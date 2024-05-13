@@ -19,6 +19,22 @@ Un matériel c'est :
 ***STOCK***
 List[MATERIEL] affichée en onglet stock
 
+Actions: 
+- Ajouter/retirer/modifier un objet du stock
+
 ***PRET***
 
+Actions:
+- Effectuer/modifier un prêt
+- Confirmer la fin du prêt (ALERTE si dépassement de la date)
+
 ***ALERTE***
+
+Actions:
+- Envoie une alerte si dépassement de date
+- Envoie une alerte si trop peu de matériel disponible
+
+#####Langages#####
+SQL -> base de données
+PHP ou JS-> requêtes pour BDD et classes
+HTML (PHP ou JS) CSS -> interface front
