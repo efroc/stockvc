@@ -38,3 +38,9 @@ Actions:
 SQL -> base de données
 PHP ou JS-> requêtes pour BDD et classes
 HTML CSS -> interface front
+
+JOUR 1: 
+    Modélisation papier du projet et commencement de la structure HTML globale
+
+JOUR 2: 
+    Commencement du CSS et squelette HTML V1 fait
