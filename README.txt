@@ -37,4 +37,4 @@ Actions:
 #####Langages#####
 SQL -> base de données
 PHP ou JS-> requêtes pour BDD et classes
-HTML (PHP ou JS) CSS -> interface front
+HTML CSS -> interface front
