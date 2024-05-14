@@ -1,3 +1,4 @@
+/*Entête*/
 body {
     background-color: gray;
 }    
@@ -24,4 +25,10 @@ li a:hover {
 } 
 .active {
     background-color:crimson;
+}
+
+/*Corps de page*/
+.stock div {
+    display: inline-table;
+    border: 1px solid red;
 }
