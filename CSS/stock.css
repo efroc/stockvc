@@ -42,13 +42,13 @@ li a:hover {
 @keyframes animate {
     0%{
         opacity: 0.2;
-      }
-      50%{
+    }
+    50%{
         opacity: 1;
-      }
-      100%{
+    }
+    100%{
         opacity: 0;
-      }
+    }
 }
 
 .alerte > * {

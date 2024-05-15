@@ -44,3 +44,6 @@ JOUR 1:
 
 JOUR 2: 
     Commencement du CSS et squelette HTML V1 fait
+
+JOUR 3: 
+    On continue la structure html et on installe le pack XAMPP, MySQL, Apache, PHP

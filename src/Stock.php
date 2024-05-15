@@ -6,7 +6,7 @@ enum Etat: string {
     case R; //reparation
 }
 
-class Liste {
+class Stock {
     private array $liste;
     
     public function __construct() {
@@ -21,26 +21,28 @@ class Liste {
         $this->liste = $liste;
     }
     
+    /** Ajoute un matériel à la liste de stock
+     *  @param $materiel l'objet à rajouter
+     *  @return bool faux et une erreur si l'ajout échoue, true sinon
+     */
     public function addMaterieltoList(Materiel $materiel): bool {
-        $r = false;
-        for($i = 0; $i < count($this->liste); $i++) {
-            if($materiel = $this->liste[$i]) {
-                $r = true;
+        for($i = 0; $i < count($this->getListe()); $i++) {
+            if($materiel = $this->getListe()[$i]) {
+                print "Erreur: Matériel déjà dans la liste";
+                return false;
             }    
         }
-        if($r = true) {
-            print "Erreur: Matériel déjà dans la liste";
-            return false;
-        } else {
-            array_push($this->liste, $materiel);
-            return true;
-        }
-        
+        array_push($this->liste, $materiel);
+        return true;
     }    
 
+    /** Supprime un matériel de la liste de stock
+     *  @param $materiel l'objet à supprimer
+     *  @return bool faux et une erreur si le retrait échoue, true sinon
+     */
     public function suppMaterielFromList(Materiel $materiel): bool {
-        for($i = 0; $i < count($this->liste); $i++) {
-            if($materiel = $this->liste[$i]) {
+        for($i = 0; $i < count($this->getListe()); $i++) {
+            if($materiel = $this->getListe()[$i]) {
                 array_splice($this->liste, $i,1);
                 return true;
             }    
