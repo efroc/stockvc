@@ -63,22 +63,22 @@ p {
 
 /**********Corps de page STOCK**********/
 
-.stock div {
+.stock div, .pret-window div {
     display: inline-table;
 }
 
-.stock { 
+.stock, .pret-window { 
     display: flex;
     height: 100%;
     width: 100%;
 }
 
-.stock-action, .scrollbar {
+.stock-action, .scrollbar, .pret-action {
     width: 29%; 
     text-align: center;
 }
 
-.stock-action > div {
+.stock-action > div, .pret-action div {
     width: 100%;
     border: 2px solid #333;
 }
@@ -119,3 +119,5 @@ table, th, td {
 tr > th:not(:last-child) {
    width: 150px;
 }
+
+/**********Corps de page PRET ET ALERTES**********/
