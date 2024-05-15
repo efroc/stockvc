@@ -48,11 +48,13 @@ class Alertes {
 
 class Alerte {
     private String $id;
+    private Pret $pret;
     private String $erreur;
     private String $date;
 
-    public function __construct(String $id, String $erreur) {
+    public function __construct(String $id, Pret $pret, String $erreur) {
         $this->id = $id;
+        $this->$pret = $pret;
         $this->erreur = $erreur;
         $this->date = date('l d m Y h:i:s');
     }    

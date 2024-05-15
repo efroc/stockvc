@@ -47,3 +47,7 @@ JOUR 2:
 
 JOUR 3: 
     On continue la structure html et on installe le pack XAMPP, MySQL, Apache, PHP
+
+//TODO
+JOUR 4: 
+    Installer le pack XAMPP, MySQL, Apache, PHP en administrateur

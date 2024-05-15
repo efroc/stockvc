@@ -25,7 +25,7 @@ class Stock {
      *  @param $materiel l'objet à rajouter
      *  @return bool faux et une erreur si l'ajout échoue, true sinon
      */
-    public function addMaterieltoList(Materiel $materiel): bool {
+    public function addMaterielToList(Materiel $materiel): bool {
         for($i = 0; $i < count($this->getListe()); $i++) {
             if($materiel = $this->getListe()[$i]) {
                 print "Erreur: Matériel déjà dans la liste";
