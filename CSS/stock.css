@@ -1,4 +1,4 @@
-/*Entête*/
+/**********Entête**********/
 body {
     background-color: gray;
 }    
@@ -11,6 +11,7 @@ ul {
 }
 li {
     border-right: 1px solid #bbb;
+    border-left: 1px solid #bbb;
     float: left;
 }
 li a {
@@ -54,9 +55,37 @@ li a:hover {
     display: inline-table;
 }
 
-/*Corps de page*/
-.stock div {
-    display: inline-table;
-    border: 1px solid red;
+p {
+    color: white;
+    background-color: #333;
+    margin-top: 0%;
 }
 
+/**********Corps de page STOCK**********/
+.stock div {
+    display: inline-table;;
+}
+
+.stock { 
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.stock-action, .scrollbar {
+    width: 39%; 
+    text-align: center;
+}
+
+.stock-action > div {
+    width: 100%;
+    border: 2px solid #333;
+}
+
+.nada {
+    width: 1%;
+}
+.scrollbar {
+    width: 60%;
+    border: 2px solid #333;
+}
