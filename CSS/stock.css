@@ -2,14 +2,14 @@
 body {
     background-color: gray;
 }    
-ul {
+.menu {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: #333;
 }
-li {
+.menu > li {
     border-right: 1px solid #bbb;
     border-left: 1px solid #bbb;
     float: left;
@@ -63,7 +63,7 @@ p {
 
 /**********Corps de page STOCK**********/
 .stock div {
-    display: inline-table;;
+    display: inline-table;
 }
 
 .stock { 
@@ -88,4 +88,19 @@ p {
 .scrollbar {
     width: 60%;
     border: 2px solid #333;
+}
+
+textarea {
+    vertical-align: top;
+    height: 40px;
+    width: 300px;
+    resize: none;
+}
+
+.first-form {
+    list-style: none;
+}
+
+.first-form > li > * { 
+    margin-top: 10px;
 }

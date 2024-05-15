@@ -25,7 +25,38 @@
             <div class="first-action">
                 <!-- Ajouter en stock -->
                 <p class="titre">Ajouter en stock</p>
+                <form action="#" method="#"> <!-- Action et method à définir plus tard -->
+                    <ul class="first-form">
+                        <li>
+                            <label for="reference">*Référence :</label>
+                            <input type="text" id="reference" name="reference" placeholder=""/>
+                        </li>
+                        <li>
+                            <label for="materiel">*Matériel :</label>
+                            <input type="text" id="materiel" name="materiel" placeholder="Ex: Clavier"/>
+                        </li>
+                        <li>
+                            <label for="marque">*Marque :</label>
+                            <input type="text" id="marque" name="marque" placeholder="Ex: Logitech"/>
+                        </li>
+                        <li>
+                            <label for="etat">*Etat :</label>
+                            <input type="radio" id="etat" name="etat" value="D" checked/>Disponible
+                            <input type="radio" id="etat" name="etat" value="P"/>Prêté
+                            <input type="radio" id="etat" name="etat" value="R"/>En réparation
+                        </li>
+                        <li>
+                            <label for="note">Note :</label>
+                            <textarea id="note" name="note" placeholder="Facultatif"></textarea>
+                        </li>
+                        <li>
+                            <button type="submit">Ajouter au stock</button>
+                        </li>
+                    </ul>
+                </form>
+                
             </div>
+            <br/><br/> <!-- Sépare les deux formulaires d'actions -->
             
             <div class="second-action">
                 <!-- Retirer du stock -->
