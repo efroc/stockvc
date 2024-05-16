@@ -40,7 +40,8 @@ PHP -> requêtes pour BDD et classes
 HTML,CSS -> interface front
 
 #####Accès Serveur Apache#####
--> localhost/MyProject/stockvc-1/
+-> localhost/MyProject/stockvc/
+-> s.info/Programmes/htdocs/MyProject/stockvc/
 
 JOUR 1: 
     Modélisation papier du projet et commencement de la structure HTML globale
@@ -53,3 +54,4 @@ JOUR 3:
 
 JOUR 4: 
     Installer le pack XAMPP, MySQL, Apache, PHP en administrateur
+    Pack installé, début de tests des classes PHP
