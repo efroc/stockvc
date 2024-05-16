@@ -68,10 +68,15 @@ class Pret {
     private String $demandeur;
 
     public function __construct(Materiel $materiel, String $start, String $end, String $demandeur) {
-        $this->materiel = $materiel;
-        $this->start = $start;
-        $this->end = $end;
-        $this->demandeur = $demandeur;
+        if($materiel->getEtat() === "P") {
+            print("Erreur: Impossible de prêter du matériel déjà en cours de prêt");
+        }
+        else {
+            $this->materiel = $materiel;
+            $this->start = $start;
+            $this->end = $end;
+            $this->demandeur = $demandeur;
+        }
     }
 
     /** Getters/Setters

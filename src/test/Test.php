@@ -28,9 +28,19 @@
     $pret1 = new Pret($mat1, "16/05/2024", "17/05/2024", "Mairie");
     $prets = new Prets();
     $prets->addPretToList($pret1);
-    
+
     $prets->pretsToString();
     $stock->stockToString();
-    
 
+
+    /** Aide-Mémoire pour DATE**/
+    $debutdate = new DateTime("2024/05/16");
+    $findate = new DateTime("2024/05/16");
+    if($findate > $debutdate) {
+        print("Date correcte");
+    }
+    else {
+        print("Erreur: Dates incorrectes");
+    }
+    /***************************/
 ?>
