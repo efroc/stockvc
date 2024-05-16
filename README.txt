@@ -39,6 +39,9 @@ MySQL -> base de données
 PHP -> requêtes pour BDD et classes
 HTML,CSS -> interface front
 
+#####Accès Serveur Apache#####
+-> localhost/MyProject/stockvc-1/
+
 JOUR 1: 
     Modélisation papier du projet et commencement de la structure HTML globale
 

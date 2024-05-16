@@ -1,9 +1,9 @@
 <?php
 
 enum Etat: string { 
-    case D; //dispo
-    case P; // déjà prêté (ou pas dispo)
-    case R; //reparation
+    case D = "D"; //dispo
+    case P = "P"; // déjà prêté (ou pas dispo)
+    case R = "R"; //reparation
 }
 
 class Stock {
@@ -49,6 +49,13 @@ class Stock {
         }
         print "Erreur: Tentative de suppression de matériel échouée";
         return false;    
+    }
+
+    public function stockToString() {
+        for($i = 0; $i < count($this->getListe()); $i++) {
+            print("\n");
+            $this->getListe()[$i]->materielToString();
+        }
     }
    
 }
@@ -112,7 +119,9 @@ class Materiel {
         $this->note = $note;
     }    
     
-    
+    public function materielToString() {
+        print "ID :  " .$this->getIdent(). "| Type : " .$this->getType(). "| Marque : " .$this->getMarque(). "| Etat : " .$this->getEtat(). "| Note : " .$this->getNote();
+    }
     
 
 }
