@@ -35,9 +35,9 @@ Actions:
 - Envoie une alerte si trop peu de matériel disponible
 
 #####Langages#####
-SQL -> base de données
-PHP ou JS-> requêtes pour BDD et classes
-HTML CSS -> interface front
+MySQL -> base de données
+PHP -> requêtes pour BDD et classes
+HTML,CSS -> interface front
 
 JOUR 1: 
     Modélisation papier du projet et commencement de la structure HTML globale
@@ -48,6 +48,5 @@ JOUR 2:
 JOUR 3: 
     On continue la structure html et on installe le pack XAMPP, MySQL, Apache, PHP
 
-//TODO
 JOUR 4: 
     Installer le pack XAMPP, MySQL, Apache, PHP en administrateur
