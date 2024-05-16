@@ -53,6 +53,7 @@ class Stock {
         for($i = 0; $i < count($this->getListe()); $i++) { 
             $this->getListe()[$i]->materielToString();
         }
+        print nl2br("\n");
     }
    
 }
