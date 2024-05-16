@@ -55,10 +55,14 @@ li a:hover {
     display: inline-table;
 }
 
-p {
+h1 {
     color: white;
     background-color: #333;
     margin-top: 0%;
+}
+
+h1 {
+    font-size: 16px;
 }
 
 /**********Corps de page STOCK**********/
@@ -116,8 +120,8 @@ table, th, td {
     border: 3px solid #333;
 }
 
-tr > th:not(:last-child) {
-   width: 150px;
+table.stock-table tr th:not(:last-child) {
+   width: 30px;
 }
 
 /**********Corps de page PRET ET ALERTES**********/

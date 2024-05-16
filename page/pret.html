@@ -23,32 +23,32 @@
         <div class="pret-action">
             <div class="pret-query">
                 <!-- Ajouter en stock -->
-                <p class="titre">Demande de prêt</p>
+                <h1 class="titre">Demande de prêt</h1>
                 <form action="#" method="#"> <!-- Action et method à définir plus tard -->
                     <ul class="first-form">
                         <li>
                             <label for="reference">*Référence :</label>
-                            <input type="text" id="reference" name="reference" placeholder=""/>
+                            <input type="text" id="reference" name="reference" required placeholder=""/>
                         </li>
                         <li>
                             <label for="materiel">*Matériel :</label>
-                            <input type="text" id="materiel" name="materiel" placeholder="Ex: Clavier"/>
+                            <input type="text" id="materiel" name="materiel" required placeholder="Ex: Clavier"/>
                         </li>
                         <li>
                             <label for="marque">*Marque :</label>
-                            <input type="text" id="marque" name="marque" placeholder="Ex: Logitech"/>
+                            <input type="text" id="marque" name="marque" required placeholder="Ex: Logitech"/>
                         </li>
                         <li>
                             <label for="demandeur">*Demandeur :</label>
-                            <input type="text" id="demandeur" name="Demandeur" placeholder=""/>
+                            <input type="text" id="demandeur" name="Demandeur" required placeholder=""/>
                         </li>
                         <li>
                             <label for="start">*Début du prêt :</label>
-                            <input type="date" id="start" name="start"/>
+                            <input type="date" id="start" name="start" required/>
                         </li>
                         <li>
                             <label for="end">*Fin du prêt :</label>
-                            <input type="date" id="end" name="end"/>
+                            <input type="date" id="end" name="end" required/>
                         </li>
                         <li>
                             <button type="submit">Confirmer la demande</button>
@@ -61,7 +61,8 @@
             
             <div class="alerte-query">
                 <!-- Retirer du stock -->
-                <p class="titre">Liste des alertes</p>
+                <h1 class="titre">Liste des alertes</h1>
+                <p class="text">Liste vide</p>
             </div>
         </div>
         <div class="nada">
@@ -69,8 +70,8 @@
         </div>
         <div class="scrollbar">
             <!-- Liste de tout le matériel en stock -->
-            <p>Liste des prêts en cours</p>
-            <table>
+            <h1>Liste des prêts en cours</h1>
+            <table class="stock-table">
                 <tr>
                     <th>Référence</th>
                     <th>Matériel</th>

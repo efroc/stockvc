@@ -1,10 +1,18 @@
 <?php
-
+/** Classe Alertes :
+ *  - Contient la liste des alertes (sous-classe Alerte)
+ *  - Contient un boolean qui avertit lorsqu'une nouvelle alerte 
+ *  est déclenchée
+ *
+ * 
+ */
 class Alertes {
     private array $alertes;
+    private bool $nouvAlerte;
 
     public function __construct() {
         $this->alertes = [];
+        $this->nouvAlerte = false;
     }
 
     public function getListe(): array {
@@ -14,8 +22,16 @@ class Alertes {
     public function setListe(array $alertes) {
         $this->alertes = $alertes;
     }    
+
+    public function getNouvAlerte(): bool {
+        return $this->nouvAlerte;
+    }
     
-    /** Ajoute une alerte à la liste
+    public function setNouvAlerte( bool $nouvAlerte) {
+        $this->nouvAlerte = $nouvAlerte;
+    }
+    
+    /** Ajoute une alerte à la liste et met nouvAlerte à true
      *  @param $alerte l'alerte à ajouter
      *  @return bool faux et une erreur si l'ajout échoue, true sinon
      */
@@ -27,6 +43,7 @@ class Alertes {
             }    
         }
         array_push($this->alertes, $alerte);
+        $this->setNouvAlerte(true);
         return true;
     }
 
