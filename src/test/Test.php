@@ -4,29 +4,29 @@
     require '../class/Alertes.php';
 
     /******* Connexion BDD MySQL *******/
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
     try {
-        $mysqlBDD = new PDO('mysql:host=localhost;dbname=stockvc;charset=utf8', 'root', '');
-        print("Connexion à la base de données ...\n");
+        $mysqlBDD = new PDO("mysql:host=$servername;dbname=stockvc", $username, $password);
+        print("Connecté à la base de données\n");
         print nl2br("\n");
     }
     catch(Exception $e) {
-        die('Erreur : ' .$e->getMessage());
+        die('Erreur de connexion à la base de données: ' .$e->getMessage());
     }    
     $query = 'SELECT * FROM stock';
-    $resQuery = $mysqlBDD->prepare($query);
+    $resQuery = $mysqlBDD->query($query);
     $result = $resQuery->fetchAll();
     foreach($result as $res) {
-    
-    ?>
-        <p><?php echo $res['ident']; ?></p>
-    <?php
+        print("ID: ".$res['ident']. " | Type: " .$res['type'].
+        " | Marque: " .$res['marque']. " | Etat: " .$res['etat']. " | Note: " .$res['note']);
+        print nl2br("\n");
     }
-    /*    
-    print("ID: ".$res['ident']. " | Type: " .$res['type'].
-    " | Marque: " .$res['marque']. " | Etat: " .$res['etat']. " | Note: " .$res['note']);
-    */
+    $mysql = null;
+    print("Fin de la connexion à la base de données");
     print nl2br("\n");
-
+    print nl2br("\n");
     
     /******* Matériel informatique******/
     $mat1 = new Materiel("1", "clavier", "Logitech", "D", "");
