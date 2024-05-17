@@ -3,6 +3,31 @@
     require '../class/Prets.php';
     require '../class/Alertes.php';
 
+    /******* Connexion BDD MySQL *******/
+    try {
+        $mysqlBDD = new PDO('mysql:host=localhost;dbname=stockvc;charset=utf8', 'root', '');
+        print("Connexion à la base de données ...\n");
+        print nl2br("\n");
+    }
+    catch(Exception $e) {
+        die('Erreur : ' .$e->getMessage());
+    }    
+    $query = 'SELECT * FROM stock';
+    $resQuery = $mysqlBDD->prepare($query);
+    $result = $resQuery->fetchAll();
+    foreach($result as $res) {
+    
+    ?>
+        <p><?php echo $res['ident']; ?></p>
+    <?php
+    }
+    /*    
+    print("ID: ".$res['ident']. " | Type: " .$res['type'].
+    " | Marque: " .$res['marque']. " | Etat: " .$res['etat']. " | Note: " .$res['note']);
+    */
+    print nl2br("\n");
+
+    
     /******* Matériel informatique******/
     $mat1 = new Materiel("1", "clavier", "Logitech", "D", "");
     $mat2 = new Materiel("2", "souris", "hyperx", "D", "blabla");
@@ -43,6 +68,7 @@
     /************************************/
     /***** Test Formulaire de stock *****/
     print nl2br("\n");
+    /*
     $temp1 = $_POST["reference"];
     $temp2 = $_POST["materiel"];
     $temp3 = $_POST["marque"];
@@ -56,6 +82,7 @@
         print nl2br("\n");
         $stock->stockToString();
     }
+    */
    
 
     
