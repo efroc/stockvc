@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
-    <meta http-equiv="refresh" content="10">    <!--Auto refresh chaque minute -->
+    <meta http-equiv="refresh" content="60">    <!--Auto refresh chaque minute -->
     <link href="css/stock.css" rel="stylesheet"/>
     <title>Stock Informatique Vitré Communauté</title>
 </head>
@@ -24,7 +24,7 @@
             <div class="pret-query">
                 <!-- Ajouter en stock -->
                 <h1 class="titre">Demande de prêt</h1>
-                <form action="#" method="#"> <!-- Action et method à définir plus tard -->
+                <form action="../src/test/Test.php" method="POST"> <!-- Action et method à définir plus tard -->
                     <ul class="first-form">
                         <li>
                             <label for="reference">*Référence :</label>
@@ -40,7 +40,7 @@
                         </li>
                         <li>
                             <label for="demandeur">*Demandeur :</label>
-                            <input type="text" id="demandeur" name="Demandeur" required placeholder=""/>
+                            <input type="text" id="demandeur" name="demandeur" required/>
                         </li>
                         <li>
                             <label for="start">*Début du prêt :</label>
