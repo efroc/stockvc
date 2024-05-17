@@ -8,27 +8,6 @@
     $bdd = new BDD();
     $bdd->connect();
     
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    try {
-        $mysqlBDD = new PDO("mysql:host=$servername;dbname=stockvc", $username, $password);
-        print("Connecté à la base de données\n");
-        print nl2br("\n");
-    }
-    catch(Exception $e) {
-        die('Erreur de connexion à la base de données: ' .$e->getMessage());
-    }  
-      
-    $query = 'SELECT * FROM stock';
-    $resQuery = $mysqlBDD->query($query);
-    $result = $resQuery->fetchAll();
-    foreach($result as $res) {
-        print("ID: ".$res['ident']. " | Type: " .$res['type'].
-        " | Marque: " .$res['marque']. " | Etat: " .$res['etat']. " | Note: " .$res['note']);
-        print nl2br("\n");
-    }
-    
     print("Fin de la connexion à la base de données");
     print nl2br("\n");
     print nl2br("\n");

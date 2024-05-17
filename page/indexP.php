@@ -10,15 +10,15 @@
 <body>
     <ul class="menu">
         <li><img src="../ressources/images/VClogo.png" alt="logo" height="42px"></li>
-        <li><a href="stock.html">Stock</a></li>
-        <li class="alerte"><a href="pret.html">Prêts et Alertes</a><p class="circle-light">!</p></li>
+        <li><a href="indexS.php">Stock</a></li>
+        <li class="alerte"><a href="indexP.php">Prêts et Alertes</a><p class="circle-light">!</p></li>
         <li style="float:right"><a class="active" href="#">Se connecter</a></li>
         <li style="float:right"><a target="_blank" href="https://www.vitrecommunaute.org/">Vitré Communauté</a></li>
     </ul>
     <!-- <p>Page des prêts</p> -->
     
     <br/><br/>
-
+    
     <div class="pret-window">
         <div class="pret-action">
             <div class="pret-query">

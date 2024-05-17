@@ -10,8 +10,8 @@
 <body>
     <ul class="menu">
         <li><img src="../ressources/images/VClogo.png" alt="logo" height="42px"></li>
-        <li><a href="stock.html">Stock</a></li>
-        <li class="alerte"><a href="pret.html">Prêts et Alertes</a><p class="circle-light">!</p></li>
+        <li><a href="indexS.php">Stock</a></li>
+        <li class="alerte"><a href="indexP.php">Prêts et Alertes</a><p class="circle-light">!</p></li>
         <li style="float:right"><a class="active" href="#">Se connecter</a></li>
         <li style="float:right"><a target="_blank" href="https://www.vitrecommunaute.org/">Vitré Communauté</a></li>
     </ul>
@@ -73,10 +73,6 @@
         </div>
         <div class="scrollbar">
             <!-- Liste de tout le matériel en stock -->
-            <!---------- Affichage du stock ---------->
-            <?php
-               
-            ?>
             <!---------------------------------------->
             <h1>Tout le stock</h1>
             <table>
@@ -87,6 +83,7 @@
                     <th>Etat</th>
                     <th>Note</th>
                 </tr>
+                <!---------- Affichage du stock ---------->
                 <?php 
                     $result = $bdd->getPdo()->query('SELECT * FROM stock');
                     foreach($result as $res) {
