@@ -2,8 +2,12 @@
     require '../class/Stock.php';
     require '../class/Prets.php';
     require '../class/Alertes.php';
+    require 'BDD.php';
 
     /******* Connexion BDD MySQL *******/
+    $bdd = new BDD();
+    $bdd->connect();
+    
     $servername = "localhost";
     $username = "root";
     $password = "";
@@ -14,7 +18,8 @@
     }
     catch(Exception $e) {
         die('Erreur de connexion à la base de données: ' .$e->getMessage());
-    }    
+    }  
+      
     $query = 'SELECT * FROM stock';
     $resQuery = $mysqlBDD->query($query);
     $result = $resQuery->fetchAll();
@@ -23,11 +28,22 @@
         " | Marque: " .$res['marque']. " | Etat: " .$res['etat']. " | Note: " .$res['note']);
         print nl2br("\n");
     }
-    $mysql = null;
+    
     print("Fin de la connexion à la base de données");
     print nl2br("\n");
     print nl2br("\n");
-    
+
+    /******* Ajout dans la table *******/
+    try {
+        $queryAjout = "INSERT INTO stock (type, marque, etat, note) VALUES ('ecran', 'asus', 'dispo', 'blibli')";
+       
+        
+    }
+    catch(Exception $e) {
+        die("Erreur: Impossible d'ajouter dans la BDD".$e->getMessage());
+    }
+    $mysqlBDD = null;
+
     /******* Matériel informatique******/
     $mat1 = new Materiel("1", "clavier", "Logitech", "D", "");
     $mat2 = new Materiel("2", "souris", "hyperx", "D", "blabla");

@@ -15,16 +15,22 @@
         <li style="float:right"><a class="active" href="#">Se connecter</a></li>
         <li style="float:right"><a target="_blank" href="https://www.vitrecommunaute.org/">Vitré Communauté</a></li>
     </ul>
-    <!-- <p>Page des prêts</p> -->
-    
+    <!------- Page du stock ------>
+    <!-- Création connexion BDD -->
+    <?php 
+        require '../src/traitement/BDD.php';
+        $bdd = new BDD();
+        $bdd->connect();
+    ?>
+    <!---------------------------->
     <br/><br/>
 
-    <div class="pret-window">
-        <div class="pret-action">
-            <div class="pret-query">
+    <div class="stock">
+        <div class="stock-action">
+            <div class="first-action">
                 <!-- Ajouter en stock -->
-                <h1 class="titre">Demande de prêt</h1>
-                <form action="../src/test/Test.php" method="POST"> <!-- Action et method à définir plus tard -->
+                <h1 class="titre">Ajouter en stock</h1>
+                <form action="../src/traitement/Test.php" method="POST"> <!-- Action et method à définir plus tard -->
                     <ul class="first-form">
                         <li>
                             <label for="reference">*Référence :</label>
@@ -39,19 +45,17 @@
                             <input type="text" id="marque" name="marque" required placeholder="Ex: Logitech"/>
                         </li>
                         <li>
-                            <label for="demandeur">*Demandeur :</label>
-                            <input type="text" id="demandeur" name="demandeur" required/>
+                            <label for="etat">*Etat :</label>
+                            <input type="radio" id="etat" name="etat" value="D" checked/>Disponible
+                            <input type="radio" id="etat" name="etat" value="P"/>Prêté
+                            <input type="radio" id="etat" name="etat" value="R"/>En réparation
                         </li>
                         <li>
-                            <label for="start">*Début du prêt :</label>
-                            <input type="date" id="start" name="start" required/>
+                            <label for="note">Note :</label>
+                            <textarea id="note" name="note" placeholder="Facultatif"></textarea>
                         </li>
                         <li>
-                            <label for="end">*Fin du prêt :</label>
-                            <input type="date" id="end" name="end" required/>
-                        </li>
-                        <li>
-                            <button type="submit">Confirmer la demande</button>
+                            <button type="submit">Ajouter au stock</button>
                         </li>
                     </ul>
                 </form>
@@ -59,10 +63,9 @@
             </div>
             <br/><br/> <!-- Sépare les deux formulaires d'actions -->
             
-            <div class="alerte-query">
+            <div class="second-action">
                 <!-- Retirer du stock -->
-                <h1 class="titre">Liste des alertes</h1>
-                <p class="text">Liste vide</p>
+                <h1 class="titre">Retirer du stock</h1>
             </div>
         </div>
         <div class="nada">
@@ -70,19 +73,36 @@
         </div>
         <div class="scrollbar">
             <!-- Liste de tout le matériel en stock -->
-            <h1>Liste des prêts en cours</h1>
-            <table class="stock-table">
+            <!---------- Affichage du stock ---------->
+            <?php
+               
+            ?>
+            <!---------------------------------------->
+            <h1>Tout le stock</h1>
+            <table>
                 <tr>
                     <th>Référence</th>
                     <th>Matériel</th>
                     <th>Marque</th>
-                    <th>Demandeur</th>
-                    <th>Début du prêt</th>
-                    <th>Fin du prêt</th>
+                    <th>Etat</th>
+                    <th>Note</th>
                 </tr>
+                <?php 
+                    $result = $bdd->getPdo()->query('SELECT * FROM stock');
+                    foreach($result as $res) {
+                ?>  
+                    <tr>     
+                        <td><?php print $res['ident']; ?></td>
+                        <td><?php print $res['type']; ?></td>
+                        <td><?php print $res['marque']; ?></td>
+                        <td><?php print $res['etat']; ?></td>
+                        <td><?php print $res['note']; ?></td>
+                    </tr>
+                <?php
+                    }
+                ?>
             </table>
         </div>
-    </div>  
-   
+    </div> 
 </body>
 </html>

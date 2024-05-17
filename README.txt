@@ -57,3 +57,5 @@ JOUR 4:
     Pack installé, début de tests des classes PHP
 
 JOUR 5:
+    Prise en main de MySQL et de phpMyAdmin, succès de la connexion à une base depuis 
+    une page php, et affichage des informations de la table.

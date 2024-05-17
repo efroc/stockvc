@@ -15,16 +15,16 @@
         <li style="float:right"><a class="active" href="#">Se connecter</a></li>
         <li style="float:right"><a target="_blank" href="https://www.vitrecommunaute.org/">Vitré Communauté</a></li>
     </ul>
-    <!-- <p>Page du stock</p> -->
+    <!-- <p>Page des prêts</p> -->
     
     <br/><br/>
-    
-    <div class="stock">
-        <div class="stock-action">
-            <div class="first-action">
+
+    <div class="pret-window">
+        <div class="pret-action">
+            <div class="pret-query">
                 <!-- Ajouter en stock -->
-                <h1 class="titre">Ajouter en stock</h1>
-                <form action="../src/test/Test.php" method="POST"> <!-- Action et method à définir plus tard -->
+                <h1 class="titre">Demande de prêt</h1>
+                <form action="../src/traitement/Test.php" method="POST"> <!-- Action et method à définir plus tard -->
                     <ul class="first-form">
                         <li>
                             <label for="reference">*Référence :</label>
@@ -39,17 +39,19 @@
                             <input type="text" id="marque" name="marque" required placeholder="Ex: Logitech"/>
                         </li>
                         <li>
-                            <label for="etat">*Etat :</label>
-                            <input type="radio" id="etat" name="etat" value="D" checked/>Disponible
-                            <input type="radio" id="etat" name="etat" value="P"/>Prêté
-                            <input type="radio" id="etat" name="etat" value="R"/>En réparation
+                            <label for="demandeur">*Demandeur :</label>
+                            <input type="text" id="demandeur" name="demandeur" required/>
                         </li>
                         <li>
-                            <label for="note">Note :</label>
-                            <textarea id="note" name="note" placeholder="Facultatif"></textarea>
+                            <label for="start">*Début du prêt :</label>
+                            <input type="date" id="start" name="start" required/>
                         </li>
                         <li>
-                            <button type="submit">Ajouter au stock</button>
+                            <label for="end">*Fin du prêt :</label>
+                            <input type="date" id="end" name="end" required/>
+                        </li>
+                        <li>
+                            <button type="submit">Confirmer la demande</button>
                         </li>
                     </ul>
                 </form>
@@ -57,9 +59,10 @@
             </div>
             <br/><br/> <!-- Sépare les deux formulaires d'actions -->
             
-            <div class="second-action">
+            <div class="alerte-query">
                 <!-- Retirer du stock -->
-                <h1 class="titre">Retirer du stock</h1>
+                <h1 class="titre">Liste des alertes</h1>
+                <p class="text">Liste vide</p>
             </div>
         </div>
         <div class="nada">
@@ -67,20 +70,19 @@
         </div>
         <div class="scrollbar">
             <!-- Liste de tout le matériel en stock -->
-            <h1>Tout le stock</h1>
-            <table>
+            <h1>Liste des prêts en cours</h1>
+            <table class="stock-table">
                 <tr>
                     <th>Référence</th>
                     <th>Matériel</th>
                     <th>Marque</th>
-                    <th>Etat</th>
-                    <th>Note</th>
+                    <th>Demandeur</th>
+                    <th>Début du prêt</th>
+                    <th>Fin du prêt</th>
                 </tr>
-
-
-
             </table>
         </div>
-    </div> 
+    </div>  
+   
 </body>
 </html>
