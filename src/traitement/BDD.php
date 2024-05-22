@@ -11,6 +11,7 @@ class BDD {
     public function connect() {
         try {
             $this->pdo = new PDO("mysql:host=$this->servername;dbname=stockvc", $this->username, $this->password);
+            $this ->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             print("Connecté à la base de données\n");
             print nl2br("\n");
         }

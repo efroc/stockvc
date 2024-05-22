@@ -5,22 +5,8 @@
     /******* Connexion BDD MySQL *******/
     $bdd = new BDD();
     $bdd->connect();
-    
-    print("Fin de la connexion à la base de données");
     print nl2br("\n");
-    print nl2br("\n");
-
-    /******* Ajout dans la table *******/
-    try {
-        $queryAjout = "INSERT INTO stock (type, marque, etat, note) VALUES ('ecran', 'asus', 'dispo', 'blibli')";
-       
-        
-    }
-    catch(Exception $e) {
-        die("Erreur: Impossible d'ajouter dans la BDD".$e->getMessage());
-    }
-    $mysqlBDD = null;
-
+   
     /******* Matériel informatique******/
     $mat1 = new Materiel("1", "clavier", "Logitech", "D", "");
     $mat2 = new Materiel("2", "souris", "hyperx", "D", "blabla");
@@ -37,6 +23,8 @@
     $stock->addMaterielToList($mat4);
     $stock->addMaterielToList($mat5);
     $stock->addMaterielToList($mat6);
+    print("Affichage du stock:");
+    print nl2br("\n");
     $stock->stockToString();
     
     /************** Prêts***************/
@@ -44,6 +32,8 @@
     $prets = new ListPrets();
     $prets->addPretToList($pret1);
 
+    print("Affichage du stock après le prêt:");
+    print nl2br("\n");
     $prets->pretsToString();
     $stock->stockToString();
 
@@ -61,7 +51,7 @@
     /************************************/
     /***** Test Formulaire de stock *****/
     print nl2br("\n");
-    /*
+    
     $temp1 = $_POST["reference"];
     $temp2 = $_POST["materiel"];
     $temp3 = $_POST["marque"];
@@ -75,11 +65,27 @@
         print nl2br("\n");
         $stock->stockToString();
     }
-    */
-   
-
+    $req = "INSERT INTO stock (ident, materiel, marque, etat, note) VALUES ('$temp1', '$temp2', '$temp3', '$temp4', '$temp5')";
+    try {
+        $bdd->getPdo()->query($req);
+    } catch(Exception $e) {
+        die("Erreur: Impossible d'ajouter dans la BDD".$e->getMessage());
+    }
+    
+    /******* FIN DE LA CONNEXION ********/
+    print("Fin de la connexion à la base de données");
+    print nl2br("\n");
+    $mysqlBDD = null;
     
 
 
-
+    $temp1 = $_POST['reference']; 
+    $temp2 = $_POST["materiel"]; 
+    $temp3 = $_POST["marque"];
+    $temp4 = $_POST["etat"]; 
+    $temp5 = $_POST["note"];
+    $result = $bdd->getPdo()->query("INSERT INTO stock (ident, materiel, marque, etat, note) 
+                             VALUES ('$temp1', '$temp2', '$temp3', '$temp4', '$temp5')");
+    $bdd->getPdo()->query($req);
+   
 ?>

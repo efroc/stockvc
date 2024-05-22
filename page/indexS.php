@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
-    <meta http-equiv="refresh" content="60">    <!--Auto refresh chaque minute -->
+    <!--<meta http-equiv="refresh" content="60">-->    <!--Auto refresh chaque minute -->
     <link href="css/stock.css" rel="stylesheet"/>
     <title>Stock Informatique Vitré Communauté</title>
     <link rel="website icon" type="png" href="../ressources/images/VClogo.png"/>
@@ -34,7 +34,7 @@
             <div class="first-action">
                 <!---------- Ajouter en stock ---------->
                 <h1 class="titre">Ajouter en stock</h1>
-                <form action="../src/traitement/Test.php" method="POST"> <!-- Action et method à définir plus tard -->
+                <form action="indexS.php" method="POST"> <!-- Action et method à définir plus tard -->
                     <ul class="first-form">
                         <li>
                             <label for="reference">*Référence :</label>
@@ -61,10 +61,13 @@
                         <li>
                             <button type="submit">Ajouter au stock</button>
                         </li>
+                        <!-- Formulaire vers BDD pour ajout du stock -->
                     </ul>
                 </form>
                 
+                
             </div>
+           
             <br/><br/> <!-- Sépare les deux formulaires d'actions -->
             
             <div class="second-action">
@@ -94,7 +97,7 @@
                 ?>  
                     <tr>     
                         <td><?php print $res['ident']; ?></td>
-                        <td><?php print $res['type']; ?></td>
+                        <td><?php print $res['materiel']; ?></td>
                         <td><?php print $res['marque']; ?></td>
                         <td><?php print $res['etat']; ?></td>
                         <td><?php print $res['note']; ?></td>

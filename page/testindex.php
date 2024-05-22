@@ -14,7 +14,6 @@
 <body>
 
     <!-------------------------- MENU ----------------------------------->
-    <?php $menu = $_GET['menu']; ?>
     <h1 class="title"><p>Gestion du stock et des prêts</p></h1>
     <ul class="menu">
         <li style="float:left"><a target="_blank" href="https://www.vitrecommunaute.org/"><img src="../ressources/images/VClogo.png" alt="logo" height="50px"></a></li>
@@ -40,7 +39,10 @@
         <!----------------------- STOCK --------------------------------->
         <div class="stock">
             <div class="stock-action">
-                    
+                  <ul class="stock-menu">
+                    <li><h3>Ajouter en stock</h3></li>
+                    <li><h3>Retirer du stock</h3></li>
+                  </ul>  
             </div>
 
             <!------------------- AFFICHE STOCK ------------------------->
@@ -48,12 +50,12 @@
             <h3>Tout le stock</h3>
             <table>
                 <tr>
-                    <th>Référence</th>
-                    <th>Matériel</th>
-                    <th>Marque</th>
-                    <th>Etat</th>
-                    <th>Note</th>
-                    <th></th>
+                    <th class="ref">Référence</th>
+                    <th class="mat">Matériel</th>
+                    <th class="marque">Marque</th>
+                    <th class="etat">Etat</th>
+                    <th class="note">Note</th>
+                    <th class="addorsupp"></th>
                 </tr>
                 <?php 
                     $result = $bdd->getPdo()->query('SELECT * FROM stock');
@@ -65,8 +67,8 @@
                         <td><?php print $res['marque']; ?></td>
                         <td><?php print $res['etat']; ?></td>
                         <td><?php print $res['note']; ?></td>
-                        <td><a class="image" href="#"><img src="../ressources/images/ajouter.png" alt="ajouter" height="20px"></a>
-                            <a class="image" href="#"><img src="../ressources/images/basket.png" alt="supprimer" height="20px"></a></td>
+                        <td><a class="image" href="#" title="Ajouter aux prêts" ><img src="../ressources/images/ajouter.png" alt="ajouter" height="20px"></a>
+                            <a class="image" href="#" title="Supprimer"><img src="../ressources/images/basket.png" alt="supprimer" height="20px"></a></td>
                         </tr>
                 <?php
                     }
