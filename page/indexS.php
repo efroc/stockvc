@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+<!---------- HEAD PAGE ---------->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
@@ -8,6 +9,8 @@
     <title>Stock Informatique Vitré Communauté</title>
     <link rel="website icon" type="png" href="../ressources/images/VClogo.png"/>
 </head>
+
+<!---------- BODY PAGE ---------->
 <body>
     <ul class="menu">
         <li><img src="../ressources/images/VClogo.png" alt="logo" height="42px"></li>
