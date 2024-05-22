@@ -1,7 +1,5 @@
 <?php
     require '../class/Stock.php';
-    require '../class/Prets.php';
-    require '../class/Alertes.php';
     require 'BDD.php';
 
     /******* Connexion BDD MySQL *******/
@@ -43,7 +41,7 @@
     
     /************** Prêts***************/
     $pret1 = new Pret($mat1, "16/05/2024", "17/05/2024", "Mairie");
-    $prets = new Prets();
+    $prets = new ListPrets();
     $prets->addPretToList($pret1);
 
     $prets->pretsToString();

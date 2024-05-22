@@ -145,4 +145,207 @@ class Materiel {
     }
     
 }
+
+/********** TEST CLASSES DANS UN SEUL FICHIER **********/
+
+/** Classe Alertes :
+ *  - Contient la liste des alertes (sous-classe Alerte)
+ *  - Contient un boolean qui avertit lorsqu'une nouvelle alerte 
+ *  est déclenchée
+ */
+class ListAlerte {
+    private array $alertes;
+    private bool $nouvAlerte;
+
+    public function __construct() {
+        $this->alertes = [];
+        $this->nouvAlerte = false;
+    }
+
+    public function getListe(): array {
+        return $this->alertes;
+    }
+
+    public function setListe(array $alertes) {
+        $this->alertes = $alertes;
+    }    
+
+    public function getNouvAlerte(): bool {
+        return $this->nouvAlerte;
+    }
+    
+    public function setNouvAlerte( bool $nouvAlerte) {
+        $this->nouvAlerte = $nouvAlerte;
+    }
+    
+    /** Ajoute une alerte à la liste et met nouvAlerte à true
+     *  @param $alerte l'alerte à ajouter
+     *  @return bool faux et une erreur si l'ajout échoue, true sinon
+     */
+    public function addAlertetoList(Alerte $alerte): bool {
+        for($i = 0; $i < count($this->getListe()); $i++) {
+            if($alerte = $this->getListe()[$i]) {
+                print "Erreur: Alerte déjà dans la liste";
+                return false;
+            }    
+        }
+        array_push($this->alertes, $alerte);
+        $this->setNouvAlerte(true);
+        return true;
+    }
+
+    /** Supprime une alerte de la liste
+     *  @param $alerte l'alerte à supprimer
+     *  @return bool faux et une erreur si le retrait échoue, true sinon
+     */
+     public function suppAlerteFromList(Alerte $alerte): bool {
+        for($i = 0; $i < count($this->getListe()); $i++) {
+            if($alerte = $this->getListe()[$i]) {
+                array_splice($this->alertes, $i,1);
+                return true;
+            }    
+        }
+        print "Erreur: Tentative de suppression de l'alerte échouée";
+        return false; 
+     }   
+}
+
+class Alerte {
+    private String $id;
+    private Pret $pret;
+    private String $erreur;
+    private String $date;
+
+    public function __construct(String $id, Pret $pret, String $erreur) {
+        $this->id = $id;
+        $this->$pret = $pret;
+        $this->erreur = $erreur;
+        $this->date = date('l d m Y h:i:s');
+    }    
+}
+
+/** Classes de Prets
+ *  Constitue la liste des prêts effectués
+ */
+class ListPrets {
+    private array $prets;
+
+    public function __construct() {
+        $this->prets = [];
+    }    
+
+    /** Getter/Setter pour $prets **/
+    public function getListe(): array {
+        return $this->prets;
+    }
+    
+    public function setListe(array $prets) {
+        $this->prets = $prets;
+    }
+
+    /** Ajoute un prêt dans la liste des prêts, et met le materiel en état de "PRET"
+     *  @param $pret le prêt à ajouter
+     *  @return bool faux et une erreur si l'ajout échoue, true sinon
+     */
+    public function addPretToList(Pret $pret): bool {
+        for($i = 0; $i < count($this->getListe()); $i++) {
+            if($pret = $pret->getListe()[$i]) {
+                print "Erreur: Prêt déjà dans la liste";
+                return false;
+            }
+        }    
+        array_push($this->prets, $pret);
+        $pret->getMateriel()->setEtat("P");
+        return true;
+    }
+
+    /** Retire un prêt de la liste des prêts, et met le materiel en état de "DISPO"
+     *  @param $pret le prêt à retirer
+     *  @return bool faux et une erreur si le retrait échoue, true sinon
+     */
+    public function suppPretFromList(Pret $pret): bool {
+        for($i = 0; $i < count($this->getListe()); $i++) {
+            if($pret = $this->getListe()[$i]) {
+                array_splice($this->prets, $i,1);
+                $pret->getMateriel()->setEtat("D");
+                return true;
+            }
+        }
+        print "Tentative de suppression du prêt échoué";
+        return false;
+    }
+
+    /** Affiche tous les prêts **/
+    public function pretsToString() {
+        for($i = 0; $i < count($this->getListe()); $i++) {
+            $this->getListe()[$i]->pretToString();
+        }
+        print nl2br("\n");
+    }
+
+
+}
+
+class Pret {
+
+    private Materiel $materiel;
+    private String $start;
+    private String $end;
+    private String $demandeur;
+
+    public function __construct(Materiel $materiel, String $start, String $end, String $demandeur) {
+        if($materiel->getEtat() === "P") {
+            print("Erreur: Impossible de prêter du matériel déjà en cours de prêt");
+        }
+        else {
+            $this->materiel = $materiel;
+            $this->start = $start;
+            $this->end = $end;
+            $this->demandeur = $demandeur;
+        }
+    }
+
+    /** Getters/Setters **/
+    public function getMateriel(): Materiel {
+        return $this->materiel;
+    }
+    
+    public function getStart(): String {
+        return $this->start;
+    }
+    
+    public function getEnd(): String {
+        return $this->end;
+    }
+    
+    public function getDemandeur(): String {
+        return $this->demandeur;
+    }    
+
+    public function setMateriel(Materiel $materiel) {
+        $this->materiel = $materiel;
+    }
+    
+    public function setStart(String $start) {
+        $this->start = $start;
+    }
+
+    public function setEnd(String $end) {
+        $this->end = $end;
+    }
+
+    public function setDemandeur(String $demandeur) {
+        $this->demandeur = $demandeur;
+    }
+
+    /** Affiche un prêt **/
+    public function pretToString() {
+        print nl2br("Matériel: ");
+        print nl2br($this->getMateriel()->materielToString());
+        print nl2br("Début: " .$this->getStart(). 
+        " | Fin: " .$this->getEnd(). " | Client: " .$this->getDemandeur());
+        print nl2br("\n");
+    }
+}
+
 ?>
