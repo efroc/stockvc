@@ -6,6 +6,7 @@
     <meta http-equiv="refresh" content="60">    <!--Auto refresh chaque minute -->
     <link href="css/stock.css" rel="stylesheet"/>
     <title>Stock Informatique Vitré Communauté</title>
+    <link rel="website icon" type="png" href="../ressources/images/VClogo.png"/>
 </head>
 <body>
     <ul class="menu">
@@ -28,7 +29,7 @@
     <div class="stock">
         <div class="stock-action">
             <div class="first-action">
-                <!-- Ajouter en stock -->
+                <!---------- Ajouter en stock ---------->
                 <h1 class="titre">Ajouter en stock</h1>
                 <form action="../src/traitement/Test.php" method="POST"> <!-- Action et method à définir plus tard -->
                     <ul class="first-form">
@@ -64,7 +65,7 @@
             <br/><br/> <!-- Sépare les deux formulaires d'actions -->
             
             <div class="second-action">
-                <!-- Retirer du stock -->
+                <!---------- Retirer du stock ---------->
                 <h1 class="titre">Retirer du stock</h1>
             </div>
         </div>

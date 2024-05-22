@@ -6,6 +6,7 @@
     <meta http-equiv="refresh" content="60">    <!--Auto refresh chaque minute -->
     <link href="css/stock.css" rel="stylesheet"/>
     <title>Stock Informatique Vitré Communauté</title>
+    <link rel="website icon" type="png" href="../ressources/images/VClogo.png"/>
 </head>
 <body>
     <ul class="menu">
