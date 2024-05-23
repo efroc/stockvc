@@ -20,11 +20,31 @@
         <li style="float:right"><a target="_blank" href="https://www.vitrecommunaute.org/">Vitré Communauté</a></li>
     </ul>
     <!------- Page du stock ------>
-    <!-- Création connexion BDD -->
+    <!-- Création connexion BDD et autres -->
     <?php 
         require '../src/traitement/BDD.php';
+        require '../src/class/Stock.php';
         $bdd = new BDD();
         $bdd->connect();
+        $localdate = date('Y-m-d');
+        $stock = new Stock();
+        $listpret = new ListPrets();
+        $listalerte = new ListAlerte();
+        echo("Date du jour: ".$localdate);
+
+        /**** Ajoute toute la BDD stock dans $stock ***/
+        $result = $bdd->getPdo()->query('SELECT * FROM stock');
+            foreach($result as $res) {
+                $materiel = new Materiel($res['ident'], $res['materiel'], $res['marque'], $res['etat'], $res['note']);
+                $stock->addMaterielToList($materiel);
+            }
+        
+        /** Ajoute toute la BDD pret dans $listpret ***/
+        $result = $bdd->getPdo()->query('SELECT * FROM pret');
+            foreach($result as $res) {
+                $pret = new Pret($res['ident'], $res['start'], $res['end'], $res['client']);
+                $listpret->addPretToList($pret);
+            }
     ?>
     <!---------------------------->
     <br/><br/>

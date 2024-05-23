@@ -22,6 +22,8 @@
         require '../src/traitement/BDD.php';
         $bdd = new BDD();
         $bdd->connect();
+        $localdate = date('Y-m-d');
+        echo("Date du jour: ".$localdate);
     ?>
     <!---------------------------->
     <br/><br/>

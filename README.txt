@@ -66,3 +66,5 @@ JOUR 6, 7 et 8:
 
 A FAIRE !!!!!!!!!!!!!!!!!!
     - Vérifier ID unique pour requête dans table
+    - LIER BDD, classe STOCK et la page
+    - fonctions pret.equalsTo(pret)

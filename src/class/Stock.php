@@ -54,6 +54,8 @@ class Stock {
         }
         print nl2br("\n");
     }
+
+
    
 }
 
@@ -66,14 +68,14 @@ class Materiel {
      * état -> dispo, prêté, réparation etc 
      * note -> commentaire sur le produit
      */    
-    private string $ident; 
+    private int $ident; 
     private string $type;
     private string $marque;
     private string $etat;
     private string $note;
 
-    public function __construct(string $ident, string $type, string $marque, string $etat, string $note) {   
-        if($etat !== "D" && $etat !== "R" && $etat !== "P") {
+    public function __construct(int $ident, string $type, string $marque, string $etat, string $note) {   
+        if($etat !== "disponible" && $etat !== "en réparation" && $etat !== "déjà prêté") {
             print "Erreur : Mauvais type pour état (D | P | R requis)";
         }
         else {
@@ -247,14 +249,14 @@ class ListPrets {
      *  @return bool faux et une erreur si l'ajout échoue, true sinon
      */
     public function addPretToList(Pret $pret): bool {
-        for($i = 0; $i < count($this->getListe()); $i++) {
-            if($pret = $pret->getListe()[$i]) {
+        for($i = 0; $i < count($this->prets); $i++) {
+            if($pret = $this->prets[$i]) {
                 print "Erreur: Prêt déjà dans la liste";
                 return false;
             }
         }    
         array_push($this->prets, $pret);
-        $pret->getMateriel()->setEtat("P");
+        
         return true;
     }
 
@@ -266,7 +268,7 @@ class ListPrets {
         for($i = 0; $i < count($this->getListe()); $i++) {
             if($pret = $this->getListe()[$i]) {
                 array_splice($this->prets, $i,1);
-                $pret->getMateriel()->setEtat("D");
+               
                 return true;
             }
         }
@@ -282,31 +284,35 @@ class ListPrets {
         print nl2br("\n");
     }
 
+    public function identAlreadyExists(int $ident): bool {
+        for($i = 0; $i < count($this->getListe()); $i++) {
+            if($this->getListe()[$i]->getIdent() === $ident) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 }
 
 class Pret {
 
-    private Materiel $materiel;
+    private int $ident;
     private String $start;
     private String $end;
     private String $demandeur;
 
-    public function __construct(Materiel $materiel, String $start, String $end, String $demandeur) {
-        if($materiel->getEtat() === "P") {
-            print("Erreur: Impossible de prêter du matériel déjà en cours de prêt");
-        }
-        else {
-            $this->materiel = $materiel;
-            $this->start = $start;
-            $this->end = $end;
-            $this->demandeur = $demandeur;
-        }
+    public function __construct(int $ident, String $start, String $end, String $demandeur) {
+        $this->ident = $ident;
+        $this->start = $start;
+        $this->end = $end;
+        $this->demandeur = $demandeur;
     }
 
     /** Getters/Setters **/
-    public function getMateriel(): Materiel {
-        return $this->materiel;
+    public function getIdent(): int {
+        return $this->ident;
     }
     
     public function getStart(): String {
@@ -339,8 +345,8 @@ class Pret {
 
     /** Affiche un prêt **/
     public function pretToString() {
-        print nl2br("Matériel: ");
-        print nl2br($this->getMateriel()->materielToString());
+        print nl2br("Ident: ");
+        print nl2br($this->getIdent());
         print nl2br("Début: " .$this->getStart(). 
         " | Fin: " .$this->getEnd(). " | Client: " .$this->getDemandeur());
         print nl2br("\n");

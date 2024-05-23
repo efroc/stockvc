@@ -16,7 +16,7 @@ class BDD {
             print nl2br("\n");
         }
         catch(Exception $e) {
-            die("Impossible de se connecter à la base de données\n" .$e->getMessage());
+            die("Impossible de se connecter à la base de données: " .$e->getMessage().print nl2br("\n"));
         }
     }
 
