@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
-    <meta http-equiv="refresh" content="60">    <!--Auto refresh chaque minute -->
+    <!--<meta http-equiv="refresh" content="60">-->   <!--Auto refresh chaque minute -->
     <link href="css/stock.css" rel="stylesheet"/>
     <title>Stock Informatique Vitré Communauté</title>
     <link rel="website icon" type="png" href="../ressources/images/VClogo.png"/>
@@ -29,15 +29,7 @@
                     <ul class="first-form">
                         <li>
                             <label for="reference">*Référence :</label>
-                            <input type="text" id="reference" name="reference" required placeholder=""/>
-                        </li>
-                        <li>
-                            <label for="materiel">*Matériel :</label>
-                            <input type="text" id="materiel" name="materiel" required placeholder="Ex: Clavier"/>
-                        </li>
-                        <li>
-                            <label for="marque">*Marque :</label>
-                            <input type="text" id="marque" name="marque" required placeholder="Ex: Logitech"/>
+                            <input type="text" id="reference" name="reference" value="<?php echo $_POST['id'];?>" required placeholder=""/>
                         </li>
                         <li>
                             <label for="demandeur">*Demandeur :</label>

@@ -34,7 +34,7 @@
             <div class="first-action">
                 <!---------- Ajouter en stock ---------->
                 <h1 class="titre">Ajouter en stock</h1>
-                <form action="indexS.php" method="POST"> <!-- Action et method à définir plus tard -->
+                <form action="indexS.php" method="POST"> 
                     <ul class="first-form">
                         <li>
                             <label for="reference">*Référence :</label>
@@ -61,10 +61,11 @@
                         <li>
                             <button type="submit" name="submit">Ajouter au stock</button>
                         </li>
-                        <!-- Formulaire vers BDD pour ajout du stock -->
+                        
                     </ul>
                 </form>
             </div>
+            <!-- Formulaire vers BDD pour ajout du stock -->
             <?php
                 if(isset($_POST['submit'])) {
                     $ref = $_POST['reference'];
@@ -91,11 +92,12 @@
             <h1>Tout le stock</h1>
             <table>
                 <tr>
-                    <th>Référence</th>
-                    <th>Matériel</th>
-                    <th>Marque</th>
-                    <th>Etat</th>
-                    <th>Note</th>
+                    <th class="ref">Référence</th>
+                    <th class="mat">Matériel</th>
+                    <th class="marque">Marque</th>
+                    <th class="etat">Etat</th>
+                    <th class="note">Note</th>
+                    <th class="button"></th>
                 </tr>
                 <!---------- Affichage du stock ---------->
                 <?php 
@@ -103,15 +105,23 @@
                     foreach($result as $res) {
                 ?>  
                     <tr>     
-                        <td><?php print $res['ident']; $id = $res['ident']; ?></td>
-                        <td><?php print $res['materiel']; ?></td>
-                        <td><?php print $res['marque']; ?></td>
-                        <td><?php print $res['etat']; ?></td>
-                        <td><?php print $res['note']; ?></td>
-                        <td>
+                        <td class="ref"><?php print $res['ident']; $id = $res['ident']; ?></td>
+                        <td class="mat"><?php print $res['materiel']; ?></td>
+                        <td class="marque"><?php print $res['marque']; ?></td>
+                        <td class="etat"><?php print $res['etat']; ?></td>
+                        <td class="note"><?php print $res['note']; ?></td>
+                        <td class="button">
+                            <form action="indexP.php" method="POST">
+                                <button type="submit" name="submit-add" title="Ajouter aux prêts">
+                                <input type="hidden" value="<?php echo $id; ?>" name="id"/>
+                                <img src="../ressources/images/ajouter.png" alt="ajouter" height="20px"></button>      
+                            </form>
+                        </td>
+                        <td class="button">
                             <form action="indexS.php" method="POST">
-                                <button type="submit" name="submit-add" title="Ajouter aux prêts"><input type="hidden" value="<?php echo $id; ?>" name="id"/><img src="../ressources/images/ajouter.png" alt="ajouter" height="20px"></button>
-                                <button type="submit" name="submit-supp" title="Supprimer"><img src="../ressources/images/basket.png" alt="supprimer" height="20px"></button>
+                                <button type="submit" name="submit-supp" title="Supprimer">
+                                <input type="hidden" value="<?php echo $id; ?>" name="id"/>
+                                <img src="../ressources/images/basket.png" alt="supprimer" height="20px"></button>
                             </form>
                         </td>
                     </tr>

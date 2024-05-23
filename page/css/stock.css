@@ -124,4 +124,13 @@ table.stock-table tr th:not(:last-child) {
    width: 30px;
 }
 
+tr > .ref, .mat, .marque, .etat{
+    width: 15%;
+}
+
+tr > .button {
+    width: 5%;
+    border-right: none;
+    border-left: none;
+}
 /**********Corps de page PRET ET ALERTES**********/

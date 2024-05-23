@@ -59,3 +59,10 @@ JOUR 4:
 JOUR 5:
     Prise en main de MySQL et de phpMyAdmin, succès de la connexion à une base depuis 
     une page php, et affichage des informations de la table.
+
+JOUR 6, 7 et 8: 
+    Création de requête MySQL pour ajouter, supprimer et afficher données de la BDD
+
+
+A FAIRE !!!!!!!!!!!!!!!!!!
+    - Vérifier ID unique pour requête dans table
