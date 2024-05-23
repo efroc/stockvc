@@ -47,8 +47,7 @@ class Stock {
         return false;    
     }
 
-    /** Affiche la liste de stock 
-     */
+    /** Affiche la liste de stock */
     public function stockToString() {
         for($i = 0; $i < count($this->getListe()); $i++) { 
             $this->getListe()[$i]->materielToString();

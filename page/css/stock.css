@@ -124,8 +124,16 @@ table.stock-table tr th:not(:last-child) {
    width: 30px;
 }
 
-tr > .ref, .mat, .marque, .etat{
+.stock-table > tr > .ref, .mat, .marque, .etat, .start, .end{
     width: 15%;
+}
+
+.stock-pret > tr > .ref {
+    width: 10%;
+}
+
+.stock-pret > tr > .start, .end, .client {
+    width: 30%;
 }
 
 tr > .button {

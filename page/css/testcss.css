@@ -18,6 +18,10 @@ body {
     border-radius: 30px;
 }
 
+.menu-text {
+    font-size: 20px;
+}
+
 .menu > li {
     float: left;
 }

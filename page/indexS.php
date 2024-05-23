@@ -50,9 +50,9 @@
                         </li>
                         <li>
                             <label for="etat">*Etat :</label>
-                            <input type="radio" id="etat" name="etat" value="D" checked/>Disponible
-                            <input type="radio" id="etat" name="etat" value="P"/>Prêté
-                            <input type="radio" id="etat" name="etat" value="R"/>En réparation
+                            <input type="radio" id="etat" name="etat" value="disponible" checked/>Disponible
+                            <input type="radio" id="etat" name="etat" value="déjà prêté"/>Prêté
+                            <input type="radio" id="etat" name="etat" value="en réparation"/>En réparation
                         </li>
                         <li>
                             <label for="note">Note :</label>
@@ -60,8 +60,7 @@
                         </li>
                         <li>
                             <button type="submit" name="submit">Ajouter au stock</button>
-                        </li>
-                        
+                        </li> 
                     </ul>
                 </form>
             </div>

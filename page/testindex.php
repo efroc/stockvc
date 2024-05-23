@@ -16,10 +16,10 @@
     <!-------------------------- MENU ----------------------------------->
     <h1 class="title"><p>Gestion du stock et des prêts</p></h1>
     <ul class="menu">
-        <li style="float:left"><a target="_blank" href="https://www.vitrecommunaute.org/"><img src="../ressources/images/VClogo.png" alt="logo" height="50px"></a></li>
-        <li><a href="testindex.php?menu=1"><p>Stock</p></a></li>
-        <li><a href="testindex.php?menu=2"><p>Prêts et Alertes</p></a></li>
-        <li style="float:right"><a href="testindex.php?menu=3"><p>Se connecter</p></a></li> 
+        <li style="float:left"><a target="_blank" href="https://www.vitrecommunaute.org/"><img src="../ressources/images/VClogo.png" alt="logo" height="59px"></a></li>
+        <li><a href="testindex.php?menu=1"><p class="menu-text">Stock</p></a></li>
+        <li><a href="testindex.php?menu=2"><p class="menu-text">Prêts et Alertes</p></a></li>
+        <li style="float:right"><a href="testindex.php?menu=3"><p class="menu-text">Se connecter</p></a></li> 
     </ul>
 
     <!-------------------------- CONNEXION BDD -------------------------->
@@ -32,7 +32,7 @@
     <!-------------------------- AFFICHAGE SELON MENU ------------------->
     <div class="contenu">
         <?php
-            switch($_GET['menu']) {
+            if(isset($_GET['menu'])) switch($_GET['menu']) {
                 case 1:
         ?>            
         <!----------------------- CASE 1 -------------------------------->
