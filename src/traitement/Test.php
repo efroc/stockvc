@@ -51,7 +51,7 @@
     /************************************/
     /***** Test Formulaire de stock *****/
     print nl2br("\n");
-    
+    /*
     $temp1 = $_POST["reference"];
     $temp2 = $_POST["materiel"];
     $temp3 = $_POST["marque"];
@@ -71,14 +71,14 @@
     } catch(Exception $e) {
         die("Erreur: Impossible d'ajouter dans la BDD".$e->getMessage());
     }
-    
+    */
     /******* FIN DE LA CONNEXION ********/
     print("Fin de la connexion à la base de données");
     print nl2br("\n");
     $mysqlBDD = null;
     
 
-
+    /*
     $temp1 = $_POST['reference']; 
     $temp2 = $_POST["materiel"]; 
     $temp3 = $_POST["marque"];
@@ -87,5 +87,6 @@
     $result = $bdd->getPdo()->query("INSERT INTO stock (ident, materiel, marque, etat, note) 
                              VALUES ('$temp1', '$temp2', '$temp3', '$temp4', '$temp5')");
     $bdd->getPdo()->query($req);
+    */
    
 ?>

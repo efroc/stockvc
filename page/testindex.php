@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
-    <meta http-equiv="refresh" content="60">    <!--Auto refresh chaque minute -->
+    <meta http-equiv="refresh" content="60"> 
     <link href="css/testcss.css" rel="stylesheet"/>
     <title>Stock Informatique Vitré Communauté</title>
     <link rel="website icon" type="png" href="../ressources/images/VClogo.png"/>
@@ -39,10 +39,53 @@
         <!----------------------- STOCK --------------------------------->
         <div class="stock">
             <div class="stock-action">
-                  <ul class="stock-menu">
-                    <li><h3>Ajouter en stock</h3></li>
-                    <li><h3>Retirer du stock</h3></li>
-                  </ul>  
+                <!-------------- AJOUTE AU STOCK ------------------------>
+                <h3>Ajouter en stock</h3>
+                <form action="testindex.php" method="POST">
+                    <ul class="stock-form">
+                        <li>
+                            <label for="reference">*Référence</label>
+                            <input type="text" id="reference" name="reference" required placeholder=""/>
+                        </li>
+                        <li>
+                            <label for="materiel">*Matériel</label>
+                            <input type="text" id="materiel" name="materiel" required placeholder="Ex: clavier"/>
+                        </li>
+                        <li>
+                            <label for="marque">*Marque</label>
+                            <input type="text" id="marque" name="marque" required placeholder="Ex: logitech"/>
+                        </li>
+                        <li>
+                            <label for="etat">*Etat</label>
+                            <input type="radio" id="etat" name="etat" value="D" checked/>Disponible
+                            <input type="radio" id="etat" name="etat" value="P"/>Prêté
+                            <input type="radio" id="etat" name="etat" value="R"/>En réparation
+                        </li>
+                        <li>
+                            <label for="note">Note</label>
+                            <input type="text" id="note" name="note" placeholder="Facultatif"/>
+                        </li>
+                        <li>
+                            <button type="submit" name="submit">Ajouter au stock</button>
+                        </li>
+                    </ul>
+                </form>
+                <!---------------- FORMULAIRE VERS BDD ------------------>
+                <?php
+                    if(isset($_POST['submit'])) {
+                        $ref = $_POST['reference'];
+                        $mat = $_POST['materiel'];
+                        $marque = $_POST['marque'];
+                        $etat = $_POST['etat'];
+                        $note = $_POST['note'];
+                        $req = "INSERT INTO stock (ident, materiel, marque, etat, note) VALUES ('$ref', '$mat', '$marque', '$etat', '$note')";
+                        try {
+                            $bdd->getPdo()->query($req);
+                        } catch(Exception $e) {
+                            die("Erreur: Impossible d'ajouter dans la BDD".$e->getMessage());
+                        }
+                    }   
+                ?>
             </div>
 
             <!------------------- AFFICHE STOCK ------------------------->
@@ -63,13 +106,13 @@
                 ?>  
                     <tr>     
                         <td><?php print $res['ident']; ?></td>
-                        <td><?php print $res['type']; ?></td>
+                        <td><?php print $res['materiel']; ?></td>
                         <td><?php print $res['marque']; ?></td>
                         <td><?php print $res['etat']; ?></td>
                         <td><?php print $res['note']; ?></td>
                         <td><a class="image" href="#" title="Ajouter aux prêts" ><img src="../ressources/images/ajouter.png" alt="ajouter" height="20px"></a>
                             <a class="image" href="#" title="Supprimer"><img src="../ressources/images/basket.png" alt="supprimer" height="20px"></a></td>
-                        </tr>
+                    </tr>
                 <?php
                     }
                 ?>

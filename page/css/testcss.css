@@ -1,6 +1,6 @@
 /**********Entête*********/
 body {
-    background-color: #000000;
+    background-color: #1f4b63
 }
 
 .title {
@@ -10,7 +10,7 @@ body {
 }
 
 .menu {
-    background-color: #100d44;
+    background-color: #2f81af;
     list-style-type: none;
     overflow: hidden;
     margin-left: 10%;
@@ -61,7 +61,7 @@ p {
     margin-right: 2%;
     margin-left: 2%;
     border-radius: 20px;
-    background-color: #100d44;
+    background-color: #2f81af;
 }
 
 table {
@@ -92,7 +92,11 @@ tr {
     margin-left: none;
     list-style-type: none;
     border-radius: 20px;
-    background-color: #100d44;
+    background-color: #2f81af;
+}
+
+.stock-form {
+    color: black;
 }
 
 

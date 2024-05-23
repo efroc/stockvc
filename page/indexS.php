@@ -59,21 +59,28 @@
                             <textarea id="note" name="note" placeholder="Facultatif"></textarea>
                         </li>
                         <li>
-                            <button type="submit">Ajouter au stock</button>
+                            <button type="submit" name="submit">Ajouter au stock</button>
                         </li>
                         <!-- Formulaire vers BDD pour ajout du stock -->
                     </ul>
                 </form>
-                
-                
             </div>
-           
-            <br/><br/> <!-- Sépare les deux formulaires d'actions -->
+            <?php
+                if(isset($_POST['submit'])) {
+                    $ref = $_POST['reference'];
+                    $mat = $_POST['materiel'];
+                    $marque = $_POST['marque'];
+                    $etat = $_POST['etat'];
+                    $note = $_POST['note'];
+                    $req = "INSERT INTO stock (ident, materiel, marque, etat, note) VALUES ('$ref', '$mat', '$marque', '$etat', '$note')";
+                    try {
+                        $bdd->getPdo()->query($req);
+                    } catch(Exception $e) {
+                        die("Erreur: Impossible d'ajouter dans la BDD".$e->getMessage());
+                    }
+                }
+            ?>
             
-            <div class="second-action">
-                <!---------- Retirer du stock ---------->
-                <h1 class="titre">Retirer du stock</h1>
-            </div>
         </div>
         <div class="nada">
 
@@ -96,13 +103,33 @@
                     foreach($result as $res) {
                 ?>  
                     <tr>     
-                        <td><?php print $res['ident']; ?></td>
+                        <td><?php print $res['ident']; $id = $res['ident']; ?></td>
                         <td><?php print $res['materiel']; ?></td>
                         <td><?php print $res['marque']; ?></td>
                         <td><?php print $res['etat']; ?></td>
                         <td><?php print $res['note']; ?></td>
+                        <td>
+                            <form action="indexS.php" method="POST">
+                                <button type="submit" name="submit-add" title="Ajouter aux prêts"><input type="hidden" value="<?php echo $id; ?>" name="id"/><img src="../ressources/images/ajouter.png" alt="ajouter" height="20px"></button>
+                                <button type="submit" name="submit-supp" title="Supprimer"><img src="../ressources/images/basket.png" alt="supprimer" height="20px"></button>
+                            </form>
+                        </td>
                     </tr>
+                    <!-------------------- RETRAIT DU STOCK ------------------->
                 <?php
+                    }
+                    if(isset($_POST['submit-add'])) {
+                        
+                    }
+                    
+                    if(isset($_POST['submit-supp'])) {
+                        $req = "DELETE FROM stock WHERE ident = {$_POST['id']} ";
+                        $bdd->getPdo()->exec($req);
+                        try {
+                            $bdd->getPdo()->query($req);
+                        } catch(Exception $e) {
+                            die("Erreur: Impossible d'ajouter dans la BDD".$e->getMessage());
+                        }
                     }
                 ?>
             </table>
