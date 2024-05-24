@@ -45,7 +45,7 @@
                         </li>
                         <li>
                             <label for="start">*Début du prêt :</label>
-                            <input type="date" id="start" name="start" required/>
+                            <input type="date" id="start" name="start" value="<?php echo $localdate; ?>" required/>
                         </li>
                         <li>
                             <label for="end">*Fin du prêt :</label>
@@ -63,12 +63,18 @@
                     $client = $_POST['demandeur'];
                     $start = $_POST['start'];
                     $end = $_POST['end'];
-                    $req = "INSERT INTO pret (ident, start, end, client) VALUES ('$ref', '$start', '$end', '$client')";
-                    try {
-                        $bdd->getPdo()->query($req);
-                    } catch(Exception $e) {
-                        die("Erreur: Impossible d'ajouter dans la BDD".$e->getMessage());
+                  
+                    if($start < $end) {
+                        $req = "INSERT INTO pret (ident, start, end, client) VALUES ('$ref', '$start', '$end', '$client')";
+                        $updatereq = "UPDATE stock SET etat = 'déjà prêté' WHERE ident = '{$ref}'";
+                        try {
+                            $bdd->getPdo()->query($req);
+                            $bdd->getPdo()->query($updatereq);
+                        } catch(Exception $e) {
+                            die("Erreur: Impossible d'ajouter dans la BDD".$e->getMessage());
+                        }
                     }
+                    
                 }
             ?>
             <br/><br/> <!-- Sépare les deux formulaires d'actions -->

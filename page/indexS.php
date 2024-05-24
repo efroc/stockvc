@@ -92,7 +92,11 @@
                     $marque = $_POST['marque'];
                     $etat = $_POST['etat'];
                     $note = $_POST['note'];
-                    $req = "INSERT INTO stock (ident, materiel, marque, etat, note) VALUES ('$ref', '$mat', '$marque', '$etat', '$note')";
+                    $tempmat = new Materiel($ref, $mat, $marque, $etat, $note);
+                    $stock->addMaterielToList($tempmat);
+                    $req = "INSERT INTO stock (ident, materiel, marque, etat, note) 
+                            VALUES ('{$tempmat->getIdent()}', '{$tempmat->getType()}', '{$tempmat->getMarque()}',
+                            '{$tempmat->getEtat()}', '{$tempmat->getNote()}')";
                     try {
                         $bdd->getPdo()->query($req);
                     } catch(Exception $e) {

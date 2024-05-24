@@ -250,13 +250,12 @@ class ListPrets {
      */
     public function addPretToList(Pret $pret): bool {
         for($i = 0; $i < count($this->prets); $i++) {
-            if($pret = $this->prets[$i]) {
+            if($pret->equalsTo($this->getListe()[$i])) {
                 print "Erreur: Prêt déjà dans la liste";
                 return false;
             }
         }    
         array_push($this->prets, $pret);
-        
         return true;
     }
 
@@ -345,11 +344,17 @@ class Pret {
 
     /** Affiche un prêt **/
     public function pretToString() {
-        print nl2br("Ident: ");
-        print nl2br($this->getIdent());
-        print nl2br("Début: " .$this->getStart(). 
+        print nl2br("Ident: ".$this->getIdent()." | Début: " .$this->getStart(). 
         " | Fin: " .$this->getEnd(). " | Client: " .$this->getDemandeur());
         print nl2br("\n");
+    }
+
+    public function equalsTo(Pret $pret): bool {
+        if($this->getIdent() === $pret->getIdent() && $this->getStart() === $pret->getStart()
+        && $this->getEnd() === $pret->getEnd() && $this->getDemandeur() === $pret->getDemandeur()) {
+            return true;
+        }
+        return false;
     }
 }
 
