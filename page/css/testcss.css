@@ -72,10 +72,9 @@ table {
     border-collapse: collapse;
 }
 
-td:not(:first-child):not(:last-child) {
+td:not(:first-child):not(:last-child):not(:nth-child(7)) {
     border-left: 2px solid black;
 }
-
 
 tr {
     border: 2px solid black; 
@@ -107,7 +106,7 @@ tr {
 }
 
 tr > .button {
-    width: 5%;
+    width: 3%;
 }
 
 table tr:hover:not(:first-child) {
@@ -115,7 +114,7 @@ table tr:hover:not(:first-child) {
 }
 
 button[name="submit-reference"], button[name="submit-materiel"], 
-button[name="submit-marque"],button[name="submit-etat"] {
+button[name="submit-marque"], button[name="submit-etat"], button[name="submit-note"] {
     width: 100%;
 }
 

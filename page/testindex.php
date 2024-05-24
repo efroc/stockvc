@@ -74,10 +74,10 @@
                 <?php
                     if(isset($_POST['submit'])) {
                         $ref = $_POST['reference'];
-                        $mat = $_POST['materiel'];
-                        $marque = $_POST['marque'];
-                        $etat = $_POST['etat'];
-                        $note = $_POST['note'];
+                        $mat = strtolower($_POST['materiel']);
+                        $marque = strtolower($_POST['marque']);
+                        $etat = strtolower($_POST['etat']);
+                        $note = strtolower($_POST['note']);
                         $req = "INSERT INTO stock (ident, materiel, marque, etat, note) VALUES ('$ref', '$mat', '$marque', '$etat', '$note')";
                         try {
                             $bdd->getPdo()->query($req);
@@ -113,12 +113,19 @@
                             <button type="submit" name="submit-etat" title="Trier par état">Etat</button>
                         </form>
                     </th>
-                    <th class="note">Note</th>
+                    <th class="note">
+                        <form action="testindex.php?menu=1" method="POST">
+                            <button type="submit" name="submit-note" title="Trier par note">Note</button>
+                        </form>
+                    </th>
+                    <th class="button"></th>
                     <th class="button"></th>
                     <th class="button"></th>
                 </tr>
+                <!--------------------------- BOUTONS DE TRIE --------------------------->
                 <?php 
                     $trie ="";
+                    $id;
                     if(isset($_POST['submit-reference'])) {
                         $trie = ' ORDER BY ident';
                     }
@@ -130,6 +137,9 @@
                     } 
                     if(isset($_POST['submit-marque'])) {
                         $trie = ' ORDER BY marque';
+                    }
+                    if(isset($_POST['submit-note'])) {
+                        $trie = ' ORDER BY note DESC';
                     }
                     $result = $bdd->getPdo()->query('SELECT * FROM stock'.$trie);
                     foreach($result as $res) {
@@ -150,6 +160,13 @@
                     </td>
                     <td class="button">
                         <form action="testindex.php?menu=1" method="POST">
+                            <button type="submit" name="submit-edit" title="Modifier">
+                            <input type="hidden" value="<?php echo $id; ?>" name="id"/>
+                            <img src="../ressources/images/modifier.png" alt="modifier" height="20px">
+                        </form>
+                    </td>
+                    <td class="button">
+                        <form action="testindex.php?menu=1" method="POST">
                             <button type="submit" name="submit-supp" title="Supprimer">
                             <input type="hidden" value="<?php echo $id; ?>" name="id"/>
                             <img src="../ressources/images/basket.png" alt="supprimer" height="20px">
@@ -157,7 +174,7 @@
                         </form>
                     </td>
                 </tr>
-                <!------------------------ ACTIONS BOUTONS ------------------------------>
+                <!------------------------ BOUTONS ACTIONS ------------------------------>
                 <?php
                     }
                     if(isset($_POST['submit-supp'])) {
@@ -166,14 +183,36 @@
                         try {
                             $bdd->getPdo()->query($req);
                         } catch(Exception $e) {
-                            die("Erreur: Impossible d'ajouter dans la BDD".$e->getMessage());
+                            die("Erreur: Impossible de supprimer dans la BDD".$e->getMessage());
                         }
                     }
                 ?>
             </table>   
-
-
-
+            <br/>
+            <?php
+                if(isset($_POST["submit-edit"])) {
+            ?>
+                    <form action="testindex.php?menu=1" method="POST">
+                        <label for="materiel">*Matériel: </label>
+                        <input type="text" id="mat-edit" name="mat-edit" required placeholder=""/>
+                        <label for="marque">*Marque: </label>
+                        <input type="text" id="marque-edit" name="marque-edit" required placeholder=""/>
+                        <label for="note">Note: </label>
+                        <input type="text" id="note-edit" name="note-edit" placeholder=""/>
+                        <button type="submit" name="edit" title="Modifier">Modifier</button>
+                    </form>  
+            <?php
+                if(isset($_POST["edit"])) {
+                    $req = "UPDATE stock SET materiel = {$_POST['mat-edit']}, marque = {$_POST['marque-edit']}, 
+                    note = {$_POST['note-edit']} WHERE ident = {$_POST['id']}";
+                    try {
+                        $bdd->getPdo()->exec($req);
+                    } catch(Exception $e) {
+                        die("Erreur: Impossible de modifier la BDD".$e->getMessage());
+                    }
+                }
+                }
+            ?>
             </div>
         </div>
 

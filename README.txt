@@ -63,7 +63,13 @@ JOUR 5:
 JOUR 6, 7 et 8: 
     Création de requête MySQL pour ajouter, supprimer et afficher données de la BDD
 
-
+JOUR 9: 
+    Mise en forme d'une page HTML plus propre et plus lisible pour accueillir 
+    l'application. La page de stock fonctionne bien, Ajout, suppression, trie.
+    
 A FAIRE !!!!!!!!!!!!!!!!!!
+    MODIFICATION DE STOCK : ne marche pas
     - Vérifier ID unique pour requête dans table
     - LIER BDD, classe STOCK et la page
+
+
