@@ -1,6 +1,6 @@
-/**********Entête*********/
+/*************************Entête*******************/
 body {
-    background-color: #1f4b63
+    background-color: #c2d2db;
 }
 
 .title {
@@ -8,9 +8,9 @@ body {
     font-family: 'Times New Roman', Times, serif;
     font-weight: normal;
 }
-
+/*  */
 .menu {
-    background-color: #2f81af;
+    background-color: gray;
     list-style-type: none;
     overflow: hidden;
     margin-left: 10%;
@@ -34,7 +34,7 @@ li a {
 }
 
 li a:hover {
-    background-color: #020024;
+    background-color: #c2d2db;
 } 
 
 li > * > p {
@@ -42,22 +42,22 @@ li > * > p {
 }
 
 p {
-    color: white;
+    color: black;
 }
 
-/**********Stock*********/
+/*************************Stock********************/
 .stock {
     margin-top: 1%;
     display: flex;
     height: 100%;
     width: 100%;
-    color: white;
     text-align: center;
 }
 
 .stock-action {
     width: 25%;
     margin-left: 2%;
+
 }
 
 .stock-list {
@@ -65,7 +65,6 @@ p {
     margin-right: 2%;
     margin-left: 2%;
     border-radius: 20px;
-    background-color: #2f81af;
 }
 
 table {
@@ -73,22 +72,17 @@ table {
     border-collapse: collapse;
 }
 
-td:not(:first-child) {
+td:not(:first-child):not(:last-child) {
     border-left: 2px solid black;
 }
 
+
 tr {
-    border: 2px solid black;
-    border-left: none;
-    border-right: none;
+    border: 2px solid black; 
 }
 
 .ref, .mat, .marque, .etat{
     width: 15%;
-}
-
-.addorsupp {
-    width: 10%;
 }
 
 .stock-menu {
@@ -101,6 +95,29 @@ tr {
 
 .stock-form {
     color: black;
+    list-style-type: none;
 }
+
+.stock-action > form {
+    border: 2px solid black;
+}
+
+.stock-form > li {
+    margin-top: 1em;
+}
+
+tr > .button {
+    width: 5%;
+}
+
+table tr:hover:not(:first-child) {
+    background-color: gray;
+}
+
+button[name="submit-reference"], button[name="submit-materiel"], 
+button[name="submit-marque"],button[name="submit-etat"] {
+    width: 100%;
+}
+
 
 

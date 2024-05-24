@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="fr">
-<!---------------------------- HEAD PAGE -------------------------------->
+<!-------------------------------------------- HEAD PAGE -------------------------------->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
-    <meta http-equiv="refresh" content="60"> 
+    <!--<meta http-equiv="refresh" content="60">-->
     <link href="css/testcss.css" rel="stylesheet"/>
     <title>Stock Informatique Vitré Communauté</title>
     <link rel="website icon" type="png" href="../ressources/images/VClogo.png"/>
 </head>
 
-<!------------------------------ BODY PAGE ------------------------------>
+<!----------------------------------------- BODY PAGE ----------------------------------->
 <body>
 
-    <!-------------------------- MENU ----------------------------------->
+    <!--------------------------------------- MENU -------------------------------------->
     <h1 class="title"><p>Gestion du stock et des prêts</p></h1>
     <ul class="menu">
         <li style="float:left"><a target="_blank" href="https://www.vitrecommunaute.org/"><img src="../ressources/images/VClogo.png" alt="logo" height="59px"></a></li>
@@ -22,26 +22,26 @@
         <li style="float:right"><a href="testindex.php?menu=3"><p class="menu-text">Se connecter</p></a></li> 
     </ul>
 
-    <!-------------------------- CONNEXION BDD -------------------------->
+    <!--------------------------------- CONNEXION BDD ----------------------------------->
     <?php
         require '../src/traitement/BDD.php';
         $bdd = new BDD();
         $bdd->connect();
     ?>
 
-    <!-------------------------- AFFICHAGE SELON MENU ------------------->
+    <!----------------------------- AFFICHAGE SELON MENU -------------------------------->
     <div class="contenu">
         <?php
             if(isset($_GET['menu'])) switch($_GET['menu']) {
                 case 1:
         ?>            
-        <!----------------------- CASE 1 -------------------------------->
-        <!----------------------- STOCK --------------------------------->
+        <!-------------------------------- CASE 1 --------------------------------------->
+        <!-------------------------------- STOCK ---------------------------------------->
         <div class="stock">
             <div class="stock-action">
-                <!-------------- AJOUTE AU STOCK ------------------------>
+                <!-------------------- AJOUTE AU STOCK ---------------------------------->
                 <h3>Ajouter en stock</h3>
-                <form action="testindex.php" method="POST">
+                <form action="testindex.php?menu=1" method="POST">
                     <ul class="stock-form">
                         <li>
                             <label for="reference">*Référence</label>
@@ -57,9 +57,9 @@
                         </li>
                         <li>
                             <label for="etat">*Etat</label>
-                            <input type="radio" id="etat" name="etat" value="D" checked/>Disponible
-                            <input type="radio" id="etat" name="etat" value="P"/>Prêté
-                            <input type="radio" id="etat" name="etat" value="R"/>En réparation
+                            <input type="radio" id="etat" name="etat" value="disponible" checked/>Disponible
+                            <input type="radio" id="etat" name="etat" value="déjà prêté"/>Prêté
+                            <input type="radio" id="etat" name="etat" value="en réparation"/>En réparation
                         </li>
                         <li>
                             <label for="note">Note</label>
@@ -70,7 +70,7 @@
                         </li>
                     </ul>
                 </form>
-                <!---------------- FORMULAIRE VERS BDD ------------------>
+                <!-------------------- FORMULAIRE VERS BDD ------------------------------>
                 <?php
                     if(isset($_POST['submit'])) {
                         $ref = $_POST['reference'];
@@ -88,32 +88,86 @@
                 ?>
             </div>
 
-            <!------------------- AFFICHE STOCK ------------------------->
+            <!-------------------------- AFFICHE STOCK ---------------------------------->
             <div class="stock-list">
             <h3>Tout le stock</h3>
             <table>
                 <tr>
-                    <th class="ref">Référence</th>
-                    <th class="mat">Matériel</th>
-                    <th class="marque">Marque</th>
-                    <th class="etat">Etat</th>
+                    <th class="ref">
+                        <form action="testindex.php?menu=1" method="POST">
+                            <button type="submit" name="submit-reference" title="Trier par référence">Référence</button>
+                        </form>
+                    </th>
+                    <th class="mat">
+                        <form action="testindex.php?menu=1" method="POST">
+                            <button type="submit" name="submit-materiel" title="Trier par matériel">Matériel</button>
+                        </form>
+                    </th>
+                    <th class="marque">
+                        <form action="testindex.php?menu=1" method="POST">
+                            <button type="submit" name="submit-marque" title="Trier par marque">Marque</button>
+                        </form>
+                    </th>
+                    <th class="etat">
+                        <form action="testindex.php?menu=1" method="POST">
+                            <button type="submit" name="submit-etat" title="Trier par état">Etat</button>
+                        </form>
+                    </th>
                     <th class="note">Note</th>
-                    <th class="addorsupp"></th>
+                    <th class="button"></th>
+                    <th class="button"></th>
                 </tr>
                 <?php 
-                    $result = $bdd->getPdo()->query('SELECT * FROM stock');
+                    $trie ="";
+                    if(isset($_POST['submit-reference'])) {
+                        $trie = ' ORDER BY ident';
+                    }
+                    if(isset($_POST['submit-materiel'])) {
+                        $trie = ' ORDER BY materiel';
+                    }
+                    if(isset($_POST['submit-etat'])) {
+                        $trie = ' ORDER BY etat';
+                    } 
+                    if(isset($_POST['submit-marque'])) {
+                        $trie = ' ORDER BY marque';
+                    }
+                    $result = $bdd->getPdo()->query('SELECT * FROM stock'.$trie);
                     foreach($result as $res) {
                 ?>  
-                    <tr>     
-                        <td><?php print $res['ident']; ?></td>
-                        <td><?php print $res['materiel']; ?></td>
-                        <td><?php print $res['marque']; ?></td>
-                        <td><?php print $res['etat']; ?></td>
-                        <td><?php print $res['note']; ?></td>
-                        <td><a class="image" href="#" title="Ajouter aux prêts" ><img src="../ressources/images/ajouter.png" alt="ajouter" height="20px"></a>
-                            <a class="image" href="#" title="Supprimer"><img src="../ressources/images/basket.png" alt="supprimer" height="20px"></a></td>
-                    </tr>
+                <tr>     
+                    <td><?php print $res['ident']; $id = $res['ident']; ?></td>
+                    <td><?php print $res['materiel']; ?></td>
+                    <td><?php print $res['marque']; ?></td>
+                    <td><?php print $res['etat']; ?></td>
+                    <td><?php print $res['note']; ?></td>
+                    <td class="button">
+                        <form action="testindex.php?menu=2" method="POST">
+                            <button type="submit" name="submit-add" title="Ajouter aux prêts">
+                            <input type="hidden" value="<?php echo $id; ?>" name="id"/>
+                            <img src="../ressources/images/ajouter.png" alt="ajouter" height="20px">
+                            </button>
+                        </form>
+                    </td>
+                    <td class="button">
+                        <form action="testindex.php?menu=1" method="POST">
+                            <button type="submit" name="submit-supp" title="Supprimer">
+                            <input type="hidden" value="<?php echo $id; ?>" name="id"/>
+                            <img src="../ressources/images/basket.png" alt="supprimer" height="20px">
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <!------------------------ ACTIONS BOUTONS ------------------------------>
                 <?php
+                    }
+                    if(isset($_POST['submit-supp'])) {
+                        $req = "DELETE FROM stock WHERE ident = {$_POST['id']} ";
+                        $bdd->getPdo()->exec($req);
+                        try {
+                            $bdd->getPdo()->query($req);
+                        } catch(Exception $e) {
+                            die("Erreur: Impossible d'ajouter dans la BDD".$e->getMessage());
+                        }
                     }
                 ?>
             </table>   
