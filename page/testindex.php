@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
-<!-------------------------------------------- HEAD PAGE -------------------------------->
+<!--------------------------------------- HEAD PAGE ------------------------------------->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
@@ -10,7 +10,7 @@
     <link rel="website icon" type="png" href="../ressources/images/VClogo.png"/>
 </head>
 
-<!----------------------------------------- BODY PAGE ----------------------------------->
+<!--------------------------------------- BODY PAGE ------------------------------------->
 <body>
 
     <!--------------------------------------- MENU -------------------------------------->
@@ -27,6 +27,8 @@
         require '../src/traitement/BDD.php';
         $bdd = new BDD();
         $bdd->connect();
+        $localdate = date('Y-m-d');
+        echo("Date du jour : ". $localdate);
     ?>
 
     <!----------------------------- AFFICHAGE SELON MENU -------------------------------->
@@ -122,7 +124,7 @@
                     <th class="button"></th>
                     <th class="button"></th>
                 </tr>
-                <!--------------------------- BOUTONS DE TRIE --------------------------->
+                <!--------------------------- BOUTONS DE TRI ---------------------------->
                 <?php 
                     $trie ="";
                     $id;
@@ -215,30 +217,74 @@
             ?>
             </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
         <?php            
                 break;
                 case 2:
         ?>
-        <!------ CASE 2 --------->
+        <!------------------------------------ CASE 2 ------------------------------------>
+        <!-------------------------------------PRET--------------------------------------->
+        <div class="pret">
+            <div class="pret-action">
+                <!-----------------------PRET ACTIONS------------------------------------->
+                <h3>Effectuer un prêt</h3>
+                <form action="testindex.php?menu=2" method="POST">
+                    <ul class="pret-form">
+                        <li>
+                            <label for="reference">*Référence :</label>
+                            <input type="text" id="reference" name="reference" value="<?php if(isset($_POST['id'])) echo $_POST['id'];?>" required placeholder=""/>
+                        </li>
+                        <li>
+                            <label for="demandeur">*Client :</label>
+                            <input type="text" id="demandeur" name="demandeur" required/>
+                        </li>
+                        <li>
+                            <label for="start">*Début du prêt :</label>
+                            <input type="date" id="start" name="start" value="<?php echo $localdate; ?>" required/>
+                        </li>
+                        <li>
+                            <label for="end">*Fin du prêt :</label>
+                            <input type="date" id="end" name="end" required/>
+                        </li>
+                        <li>
+                            <button type="submit" name="submit">Confirmer la demande</button>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+            <!------------------------------STOCK LISTE----------------------------------->
+            <div class="pret-liste">
+                <h3>Liste des prêts en cours</h3>
+                <table class="pret-table">
+                    <tr>
+                        <th class="ref">Référence</th>
+                        <th class="start">Début du prêt</th>
+                        <th class="end">Fin du prêt</th>
+                        <th class="client">Client</th>
+                    </tr>
+                    <?php 
+                        $result = $bdd->getPdo()->query('SELECT * FROM pret');
+                        foreach($result as $res) {
+                    ?>
+                    <tr>
+                        <td class="ref"><?php print $res['ident']; $id = $res['ident']; ?></td>
+                        <td class="start"><?php print $res['start']; ?></td>
+                        <td class="end"><?php print $res['end']; ?></td>
+                        <td class="client"><?php print $res['client']; ?></td>
+                    </tr>
+                    <?php
+                        }
+                    ?>
+                </table>
 
+            </div>
+        </div>
 
         <?php
                 break;
                 case 3:
         ?>
-        <!------ CASE 3 --------->
-        <!---- SE CONNECTER ----->
+        <!--------------------------------------- CASE 3 --------------------------------->
+        <!----------------------------------- SE CONNECTER ------------------------------->
 
 
         <?php            

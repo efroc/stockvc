@@ -12,8 +12,7 @@ class BDD {
         try {
             $this->pdo = new PDO("mysql:host=$this->servername;dbname=stockvc", $this->username, $this->password);
             $this ->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            print("Connecté à la base de données\n");
-            print nl2br("\n");
+            print("Connecté à la base de données | ");
         }
         catch(Exception $e) {
             die("Impossible de se connecter à la base de données: " .$e->getMessage().print nl2br("\n"));
