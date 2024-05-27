@@ -3,6 +3,10 @@ body {
     background-color: #c2d2db;
 }
 
+.login {
+    background-color: #ff8f8f;
+}
+
 .title {
     text-align: center;
     font-family: 'Times New Roman', Times, serif;

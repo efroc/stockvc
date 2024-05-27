@@ -69,14 +69,15 @@ JOUR 9:
 
 3e SEMAINE:
     Page de stock et pret quasi-finie, erreur de modification de ligne à corriger
+    Réunion de présentation de l'appli. Page historique à faire et autres modifs et améliorations.
     
 TO DO !!!!!!!!!!!!
     - ERREUR : MODIFICATION DE STOCK et DE PRET : ne marche pas
-    - ERREUR : Une fois qu'un prêt est dans la liste, empêcher d'effectuer 
-    une action dans le stock.
 
     - A FAIRE : Une pseudo console en bas de page pour écrire les messages d'erreurs
                 pour éviter qu'ils ne s'affichent n'importe où dans la page
+    - A FAIRE : Ajouter une colonne total dans stock qui comptabilise 
+                le nombre de même materiel
     - A FAIRE : Ajouter champ preteur-client
     - A FAIRE : Référence affichage inutile
     - A FAIRE : un historique

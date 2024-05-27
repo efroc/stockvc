@@ -21,7 +21,7 @@
         <li><a href="testindex.php?menu=1"><p class="menu-text">Stock</p></a></li>
         <li><a href="testindex.php?menu=2"><p class="menu-text">Prêts et Alertes</p></a></li>
         <li><a href="testindex.php?menu=3"><p class="menu-text">Historique</p></a></li>
-        <li style="float:right"><a href="testindex.php?menu=3"><p class="menu-text">Se connecter</p></a></li> 
+        <li style="float:right"><a class="login" href="testindex.php?menu=3"><p class="menu-text">Se connecter</p></a></li> 
     </ul>
 
 <!--------------------------------------------------- CONNEXION BDD ----------------------------------------------------------->
@@ -166,7 +166,7 @@
                     <td><?php print $res['ident']; $id = $res['ident']; ?></td>
                     <td><?php print $res['materiel']; ?></td>
                     <td><?php print $res['marque']; ?></td>
-                    <td><?php print $res['etat']; ?></td>
+                    <td><?php print $res['etat']; $state = $res['etat']; ?></td>
                     <td><?php print $res['note']; ?></td>
                     <td class="button">
                         <form action="testindex.php?menu=2" method="POST">
@@ -195,7 +195,7 @@
 <!------------------------------------------ BOUTONS DES ACTIONS DU STOCK ----------------------------------------------------->
                 <?php
                     }
-                    if(isset($_POST['submit-supp'])) {
+                    if(isset($_POST['submit-supp']) && $state === "disponible") {
                         $req = "DELETE FROM stock WHERE ident = {$_POST['id']} ";
                         $bdd->getPdo()->exec($req);
                         try {
@@ -204,6 +204,7 @@
                             die("Erreur: Impossible de supprimer dans la BDD".$e->getMessage());
                         }
                     }
+                    
                 ?>
             </table>   
             <br/>
