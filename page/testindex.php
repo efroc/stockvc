@@ -21,7 +21,7 @@
         <li><a href="testindex.php?menu=1"><p class="menu-text">Stock</p></a></li>
         <li><a href="testindex.php?menu=2"><p class="menu-text">Prêts et Alertes</p></a></li>
         <li><a href="testindex.php?menu=3"><p class="menu-text">Historique</p></a></li>
-        <li style="float:right"><a class="login" href="testindex.php?menu=3"><p class="menu-text">Se connecter</p></a></li> 
+        <li style="float:right"><a class="login" href="testindex.php?menu=4"><p class="menu-text">Se connecter</p></a></li> 
     </ul>
 
 <!--------------------------------------------------- CONNEXION BDD ----------------------------------------------------------->
