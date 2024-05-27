@@ -66,8 +66,22 @@ JOUR 6, 7 et 8:
 JOUR 9: 
     Mise en forme d'une page HTML plus propre et plus lisible pour accueillir 
     l'application. La page de stock fonctionne bien, Ajout, suppression, trie.
+
+3e SEMAINE:
+    Page de stock et pret quasi-finie, erreur de modification de ligne à corriger
     
-A FAIRE !!!!!!!!!!!!!!!!!!
-    MODIFICATION DE STOCK : ne marche pas
+TO DO !!!!!!!!!!!!
+    - ERREUR : MODIFICATION DE STOCK et DE PRET : ne marche pas
+    - ERREUR : Une fois qu'un prêt est dans la liste, empêcher d'effectuer 
+    une action dans le stock.
+
+    - A FAIRE : Une pseudo console en bas de page pour écrire les messages d'erreurs
+                pour éviter qu'ils ne s'affichent n'importe où dans la page
+    - A FAIRE : Ajouter champ preteur-client
+    - A FAIRE : Référence affichage inutile
+    - A FAIRE : Affichage du matériel et de la note dans les prêts 
+    - A FAIRE : un historique
+    - A FAIRE : Rajouter un état affecter et rebus (sortie du stock definitivement)
+
 
 
