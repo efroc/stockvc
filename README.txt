@@ -79,9 +79,7 @@ TO DO !!!!!!!!!!!!
                 pour éviter qu'ils ne s'affichent n'importe où dans la page
     - A FAIRE : Ajouter champ preteur-client
     - A FAIRE : Référence affichage inutile
-    - A FAIRE : Affichage du matériel et de la note dans les prêts 
     - A FAIRE : un historique
-    - A FAIRE : Rajouter un état affecter et rebus (sortie du stock definitivement)
 
 
 
