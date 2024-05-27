@@ -69,7 +69,5 @@ JOUR 9:
     
 A FAIRE !!!!!!!!!!!!!!!!!!
     MODIFICATION DE STOCK : ne marche pas
-    - Vérifier ID unique pour requête dans table
-    - LIER BDD, classe STOCK et la page
 
 

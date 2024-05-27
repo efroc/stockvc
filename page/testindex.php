@@ -176,7 +176,7 @@
                         </form>
                     </td>
                 </tr>
-                <!------------------------ BOUTONS ACTIONS ------------------------------>
+                <!------------------------- BOUTONS STOCK ACTIONS ----------------------->
                 <?php
                     }
                     if(isset($_POST['submit-supp'])) {
@@ -203,16 +203,19 @@
                         <input type="text" id="note-edit" name="note-edit" placeholder=""/>
                         <button type="submit" name="edit" title="Modifier">Modifier</button>
                     </form>  
+                    <form action="testindex.php?menu=1" method="POST">
+                        <button type="submit" name="cancel" title="Annuler">Annuler</button>
+                    </form>
             <?php
-                if(isset($_POST["edit"])) {
-                    $req = "UPDATE stock SET materiel = {$_POST['mat-edit']}, marque = {$_POST['marque-edit']}, 
-                    note = {$_POST['note-edit']} WHERE ident = {$_POST['id']}";
-                    try {
-                        $bdd->getPdo()->exec($req);
-                    } catch(Exception $e) {
-                        die("Erreur: Impossible de modifier la BDD".$e->getMessage());
+                    if(isset($_POST["edit"])) {
+                        $req = "UPDATE stock SET materiel = {$_POST['mat-edit']}, marque = {$_POST['marque-edit']}, 
+                        note = {$_POST['note-edit']} WHERE ident = {$_POST['id']}";
+                        try {
+                            $bdd->getPdo()->exec($req);
+                        } catch(Exception $e) {
+                            die("Erreur: Impossible de modifier la BDD".$e->getMessage());
+                        }
                     }
-                }
                 }
             ?>
             </div>
@@ -256,13 +259,41 @@
                 <h3>Liste des prêts en cours</h3>
                 <table class="pret-table">
                     <tr>
-                        <th class="ref">Référence</th>
-                        <th class="start">Début du prêt</th>
-                        <th class="end">Fin du prêt</th>
-                        <th class="client">Client</th>
+                        <th class="ref">
+                            <form action="testindex.php?menu=2" method="POST">
+                                <button type="submit" name="submit-reference" title="Trier par référence">Référence</button>
+                            </form>
+                        </th>
+                        <th class="start">
+                            <form action="testindex.php?menu=2" method="POST">
+                                <button type="submit" name="submit-start" title="Trier par date de début">Début du prêt</button>
+                            </form>
+                        </th>
+                        <th class="end">
+                            <form action="testindex.php?menu=2" method="POST">
+                                <button type="submit" name="submit-end" title="Trier par date de fin">Fin du prêt</button>
+                            </form>
+                        </th>
+                        <th class="client">
+                            <form action="testindex.php?menu=2" method="POST">
+                                <button type="submit" name="submit-client" title="Trier par client">Client</button>
+                            </form>
+                        </th>
                     </tr>
                     <?php 
-                        $result = $bdd->getPdo()->query('SELECT * FROM pret');
+                        if(isset($_POST['submit-reference'])) {
+                            $trie = ' ORDER BY ident';
+                        }
+                        if(isset($_POST['submit-start'])) {
+                            $trie = ' ORDER BY start';
+                        }
+                        if(isset($_POST['submit-end'])) {
+                            $trie = ' ORDER BY end';
+                        }
+                        if(isset($_POST['submit-client'])) {
+                            $trie = ' ORDER BY client';
+                        }
+                        $result = $bdd->getPdo()->query('SELECT * FROM pret'.$trie);
                         foreach($result as $res) {
                     ?>
                     <tr>
