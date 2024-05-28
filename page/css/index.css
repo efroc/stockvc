@@ -34,11 +34,11 @@ li a {
     display: block;
     text-decoration: none;
     text-align: center;
-    padding: 5px 60px;
+    padding: 5px 50px;
 }
 
 li a[class="redirection"] {
-    padding: 5px 20px;
+    padding: 5px 10px;
 }
 
 li a:hover {

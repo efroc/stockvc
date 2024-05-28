@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <!--<meta http-equiv="refresh" content="60">-->
-    <link href="css/testcss.css" rel="stylesheet"/>
+    <link href="css/index.css" rel="stylesheet"/>
     <title>Stock Informatique Vitré Communauté</title>
     <link rel="website icon" type="png" href="../ressources/images/VClogo.png"/>
 </head>
@@ -18,15 +18,16 @@
     <ul class="menu">
         <li style="float:left"><a class="redirection" target="_blank" href="https://www.vitrecommunaute.org/"><img src="../ressources/images/VClogo.png" alt="logo" height="59px"></a></li>
         <li style="float:left"><a class="redirection" target="_blank" href="https://www.mairie-vitre.com/"><img src="../ressources/images/mairielogo.png" alt="logo" height="59px"></a></li>
-        <li><a href="testindex.php?menu=1"><p class="menu-text">Stock</p></a></li>
-        <li><a href="testindex.php?menu=2"><p class="menu-text">Prêts et Alertes</p></a></li>
-        <li><a href="testindex.php?menu=3"><p class="menu-text">Historique</p></a></li>
-        <li style="float:right"><a class="login" href="testindex.php?menu=4"><p class="menu-text">Se connecter</p></a></li> 
+        <li><a href="index.php?menu=1"><p class="menu-text">Stock</p></a></li>
+        <li><a href="index.php?menu=2"><p class="menu-text">Prêts et Alertes</p></a></li>
+        <li><a href="index.php?menu=3"><p class="menu-text">Historique</p></a></li>
+        <li style="float:right"><a class="login" href="index.php?menu=4"><p class="menu-text">Se connecter</p></a></li> 
     </ul>
 
 <!--------------------------------------------------- CONNEXION BDD ----------------------------------------------------------->
     <?php
         require '../src/traitement/BDD.php';
+        require '../src/traitement/Erreur.php';
         $bdd = new BDD();
         $bdd->connect();
         $localdate = date('Y-m-d');
@@ -48,7 +49,7 @@
             <div class="stock-action">
 <!-------------------------------------------- FORMULAIRE AJOUTER AU STOCK ---------------------------------------------------->
                 <h3>Ajouter en stock</h3>
-                <form action="testindex.php?menu=1" method="POST">
+                <form action="index.php?menu=1" method="POST">
                     <ul class="stock-form">
                         <li>
                             <label for="reference">*Référence</label>
@@ -112,27 +113,27 @@
             <table>
                 <tr class="stock-table">
                     <th class="ref">
-                        <form action="testindex.php?menu=1" method="POST">
+                        <form action="index.php?menu=1" method="POST">
                             <button type="submit" name="submit-reference" title="Trier par référence">Référence</button>
                         </form>
                     </th>
                     <th class="mat">
-                        <form action="testindex.php?menu=1" method="POST">
+                        <form action="index.php?menu=1" method="POST">
                             <button type="submit" name="submit-materiel" title="Trier par matériel">Matériel</button>
                         </form>
                     </th>
                     <th class="marque">
-                        <form action="testindex.php?menu=1" method="POST">
+                        <form action="index.php?menu=1" method="POST">
                             <button type="submit" name="submit-marque" title="Trier par marque">Marque</button>
                         </form>
                     </th>
                     <th class="etat">
-                        <form action="testindex.php?menu=1" method="POST">
+                        <form action="index.php?menu=1" method="POST">
                             <button type="submit" name="submit-etat" title="Trier par état">Etat</button>
                         </form>
                     </th>
                     <th class="note">
-                        <form action="testindex.php?menu=1" method="POST">
+                        <form action="index.php?menu=1" method="POST">
                             <button type="submit" name="submit-note" title="Trier par note">Note</button>
                         </form>
                     </th>
@@ -169,7 +170,7 @@
                     <td><?php print $res['etat']; $state = $res['etat']; ?></td>
                     <td><?php print $res['note']; ?></td>
                     <td class="button">
-                        <form action="testindex.php?menu=2" method="POST">
+                        <form action="index.php?menu=2" method="POST">
                             <button type="submit" name="submit-add" title="Ajouter aux prêts">
                             <input type="hidden" value="<?php echo $id; ?>" name="id"/>
                             <img src="../ressources/images/ajouter.png" alt="ajouter" height="20px">
@@ -177,14 +178,14 @@
                         </form>
                     </td>
                     <td class="button">
-                        <form action="testindex.php?menu=1" method="POST">
+                        <form action="index.php?menu=1" method="POST">
                             <button type="submit" name="submit-edit" title="Modifier">
                             <input type="hidden" value="<?php echo $id; ?>" name="id"/>
                             <img src="../ressources/images/modifier.png" alt="modifier" height="20px">
                         </form>
                     </td>
                     <td class="button">
-                        <form action="testindex.php?menu=1" method="POST">
+                        <form action="index.php?menu=1" method="POST">
                             <button type="submit" name="submit-supp" title="Supprimer">
                             <input type="hidden" value="<?php echo $id; ?>" name="id"/>
                             <img src="../ressources/images/basket.png" alt="supprimer" height="20px">
@@ -211,7 +212,7 @@
             <?php
                 if(isset($_POST["submit-edit"])) {
             ?>
-                    <form action="testindex.php?menu=1" method="POST">
+                    <form action="index.php?menu=1" method="POST">
                         <label for="materiel">*Matériel: </label>
                         <input type="text" id="mat-edit" name="mat-edit" required placeholder=""/>
                         <label for="marque">*Marque: </label>
@@ -220,7 +221,7 @@
                         <input type="text" id="note-edit" name="note-edit" placeholder=""/>
                         <button type="submit" name="edit" title="Modifier">Modifier</button>
                     </form>  
-                    <form action="testindex.php?menu=1" method="POST">
+                    <form action="index.php?menu=1" method="POST">
                         <button type="submit" name="cancel" title="Annuler">Annuler</button>
                     </form>
             <?php
@@ -250,7 +251,7 @@
             <div class="pret-action">
 <!----------------------------------------------------PRET ACTIONS------------------------------------------------------------->
                 <h3>Effectuer un prêt</h3>
-                <form action="testindex.php?menu=2" method="POST">
+                <form action="index.php?menu=2" method="POST">
                     <ul class="pret-form">
                         <li>
                             <label for="reference">*Référence :</label>
@@ -303,37 +304,37 @@
                 <table>
                     <tr class="pret-table">
                         <th class="ref">
-                            <form action="testindex.php?menu=2" method="POST">
+                            <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-reference" title="Trier par référence">Référence</button>
                             </form>
                         </th>
                         <th class="mat">
-                            <form action="testindex.php?menu=2" method="POST">
+                            <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-materiel" title="Trier par materiel">Matériel</button>
                             </form>
                         </th>
                         <th class="marque">
-                            <form action="testindex.php?menu=2" method="POST">
+                            <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-marque" title="Trier par marque">Marque</button>
                             </form>
                         </th>
                         <th class="note">
-                            <form action="testindex.php?menu=2" method="POST">
+                            <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-note" title="Trier par note">Note</button>
                             </form>
                         </th>
                         <th class="start">
-                            <form action="testindex.php?menu=2" method="POST">
+                            <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-start" title="Trier par date de début">Début du prêt</button>
                             </form>
                         </th>
                         <th class="end">
-                            <form action="testindex.php?menu=2" method="POST">
+                            <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-end" title="Trier par date de fin">Fin du prêt</button>
                             </form>
                         </th>
                         <th class="client">
-                            <form action="testindex.php?menu=2" method="POST">
+                            <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-client" title="Trier par client">Client</button>
                             </form>
                         </th>
@@ -367,14 +368,14 @@
                         <td class="end"><?php print $res['end']; ?></td>
                         <td class="client"><?php print $res['client']; ?></td>
                         <td class="button">
-                            <form action="testindex.php?menu=2" method="POST">
+                            <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-edit" title="Modifier">
                                 <input type="hidden" value="<?php echo $id; ?>" name="id"/>
                                 <img src="../ressources/images/modifier.png" alt="modifier" height="20px">
                             </form>
                          </td>
                         <td class="button">
-                            <form action="testindex.php?menu=2" method="POST">
+                            <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-supp" title="Supprimer">
                                 <input type="hidden" value="<?php echo $id; ?>" name="id"/>
                                 <img src="../ressources/images/basket.png" alt="supprimer" height="20px">
@@ -415,17 +416,17 @@
             <table>
                 <tr class="historique-table">
                     <th class="date">
-                        <form action="testindex.php?menu=3" method="POST">
+                        <form action="index.php?menu=3" method="POST">
                             <button type="submit" name="submit-date" title="Trier par date">Date</button>
                         </form>
                     </th>
                     <th class="ref">
-                        <form action="testindex.php?menu=3" method="POST">
+                        <form action="index.php?menu=3" method="POST">
                             <button type="submit" name="submit-reference" title="Trier par référence">Référence</button>
                         </form>
                     </th>
                     <th class="message">
-                        <form action="testindex.php?menu=3" method="POST">
+                        <form action="index.php?menu=3" method="POST">
                             <button type="submit" name="submit-message" title="Trier par message">Message</button>
                         </form>
                     </th>
