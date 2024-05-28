@@ -62,25 +62,25 @@ class Stock {
 class Materiel {
 
     /**
-     * ident -> reference unique d'identification
+     * reference -> reference unique d'identification
      * type -> clavier, écran, souris etc
      * marque -> acer, asus etc
      * état -> dispo, prêté, réparation etc 
      * note -> commentaire sur le produit
      */    
-    private int $ident; 
-    private string $type;
+    private int $reference; 
+    private string $materiel;
     private string $marque;
     private string $etat;
     private string $note;
 
-    public function __construct(int $ident, string $type, string $marque, string $etat, string $note) {   
+    public function __construct(int $reference, string $materiel, string $marque, string $etat, string $note) {   
         if($etat !== "disponible" && $etat !== "en réparation" && $etat !== "déjà prêté") {
             print "Erreur : Mauvais type pour état (D | P | R requis)";
         }
         else {
-            $this->ident = $ident;
-            $this->type = $type;
+            $this->reference = $reference;
+            $this->materiel = $materiel;
             $this->marque = $marque;
             $this->etat = $etat;
             $this->note = $note;
@@ -89,12 +89,12 @@ class Materiel {
     
     /** Getters/Setters attributs
      */
-    public function getIdent(): string {
-        return $this->ident;
+    public function getReference(): string {
+        return $this->reference;
     }
     
-    public function getType(): string {
-        return $this->type;
+    public function getMateriel(): string {
+        return $this->materiel;
     }
     
     public function getMarque(): string {
@@ -109,8 +109,8 @@ class Materiel {
         return $this->note;
     }
     
-    public function setType(string $type) {
-        $this->type = $type;
+    public function setMateriel(string $materiel) {
+        $this->materiel = $materiel;
     }
     
     public function setMarque(string $marque) {
@@ -130,7 +130,7 @@ class Materiel {
      *  @return bool true si égaux, false sinon
      */
     public function equalTo(Materiel $mat2): bool {
-        if($this->getIdent() === $mat2->getIdent() && $this->getType() === $mat2->getType() && $this->getMarque() === $mat2->getMarque() && $this->getEtat() === $mat2->getEtat() && $this->getNote() === $mat2->getNote()) {
+        if($this->getReference() === $mat2->getReference() && $this->getMateriel() === $mat2->getMateriel() && $this->getMarque() === $mat2->getMarque() && $this->getEtat() === $mat2->getEtat() && $this->getNote() === $mat2->getNote()) {
             return true;
         }
         else {
@@ -138,10 +138,9 @@ class Materiel {
         }
     }
 
-    /** Affiche un objet Materiel
-     */
+    /** Affiche un objet Materiel**/
     public function materielToString() {
-        print "ID:  " .$this->getIdent(). " | Type: " .$this->getType(). " | Marque: " .$this->getMarque(). " | Etat: " .$this->getEtat(). " | Note: " .$this->getNote();
+        print "Référence:  " .$this->getReference(). " | Matériel: " .$this->getReference(). " | Marque: " .$this->getMarque(). " | Etat: " .$this->getEtat(). " | Note: " .$this->getNote();
         print nl2br("\n");
     }
     

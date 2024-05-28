@@ -27,6 +27,7 @@
 <!--------------------------------------------------- CONNEXION BDD ----------------------------------------------------------->
     <?php
         require '../src/traitement/BDD.php';
+        require '../src/class/Stock.php';
         require '../src/traitement/Erreur.php';
         $bdd = new BDD();
         $bdd->connect();
@@ -52,19 +53,19 @@
                 <form action="index.php?menu=1" method="POST">
                     <ul class="stock-form">
                         <li>
-                            <label for="reference">*Référence</label>
-                            <input type="text" id="reference" name="reference" required placeholder=""/>
+                            <label for="reference">Référence</label><br/>
+                            <input type="text" id="reference" name="reference" placeholder="Ex: N° de série"/>
                         </li>
                         <li>
-                            <label for="materiel">*Matériel</label>
+                            <label for="materiel">*Matériel</label><br/>
                             <input type="text" id="materiel" name="materiel" required placeholder="Ex: clavier"/>
                         </li>
                         <li>
-                            <label for="marque">*Marque</label>
+                            <label for="marque">*Marque</label><br/>
                             <input type="text" id="marque" name="marque" required placeholder="Ex: logitech"/>
                         </li>
                         <li>
-                            <label for="etat">*Etat</label>
+                            <label for="etat">*Etat</label><br/>
                             <input type="radio" id="etat" name="etat" value="disponible" checked/>Disponible
                             <input type="radio" id="etat" name="etat" value="déjà prêté"/>Prêté
                             <input type="radio" id="etat" name="etat" value="affecté"/>Affecté
@@ -72,7 +73,7 @@
                             <input type="radio" id="etat" name="etat" value="rebut"/>Rebut
                         </li>
                         <li>
-                            <label for="note">Note</label>
+                            <label for="note">Note</label><br/>
                             <input type="text" id="note" name="note" placeholder="Facultatif"/>
                         </li>
                         <li>
@@ -83,26 +84,9 @@
 <!---------------------------------------------- FORMULAIRE VERS BDD ---------------------------------------------------------->
                 <?php
                     if(isset($_POST['submit-stock'])) {
-                        $ref = $_POST['reference'];
-                        $mat = strtolower($_POST['materiel']);
-                        $marque = strtolower($_POST['marque']);
-                        $etat = strtolower($_POST['etat']);
-                        $note = strtolower($_POST['note']);
-                        $histo = "Le matériel suivant a été ajouté au stock. Matériel : ".$mat. 
-                                 " | Marque : ".$marque. " | Etat : " .$etat. " | Note : " .$note;
-                        $req = "INSERT INTO stock (ident, materiel, marque, etat, note) VALUES ('$ref', '$mat', '$marque', '$etat', '$note')";
-                        try {
-                            $bdd->getPdo()->query($req);
-                            $req = "INSERT INTO historique (identMateriel, message, date) VALUES ('$ref', '$histo', '$localdate')";
-                            try {
-                                $bdd->getPdo()->query($req);
-                            }
-                            catch(Exception $e) {
-                                die("Erreur: Impossible d'ajouter dans l'historique".$e->getMessage());
-                            }
-                        } catch(Exception $e) {
-                            die("Erreur: Impossible d'ajouter dans la BDD".$e->getMessage());
-                        }
+                        $newmat = new Materiel($_POST['reference'], strtolower($_POST['materiel']), strtolower($_POST['marque']), 
+                                strtolower($_POST['etat']), strtolower($_POST['note']));
+                        $bdd->addMaterielToStock($newmat);
                     }   
                 ?>
             </div>
@@ -144,9 +128,11 @@
 <!------------------------------------------------ BOUTONS DE TRI ------------------------------------------------------------->
                 <?php 
                     $trie ="";
+                    $state;
                     $id;
+                    $ref ="";
                     if(isset($_POST['submit-reference'])) {
-                        $trie = ' ORDER BY ident';
+                        $trie = ' ORDER BY reference';
                     }
                     if(isset($_POST['submit-materiel'])) {
                         $trie = ' ORDER BY materiel';
@@ -164,7 +150,7 @@
                     foreach($result as $res) {
                 ?>  
                 <tr class="stock-table">     
-                    <td><?php print $res['ident']; $id = $res['ident']; ?></td>
+                    <td><?php print $res['reference']; $id = $res['ident']; ?></td>
                     <td><?php print $res['materiel']; ?></td>
                     <td><?php print $res['marque']; ?></td>
                     <td><?php print $res['etat']; $state = $res['etat']; ?></td>
@@ -172,7 +158,7 @@
                     <td class="button">
                         <form action="index.php?menu=2" method="POST">
                             <button type="submit" name="submit-add" title="Ajouter aux prêts">
-                            <input type="hidden" value="<?php echo $id; ?>" name="id"/>
+                            <input type="hidden" value="<?php echo $res['reference']; ?>" name="id"/>
                             <img src="../ressources/images/ajouter.png" alt="ajouter" height="20px">
                             </button>
                         </form>
@@ -196,21 +182,15 @@
 <!------------------------------------------ BOUTONS DES ACTIONS DU STOCK ----------------------------------------------------->
                 <?php
                     }
-                    if(isset($_POST['submit-supp']) && $state === "disponible") {
-                        $req = "DELETE FROM stock WHERE ident = {$_POST['id']} ";
-                        $bdd->getPdo()->exec($req);
-                        try {
-                            $bdd->getPdo()->query($req);
-                        } catch(Exception $e) {
-                            die("Erreur: Impossible de supprimer dans la BDD".$e->getMessage());
-                        }
+                    if(isset($_POST['submit-supp'])) {
+                        $bdd->suppMaterielFromStock($_POST['id']);
                     }
-                    
                 ?>
             </table>   
             <br/>
             <?php
                 if(isset($_POST["submit-edit"])) {
+                    $id = $_POST['id'];
             ?>
                     <form action="index.php?menu=1" method="POST">
                         <label for="materiel">*Matériel: </label>
@@ -227,7 +207,7 @@
             <?php
                     if(isset($_POST["edit"])) {
                         $req = "UPDATE stock SET materiel = {$_POST['mat-edit']}, marque = {$_POST['marque-edit']}, 
-                        note = {$_POST['note-edit']} WHERE ident = {$_POST['id']}";
+                        note = {$_POST['note-edit']} WHERE ident = {$id}";
                         try {
                             $bdd->getPdo()->exec($req);
                         } catch(Exception $e) {
@@ -254,19 +234,74 @@
                 <form action="index.php?menu=2" method="POST">
                     <ul class="pret-form">
                         <li>
-                            <label for="reference">*Référence :</label>
-                            <input type="text" id="reference" name="reference" value="<?php if(isset($_POST['id'])) echo $_POST['id'];?>" required placeholder=""/>
+                            <label for="reference">Référence</label><br/>
+                            <input type="text" id="reference" name="reference" value="<?php if(isset($_POST['submit-add'])) echo($_POST['id']);?>" required placeholder=""/>
                         </li>
                         <li>
-                            <label for="client">*Client :</label>
-                            <input type="text" id="client" name="client" required/>
+                            <label for="client">*Client</label><br/>
+                            <select name="client" id="client" required>
+                                <option value="Mairie d\'Argentré du Plessis">Mairie d'Argentré du Plessis</option>
+                                <option value="Mairie d\'Availles-sur-Seiche">Mairie d'Availles-sur-Seiche</option>
+                                <option value="Mairie de Bais">Mairie de Bais</option>
+                                <option value="Mairie de Balazé">Mairie de Balazé</option>
+                                <option value="Mairie de Bréal-sous-Vitré">Mairie de Bréal-sous-Vitré</option>
+                                <option value="Mairie de Brielles">Mairie de Brielles</option>
+                                <option value="Mairie de Champeaux">Mairie de Champeaux</option>
+                                <option value="Mairie de Châteaubourg">Mairie de Châteaubourg</option>
+                                <option value="Mairie de Châtillon-en-Vendelais">Mairie de Châtillon-en-Vendelais</option>
+                                <option value="Mairie de Cornillé">Mairie de Cornillé</option>
+                                <option value="Mairie de Domagné">Mairie de Domagné</option>
+                                <option value="Mairie de Domalain">Mairie de Domalain</option>
+                                <option value="Mairie de Drouges">Mairie de Drouges</option>
+                                <option value="Mairie d\'Erbrée">Mairie d'Erbrée</option>
+                                <option value="Mairie d\'Étrelles">Mairie d'Étrelles</option>
+                                <option value="Mairie de Gennes-sur-Seiche">Mairie de Gennes-sur-Seiche</option>
+                                <option value="Mairie de La Chapelle-Erbrée">Mairie de La Chapelle-Erbrée</option>
+                                <option value="Mairie de La Guerche-de-Bretagne">Mairie de La Guerche-de-Bretagne</option>
+                                <option value="Mairie de La Selle-Guerchaise">Mairie de La Selle-Guerchaise</option>
+                                <option value="Mairie de Landavran">Mairie de Landavran</option>
+                                <option value="Mairie de Le Pertre">Mairie de Le Pertre</option>
+                                <option value="Mairie de Louvigné-de-Bais">Mairie de Louvigné-de-Bais</option>
+                                <option value="Mairie de Marpiré">Mairie de Marpiré</option>
+                                <option value="Mairie de Mecé">Mairie de Mecé</option>
+                                <option value="Mairie de Mondevert">Mairie de Mondevert</option>
+                                <option value="Mairie de Montautour">Mairie de Montautour</option>
+                                <option value="Mairie de Montreuil-des-Landes">Mairie de Montreuil-des-Landes</option>
+                                <option value="Mairie de Montreuil-sous-Pérouse">Mairie de Montreuil-sous-Pérouse</option>
+                                <option value="Mairie de Moulins">Mairie de Moulins</option>
+                                <option value="Mairie de Moussé">Mairie de Moussé</option>
+                                <option value="Mairie de Pocé-les-Bois">Mairie de Pocé-les-Bois</option>
+                                <option value="Mairie de Princé">Mairie de Princé</option>
+                                <option value="Mairie de Rannée">Mairie de Rannée</option>
+                                <option value="Mairie de Saint-Aubin-des-Landes">Mairie de Saint-Aubin-des-Landes</option>
+                                <option value="Mairie de Saint-Christophe-des-Bois">Mairie de Saint-Christophe-des-Bois</option>
+                                <option value="Mairie de Saint-Didier">Mairie de Saint-Didier</option>
+                                <option value="Mairie de Saint-Germain-du-Pinel">Mairie de Saint-Germain-du-Pinel</option>
+                                <option value="Mairie de Saint-Jean-sur-Vilaine">Mairie de Saint-Jean-sur-Vilaine</option>
+                                <option value="Mairie de Saint-M\'Hervé">Mairie de Saint-M'Hervé</option>
+                                <option value="Mairie de Taillis">Mairie de Taillis</option>
+                                <option value="Mairie de Torcé">Mairie de Torcé</option>
+                                <option value="Mairie de Val D\'Izé">Mairie de Val D'Izé</option>
+                                <option value="Mairie de Vergéal">Mairie de Vergéal</option>
+                                <option value="Mairie de Visseiche">Mairie de Visseiche</option>
+                                <option value="Mairie de Vitré">Mairie de Vitré</option>
+                                <option value="CCAS de Chateaubourg">CCAS de Chateaubourg</option>
+                                <option value="CCAS de Chatillon-en-Vendelais">CCAS de Chatillon-en-Vendelais</option>
+                                <option value="CCAS de Val d\'Izé">CCAS de Val d'Izé</option>
+                                <option value="CCAS de Vitré">CCAS de Vitré</option>
+                                <option value="Smictom Sud Est 35">Smictom Sud Est 35</option>
+                                <option value="Eau des Portes de Bretagne">Eau des Portes de Bretagne</option>
+                                <option value="Syndicat d\'Urbanisme du Pays de Vitré">Syndicat d'Urbanisme du Pays de Vitré</option>
+                                <option value="Vitré Communauté">Vitré Communauté</option>
+                                <option value="Syndicat de traitement S3TEC">Syndicat de traitement S3TEC</option>
+                            </select>
                         </li>
                         <li>
-                            <label for="start">*Début du prêt :</label>
+                            <label for="start">*Début du prêt</label><br/>
                             <input type="date" id="start" name="start" value="<?php echo $localdate; ?>" required/>
                         </li>
                         <li>
-                            <label for="end">*Fin du prêt :</label>
+                            <label for="end">*Fin du prêt</label><br/>
                             <input type="date" id="end" name="end" required/>
                         </li>
                         <li>
@@ -276,16 +311,17 @@
                 </form>
                 <?php
                     if(isset($_POST['submit-pret'])) {
+                        $id = $_POST['id'];
                         $ref = strtolower($_POST['reference']);
                         $start = strtolower($_POST['start']);
                         $end = strtolower($_POST['end']);
                         $client = strtolower($_POST['client']);
 
                         if($start < $end) {
-                            $req = "INSERT INTO pret (ident, start, end, client) 
+                            $req = "INSERT INTO pret (reference, start, end, client) 
                                     VALUES ('$ref', '$start', '$end', '$client')";
                             $updatereq = "UPDATE stock SET etat = 'déjà prêté' 
-                                            WHERE ident = '{$ref}'";
+                                            WHERE ident = '{$id}'";
                             try {
                                 $bdd->getPdo()->query($req);
                                 $bdd->getPdo()->query($updatereq);
@@ -295,7 +331,7 @@
                         }
                     }
                 ?>
-                <!------------------------ LISTE DES ALERTES ----------------------------->
+<!--------------------------------------------------- LISTE DES ALERTES ------------------------------------------------------->
                 <h3>Alertes</h3>
             </div>
 <!-----------------------------------------------------LISTE DES PRETS--------------------------------------------------------->
@@ -345,7 +381,7 @@
                     <?php 
                         $trie = "";
                         if(isset($_POST['submit-reference'])) {
-                            $trie = ' ORDER BY ident';
+                            $trie = ' ORDER BY reference';
                         }
                         if(isset($_POST['submit-start'])) {
                             $trie = ' ORDER BY start';
@@ -356,11 +392,11 @@
                         if(isset($_POST['submit-client'])) {
                             $trie = ' ORDER BY client';
                         }
-                        $result = $bdd->getPdo()->query('SELECT * FROM stock INNER JOIN pret ON stock.ident = pret.ident'.$trie);
+                        $result = $bdd->getPdo()->query('SELECT * FROM stock INNER JOIN pret ON stock.reference = pret.reference'.$trie);
                         foreach($result as $res) {
                     ?>
                     <tr class="pret-table">
-                        <td class="ref"><?php print $res['ident']; $id = $res['ident']; ?></td>
+                        <td class="ref"><?php print $res['reference']; $id = $res['ident']; ?></td>
                         <td class="mat"><?php print $res['materiel']; ?> </td>
                         <td class="marque"><?php print $res['marque']; ?></td>
                         <td class="note"><?php print $res['note']; ?></td>
@@ -420,6 +456,11 @@
                             <button type="submit" name="submit-date" title="Trier par date">Date</button>
                         </form>
                     </th>
+                    <th class="action">
+                        <form action="index.php?menu=3" method="POST">
+                            <button type="submit" name="submit-action" title="Trier par action">Action</button>
+                        </form>
+                    </th>
                     <th class="ref">
                         <form action="index.php?menu=3" method="POST">
                             <button type="submit" name="submit-reference" title="Trier par référence">Référence</button>
@@ -437,6 +478,9 @@
                     if(isset($_POST['submit-date'])) {
                         $trie = ' ORDER BY date';
                     }
+                    if(isset($_POST['submit-action'])) {
+                        $trie = ' ORDER BY action';
+                    }
                     if(isset($_POST['submit-reference'])) {
                         $trie = ' ORDER BY identMateriel';
                     }
@@ -446,8 +490,9 @@
                     $result = $bdd->getPdo()->query("SELECT * FROM historique ".$trie);
                     foreach($result as $res) {
                 ?>
-                <tr>
+                <tr class="historique-table">
                     <td><?php print $res['date']; ?></td>
+                    <td><?php print $res['action']; ?></td>
                     <td><?php print $res['identMateriel']; ?></td>
                     <td><?php print $res['message']; ?></td>
                 </tr>

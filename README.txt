@@ -81,6 +81,7 @@ TO DO !!!!!!!!!!!!
     - A FAIRE : Ajouter champ preteur-client
     - A FAIRE : Référence affichage inutile
     - A FAIRE : un historique
+    - A FAIRE : ajouter dans historique quand une ligne est supprimée ou modifiée
 
 
 

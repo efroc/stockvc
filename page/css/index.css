@@ -68,7 +68,7 @@ p {
 }
 
 .pret-action {
-    width: 15;
+    width: 15%;
     margin-left: 2%;
 }
 
@@ -98,6 +98,7 @@ tr {
 .stock-form, .pret-form {
     color: black;
     list-style-type: none;
+    padding: 0px;
 }
 
 .stock-action > form, .pret-action > form {
@@ -111,7 +112,9 @@ tr {
 button[name="submit-reference"], button[name="submit-materiel"], 
 button[name="submit-marque"], button[name="submit-etat"], 
 button[name="submit-note"], button[name="submit-start"],
-button[name="submit-end"], button[name="submit-client"] {
+button[name="submit-end"], button[name="submit-client"], 
+button[name="submit-date"], button[name="submit-action"],
+button[name="submit-message"] {
     width: 100%;
 }
 
@@ -153,6 +156,26 @@ tr > .button {
 .pret-table > td:not(:first-child):not(:last-child) {
     border-left: 2px solid black;
 }
+
+/******************************STYLE UNIQUE HISTORIQUE*******************************/
+.historique {
+    text-align: center;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.historique-table > .date, .historique-table > .ref {
+    width: 10%;
+}
+
+.historique-table > .action {
+    width: 20%;
+}
+
+.historique-table > td {
+    border-left: 2px solid black;
+}
+
 
 /********************FOOTER************************/
 /*
