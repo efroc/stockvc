@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
-    <!--<meta http-equiv="refresh" content="60">-->
+    <!--<meta http-equiv="refresh" content="5">-->
     <link href="css/index.css" rel="stylesheet"/>
     <title>Stock Informatique Vitré Communauté</title>
     <link rel="website icon" type="png" href="../ressources/images/VClogo.png"/>
@@ -39,7 +39,7 @@
     <div class="contenu">
         <?php
             if(isset($_GET['menu'])) switch($_GET['menu']) {
-                case 1:
+                case 1:       
         ?>            
 <!------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------------
@@ -47,6 +47,55 @@
 --------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------->
         <div class="stock">
+<!-------------------------------------- TRAITEMENT DE TOUTES LES ACTIONS DE STOCK -------------------------------------------->
+            <?php
+                $id = ""; 
+                $tri ="";
+                /***** Ajout au stock *****/
+                if(isset($_POST['submit-stock'])) {
+                    $newmat = new Materiel($_POST['reference'], strtolower($_POST['materiel']), strtolower($_POST['marque']), 
+                            strtolower($_POST['etat']), strtolower($_POST['note']));
+                    
+                    for($i = 0; $i < $_POST['number']; $i++) {
+                        $bdd->addMaterielToStock($newmat); 
+                    }      
+                }
+                /***** Modifier du stock *****/
+                if(isset($_POST["confirm-edit"])) {
+                    $req = "UPDATE stock SET materiel = '{$_POST['mat-edit']}', marque = '{$_POST['marque-edit']}', 
+                            etat = '{$_POST['etat-edit']}', note = '{$_POST['note-edit']}' WHERE ident = '{$_POST['id-edit']}'";
+                    try {
+                        $bdd->query($req);
+                    } catch(Exception $e) {
+                        die("Erreur: Impossible de modifier la BDD".$e->getMessage());
+                    }
+                }
+
+                /***** Retrait du stock *****/
+                if(isset($_POST['submit-supp'])) {
+                    $bdd->suppMaterielFromStock($_POST['id']);
+                }
+                /***** BOUTONS DE TRI *****/
+                if(isset($_POST['submit-reference'])) {
+                    $tri = ' ORDER BY reference';
+                }
+                if(isset($_POST['submit-materiel'])) {
+                    $tri = ' ORDER BY materiel';
+                }
+                if(isset($_POST['submit-nb'])) {
+                    $tri = ' ORDER BY number';
+                }
+                if(isset($_POST['submit-etat'])) {
+                    $tri = ' ORDER BY etat';
+                } 
+                if(isset($_POST['submit-marque'])) {
+                    $tri = ' ORDER BY marque';
+                }
+                if(isset($_POST['submit-note'])) {
+                    $tri = ' ORDER BY note DESC';
+                }
+
+            ?>
             <div class="stock-action">
 <!-------------------------------------------- FORMULAIRE AJOUTER AU STOCK ---------------------------------------------------->
                 <h3>Ajouter en stock</h3>
@@ -85,17 +134,6 @@
                         </li>
                     </ul>
                 </form>
-<!---------------------------------------------- FORMULAIRE VERS BDD ---------------------------------------------------------->
-                <?php
-                    if(isset($_POST['submit-stock'])) {
-                        $newmat = new Materiel($_POST['reference'], strtolower($_POST['materiel']), strtolower($_POST['marque']), 
-                                strtolower($_POST['etat']), strtolower($_POST['note']));
-                        
-                        for($i = 0; $i < $_POST['number']; $i++) {
-                            $bdd->addMaterielToStock($newmat);
-                        }        
-                    }   
-                ?>
             </div>
 
 <!---------------------------------------------- AFFICHAGE DU STOCK ----------------------------------------------------------->
@@ -139,42 +177,21 @@
                 </tr>
 <!------------------------------------------------ BOUTONS DE TRI ------------------------------------------------------------->
                 <?php 
-                    $trie ="";
-                    $state;
-                    $id;
-                    $ref ="";
-                    if(isset($_POST['submit-reference'])) {
-                        $trie = ' ORDER BY reference';
-                    }
-                    if(isset($_POST['submit-materiel'])) {
-                        $trie = ' ORDER BY materiel';
-                    }
-                    if(isset($_POST['submit-nb'])) {
-                        $trie = ' ORDER BY number';
-                    }
-                    if(isset($_POST['submit-etat'])) {
-                        $trie = ' ORDER BY etat';
-                    } 
-                    if(isset($_POST['submit-marque'])) {
-                        $trie = ' ORDER BY marque';
-                    }
-                    if(isset($_POST['submit-note'])) {
-                        $trie = ' ORDER BY note DESC';
-                    }
-                    $result = $bdd->getPdo()->query('SELECT *, COUNT(*) as number FROM stock GROUP BY reference, materiel, marque, etat, note'.$trie);
+                    $result = $bdd->getPdo()->query('SELECT *, COUNT(*) as number FROM stock GROUP BY reference, materiel, marque, etat, note'.$tri);
                     foreach($result as $res) {
+                        $id; $ref; $mat; $marque; $etat; $note;
                 ?>  
                 <tr class="stock-table">     
-                    <td><?php print $res['reference']; $id = $res['ident']; ?></td>
-                    <td><?php print $res['materiel']; ?></td>
+                    <td><?php print $res['reference']; $id = $res['ident']; $ref = $res['reference']; ?></td>
+                    <td><?php print $res['materiel']; $mat = $res['materiel']; ?></td>
                     <td><?php print $res['number']; ?></td>
-                    <td><?php print $res['marque']; ?></td>
-                    <td><?php print $res['etat']; $state = $res['etat']; ?></td>
-                    <td><?php print $res['note']; ?></td>
+                    <td><?php print $res['marque']; $marque = $res['marque']; ?></td>
+                    <td><?php print $res['etat']; $etat = $res['etat']; ?></td>
+                    <td><?php print $res['note']; $note = $res['note']; ?></td>
                     <td class="button">
                         <form action="index.php?menu=2" method="POST">
                             <button type="submit" name="submit-add" title="Ajouter aux prêts">
-                            <input type="hidden" value="<?php echo $res['reference']; ?>" name="id"/>
+                            <input type="hidden" value="<?php echo $ref ?>" name="id"/>
                             <img src="../ressources/images/ajouter.png" alt="ajouter" height="20px">
                             </button>
                         </form>
@@ -183,6 +200,11 @@
                         <form action="index.php?menu=1" method="POST">
                             <button type="submit" name="submit-edit" title="Modifier">
                             <input type="hidden" value="<?php echo $id; ?>" name="id"/>
+                            <input type="hidden" value="<?php echo $ref; ?>" name="ref"/>
+                            <input type="hidden" value="<?php echo $mat; ?>" name="materiel"/>
+                            <input type="hidden" value="<?php echo $marque; ?>" name="marque"/>
+                            <input type="hidden" value="<?php echo $etat; ?>" name="etat"/>
+                            <input type="hidden" value="<?php echo $note; ?>" name="note"/>
                             <img src="../ressources/images/modifier.png" alt="modifier" height="20px">
                         </form>
                     </td>
@@ -195,44 +217,43 @@
                         </form>
                     </td>
                 </tr>
-<!------------------------------------------ BOUTONS DES ACTIONS DU STOCK ----------------------------------------------------->
                 <?php
                     }
-                    if(isset($_POST['submit-supp'])) {
-                        $bdd->suppMaterielFromStock($_POST['id']);
-                    }
                 ?>
+<!------------------------------------------ BOUTONS DES ACTIONS DU STOCK ----------------------------------------------------->
             </table>   
             <br/>
             <?php
                 if(isset($_POST["submit-edit"])) {
-                    $id = $_POST['id'];
             ?>
-                    <form action="index.php?menu=1" method="POST">
-                        <label for="materiel">*Matériel: </label>
-                        <input type="text" id="mat-edit" name="mat-edit" required placeholder=""/>
-                        <label for="marque">*Marque: </label>
-                        <input type="text" id="marque-edit" name="marque-edit" required placeholder=""/>
-                        <label for="note">Note: </label>
-                        <input type="text" id="note-edit" name="note-edit" placeholder=""/>
-                        <button type="submit" name="edit" title="Modifier">Modifier</button>
-                    </form>  
-                    <form action="index.php?menu=1" method="POST">
-                        <button type="submit" name="cancel" title="Annuler">Annuler</button>
-                    </form>
+                <form class="modif-stock" action="index.php?menu=1" method="POST">
+                    <input type="hidden" value="<?php echo $_POST['id']; ?>" name="id-edit"/>
+                    <label for="ref">Référence: </label>
+                    <input type="text" id="ref-edit" name="ref-edit" value="<?php echo $_POST['ref']; ?>" required readonly>
+                    <label for="mat">Matériel: </label> 
+                    <input type="text" id="mat-edit" name="mat-edit" value="<?php echo $_POST['materiel']; ?>" required placeholder=""/>
+                    <label for="marque">Marque: </label>
+                    <input type="text" id="marque-edit" name="marque-edit" value="<?php echo $_POST['marque']; ?>" placeholder=""/>
+                    <br/>
+                    <label for="etat">Etat: </label> 
+                    <input type="radio" id="etat-edit" name="etat-edit" value="disponible" checked/>Disponible
+                    <input type="radio" id="etat-edit" name="etat-edit" value="déjà prêté"/>Prêté
+                    <input type="radio" id="etat-edit" name="etat-edit" value="affecté"/>Affecté
+                    <input type="radio" id="etat-edit" name="etat-edit" value="en réparation"/>En réparation
+                    <input type="radio" id="etat-edit" name="etat-edit" value="rebut"/>Rebut
+                    <label for="note">Note: </label> 
+                    <input type="text" id="note-edit" name="note-edit" value="<?php echo $_POST['note']; ?>"/>
+                    <button type="submit" name="confirm-edit" title="Confirmer">Confirmer</button>
+                    <input type="hidden" value="<?php echo $_POST['id'] ?>" name="id"/>
+                </form>
+                <form class="modif-stock" action="index.php?menu=1" method="POST">
+                    <button type="submit" name="cancel-edit" title="Annuler">Annuler</button>
+                </form>
             <?php
-                    if(isset($_POST["edit"])) {
-                        $req = "UPDATE stock SET materiel = {$_POST['mat-edit']}, marque = {$_POST['marque-edit']}, 
-                        note = {$_POST['note-edit']} WHERE ident = {$id}";
-                        try {
-                            $bdd->getPdo()->exec($req);
-                        } catch(Exception $e) {
-                            die("Erreur: Impossible de modifier la BDD".$e->getMessage());
-                        }
-                    }
                 }
             ?>
             </div>
+
         </div>
 <!------------------------------------------------------------------------------------------------------------------------------        
 --------------------------------------------------------------------------------------------------------------------------------       

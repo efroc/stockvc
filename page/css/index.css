@@ -147,6 +147,14 @@ tr > .button {
     background-color: #2f81af;
 }
 
+.modif-stock {
+    display: table;
+}
+
+.modif-stock label {
+    margin-left: 20px;
+}
+
 /*********************************STYLE UNIQUE PRET***********************************/
 .pret-table > .ref, .pret-table > .mat, .pret-table > .marque, .pret-table > .start,
 .pret-table > .end {
@@ -179,6 +187,9 @@ tr > .button {
 .historique-table > td {
     border-left: 2px solid black;
 }
+
+
+
 
 
 /********************FOOTER************************/
