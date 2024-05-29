@@ -70,7 +70,6 @@ p {
 .stock-list{
     width: 80%;
     margin-left: 2%;
-    border-radius: 20px;
 }
 
 table {
@@ -90,6 +89,7 @@ tr {
 
 .stock-action > form, .pret-action > form {
     border: 2px solid black;
+    border-radius: 20px;
 }
 
 .stock-form > li, .pret-form > li {
@@ -116,6 +116,7 @@ tr > .button {
 /******************************STYLE UNIQUE STOCK************************/
 .stock-table > td:not(:first-child):not(:last-child):not(:nth-child(8)) {
     border-left: 2px solid black;
+    
 }
 
 .stock-table > .mat, .stock-table > .etat{
@@ -160,7 +161,8 @@ tr > .button {
     border-left: 2px solid black;
 }
 
-select, input:not(input[name="etat"]) {
+select, input:not(input[name="etat"]):not(input[name="ref-edit"]):not(input[name="mat-edit"]):not(input[name="marque-edit"])
+:not(input[name="etat-edit"]):not(input[name="note-edit"]){
     width: 90%;
 }
 
@@ -199,7 +201,7 @@ select, input:not(input[name="etat"]) {
     background-color: gray;
     border-radius: 30px;
     position: absolute;
-    bottom: 1%;
+    bottom: 0;
 }
 
 .footer > h3 {
