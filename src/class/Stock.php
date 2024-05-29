@@ -68,13 +68,13 @@ class Materiel {
      * état -> dispo, prêté, réparation etc 
      * note -> commentaire sur le produit
      */    
-    private int $reference; 
+    private string $reference; 
     private string $materiel;
     private string $marque;
     private string $etat;
     private string $note;
 
-    public function __construct(int $reference, string $materiel, string $marque, string $etat, string $note) {   
+    public function __construct(string $reference, string $materiel, string $marque, string $etat, string $note) {   
         if($etat !== "disponible" && $etat !== "en réparation" && $etat !== "déjà prêté") {
             print "Erreur : Mauvais type pour état (D | P | R requis)";
         }

@@ -61,14 +61,18 @@
                             <input type="text" id="materiel" name="materiel" required placeholder="Ex: clavier"/>
                         </li>
                         <li>
-                            <label for="marque">*Marque</label><br/>
-                            <input type="text" id="marque" name="marque" required placeholder="Ex: logitech"/>
+                            <label for="marque">Marque</label><br/>
+                            <input type="text" id="marque" name="marque" placeholder="Ex: logitech"/>
+                        </li>
+                        <li>
+                            <label for="nombre">Nombre à ajouter</label><br/>
+                            <input type="number" id="number" name="number" min="1" max="50" value="1" placeholder="Max:50"/>
                         </li>
                         <li>
                             <label for="etat">*Etat</label><br/>
                             <input type="radio" id="etat" name="etat" value="disponible" checked/>Disponible
                             <input type="radio" id="etat" name="etat" value="déjà prêté"/>Prêté
-                            <input type="radio" id="etat" name="etat" value="affecté"/>Affecté
+                            <input type="radio" id="etat" name="etat" value="affecté"/>Affecté<br/>
                             <input type="radio" id="etat" name="etat" value="en réparation"/>En réparation
                             <input type="radio" id="etat" name="etat" value="rebut"/>Rebut
                         </li>
@@ -86,7 +90,10 @@
                     if(isset($_POST['submit-stock'])) {
                         $newmat = new Materiel($_POST['reference'], strtolower($_POST['materiel']), strtolower($_POST['marque']), 
                                 strtolower($_POST['etat']), strtolower($_POST['note']));
-                        $bdd->addMaterielToStock($newmat);
+                        
+                        for($i = 0; $i < $_POST['number']; $i++) {
+                            $bdd->addMaterielToStock($newmat);
+                        }        
                     }   
                 ?>
             </div>
@@ -104,6 +111,11 @@
                     <th class="mat">
                         <form action="index.php?menu=1" method="POST">
                             <button type="submit" name="submit-materiel" title="Trier par matériel">Matériel</button>
+                        </form>
+                    </th>
+                    <th class="nb">
+                        <form action="index.php?menu=1" method="POST">
+                            <button type="submit" name="submit-nb" title="Trier par nombre">Nombre</button>
                         </form>
                     </th>
                     <th class="marque">
@@ -137,6 +149,9 @@
                     if(isset($_POST['submit-materiel'])) {
                         $trie = ' ORDER BY materiel';
                     }
+                    if(isset($_POST['submit-nb'])) {
+                        $trie = ' ORDER BY number';
+                    }
                     if(isset($_POST['submit-etat'])) {
                         $trie = ' ORDER BY etat';
                     } 
@@ -146,12 +161,13 @@
                     if(isset($_POST['submit-note'])) {
                         $trie = ' ORDER BY note DESC';
                     }
-                    $result = $bdd->getPdo()->query('SELECT * FROM stock'.$trie);
+                    $result = $bdd->getPdo()->query('SELECT *, COUNT(*) as number FROM stock GROUP BY reference, materiel, marque, etat, note'.$trie);
                     foreach($result as $res) {
                 ?>  
                 <tr class="stock-table">     
                     <td><?php print $res['reference']; $id = $res['ident']; ?></td>
                     <td><?php print $res['materiel']; ?></td>
+                    <td><?php print $res['number']; ?></td>
                     <td><?php print $res['marque']; ?></td>
                     <td><?php print $res['etat']; $state = $res['etat']; ?></td>
                     <td><?php print $res['note']; ?></td>
