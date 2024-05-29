@@ -33,6 +33,7 @@
         $bdd->connect();
         $localdate = date('Y-m-d');
         echo("Date du jour : ". $localdate);
+        $erreur = "";
     ?>
 
 <!----------------------------------------------- AFFICHAGE SELON MENU -------------------------------------------------------->
@@ -67,7 +68,7 @@
                     try {
                         $bdd->query($req);
                     } catch(Exception $e) {
-                        die("Erreur: Impossible de modifier la BDD".$e->getMessage());
+                        $erreur = "Erreur: Impossible de modifier la BDD".$e->getMessage();
                     }
                 }
 
@@ -175,23 +176,24 @@
                     <th class="button"></th>
                     <th class="button"></th>
                 </tr>
-<!------------------------------------------------ BOUTONS DE TRI ------------------------------------------------------------->
                 <?php 
                     $result = $bdd->getPdo()->query('SELECT *, COUNT(*) as number FROM stock GROUP BY reference, materiel, marque, etat, note'.$tri);
                     foreach($result as $res) {
-                        $id; $ref; $mat; $marque; $etat; $note;
+                        $id; $ref; $mat; $marque; $etat; $note; $num;
                 ?>  
                 <tr class="stock-table">     
                     <td><?php print $res['reference']; $id = $res['ident']; $ref = $res['reference']; ?></td>
                     <td><?php print $res['materiel']; $mat = $res['materiel']; ?></td>
-                    <td><?php print $res['number']; ?></td>
+                    <td><?php print $res['number']; $num = $res['number']; ?></td>
                     <td><?php print $res['marque']; $marque = $res['marque']; ?></td>
                     <td><?php print $res['etat']; $etat = $res['etat']; ?></td>
                     <td><?php print $res['note']; $note = $res['note']; ?></td>
                     <td class="button">
                         <form action="index.php?menu=2" method="POST">
                             <button type="submit" name="submit-add" title="Ajouter aux prêts">
-                            <input type="hidden" value="<?php echo $ref ?>" name="id"/>
+                            <input type="hidden" value="<?php echo $id ?>" name="id"/>
+                            <input type="hidden" value="<?php echo $ref ?>" name="ref"/>
+                            <input type="hidden" value="<?php echo $num ?>" name="number"/>
                             <img src="../ressources/images/ajouter.png" alt="ajouter" height="20px">
                             </button>
                         </form>
@@ -265,14 +267,41 @@
                 case 2:
         ?>
         <div class="pret">
+<!--------------------------------------TRAITEMENT DE TOUTES LES ACTIONS DE PRET----------------------------------------------->
+            <?php
+                /***** Ajouter aux prêts *****/
+                if(isset($_POST['submit-pret'])) {
+                    if($_POST['start'] < $_POST['end']) {
+                        $req = "INSERT INTO pret (reference, start, end, client) 
+                                VALUES ('{$_POST['ref']}', '{$_POST['start']}', '{$_POST['end']}', '{$_POST['client']}')";
+                        $updatereq = "UPDATE stock SET etat = 'déjà prêté' 
+                                            WHERE reference = '{$_POST['ref']}' AND etat = 'disponible'";
+                            for($i = 0; $i < $_POST['number']; $i++) {
+                                try {
+                                $bdd->query($req);
+                                $bdd->getPdo()->query($updatereq);
+                                } catch(Exception $e) {
+                                die("Erreur: Impossible d'ajouter le prêt dans la BDD".$e->getMessage());
+                                }
+                            }
+                    }
+                }
+                ?>
+            
+
             <div class="pret-action">
-<!----------------------------------------------------PRET ACTIONS------------------------------------------------------------->
+<!----------------------------------------------AJOUTER AUX PRETS-------------------------------------------------------------->
                 <h3>Effectuer un prêt</h3>
                 <form action="index.php?menu=2" method="POST">
                     <ul class="pret-form">
                         <li>
                             <label for="reference">Référence</label><br/>
-                            <input type="text" id="reference" name="reference" value="<?php if(isset($_POST['submit-add'])) echo($_POST['id']);?>" required placeholder=""/>
+                            <input type="text" id="ref" name="ref" value="<?php if(isset($_POST['submit-add'])) echo($_POST['ref']);?>" required placeholder=""/>
+                        </li>
+                        <li>
+                            <label for="nombre">Nombre à prêter</label><br/>
+                            <input type="number" id="number" name="number" min="1" max="<?php if(isset($_POST['submit-add'])) { echo($_POST['number']); } else { echo("1"); }?>" 
+                                               value="<?php if(isset($_POST['submit-add'])) echo($_POST['number']);?>" required placeholder=""/>
                         </li>
                         <li>
                             <label for="client">*Client</label><br/>
@@ -346,28 +375,7 @@
                         </li>
                     </ul>
                 </form>
-                <?php
-                    if(isset($_POST['submit-pret'])) {
-                        $id = $_POST['id'];
-                        $ref = strtolower($_POST['reference']);
-                        $start = strtolower($_POST['start']);
-                        $end = strtolower($_POST['end']);
-                        $client = strtolower($_POST['client']);
-
-                        if($start < $end) {
-                            $req = "INSERT INTO pret (reference, start, end, client) 
-                                    VALUES ('$ref', '$start', '$end', '$client')";
-                            $updatereq = "UPDATE stock SET etat = 'déjà prêté' 
-                                            WHERE ident = '{$id}'";
-                            try {
-                                $bdd->getPdo()->query($req);
-                                $bdd->getPdo()->query($updatereq);
-                            } catch(Exception $e) {
-                                die("Erreur: Impossible d'ajouter dans la BDD".$e->getMessage());
-                            }
-                        }
-                    }
-                ?>
+                
 <!--------------------------------------------------- LISTE DES ALERTES ------------------------------------------------------->
                 <h3>Alertes</h3>
             </div>
@@ -558,9 +566,10 @@
         ?>
 
     </div>
-    <!--
-    <footer>
-        <p>Salut</p>
-    </footer>
-        -->
+    
+    <div class="footer">
+    <h3>Message d'erreur :</h3>
+    <p><?php echo $erreur; ?></p>
+    </div>
+       
 </body>

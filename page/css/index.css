@@ -3,6 +3,7 @@ body {
     background-color: #c2d2db;
     margin-left: 2%;
     margin-right: 2%;
+    height: 100%;
 }
 
 .login {
@@ -66,18 +67,8 @@ p {
     width: 20%;
 }
 
-.pret-action {
-    width: 15%;
-}
-
 .stock-list{
     width: 80%;
-    margin-left: 2%;
-    border-radius: 20px;
-}
-
-.pret-liste {
-    width: 85%;
     margin-left: 2%;
     border-radius: 20px;
 }
@@ -169,6 +160,19 @@ tr > .button {
     border-left: 2px solid black;
 }
 
+select, input:not(input[name="etat"]) {
+    width: 90%;
+}
+
+.pret-action {
+    width: 15%;
+}
+
+.pret-liste {
+    width: 85%;
+    margin-left: 2%;
+    border-radius: 20px;
+}
 /******************************STYLE UNIQUE HISTORIQUE*******************************/
 .historique {
     text-align: center;
@@ -188,23 +192,21 @@ tr > .button {
     border-left: 2px solid black;
 }
 
-
-
-
-
-/********************FOOTER************************/
-/*
-footer {
-    width: 100%;
-    margin-left: 5%;
-    margin-right: 5%;
-    height: 10%;
-    border: 2px solid red;
-    
+/**************************************FOOTER****************************************/
+.footer {
+    width: 96%;
+    height: 80px;
+    background-color: gray;
+    border-radius: 30px;
     position: absolute;
-    
+    bottom: 1%;
 }
-/* * */
+
+.footer > h3 {
+    margin-top: 0.5em;
+    margin-left: 2%;
+}
+
 
 
 
