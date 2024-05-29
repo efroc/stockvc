@@ -54,6 +54,12 @@ p {
     color: black;
 }
 
+.jebaited {
+    color: black;
+    text-decoration: none;
+    cursor: text;
+}
+
 /**********************STYLE COMMUNS A STOCK ET PRET ********************/
 .stock, .pret {
     margin-top: 1%;

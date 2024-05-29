@@ -14,7 +14,7 @@
 <body>
 
 <!------------------------------------------------------- MENU ---------------------------------------------------------------->
-    <h1 class="title"><p>Gestion du stock et des prêts</p></h1>
+    <h1 class="title"><p><a class="jebaited" title="Clique pour gagner 500€" target="_blank" href="https://www.youtube.com/watch?v=-a5Ba-CG8uc">G</a>estion du stock et des prêts</p></h1>
     <ul class="menu">
         <li style="float:left"><a class="redirection" target="_blank" href="https://www.vitrecommunaute.org/"><img src="../ressources/images/VClogo.png" alt="logo" height="59px"></a></li>
         <li style="float:left"><a class="redirection" target="_blank" href="https://www.mairie-vitre.com/"><img src="../ressources/images/mairielogo.png" alt="logo" height="59px"></a></li>
