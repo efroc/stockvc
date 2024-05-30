@@ -193,6 +193,10 @@
                             <button type="submit" name="submit-add" title="Ajouter aux prêts">
                             <input type="hidden" value="<?php echo $id ?>" name="id"/>
                             <input type="hidden" value="<?php echo $ref ?>" name="ref"/>
+                            <input type="hidden" value="<?php echo $mat ?>" name="mat"/>
+                            <input type="hidden" value="<?php echo $marque ?>" name="marque"/>
+                            <input type="hidden" value="<?php echo $etat ?>" name="etat"/>
+                            <input type="hidden" value="<?php echo $note ?>" name="note"/>
                             <input type="hidden" value="<?php echo $num ?>" name="number"/>
                             <img src="../ressources/images/ajouter.png" alt="ajouter" height="20px">
                             </button>
@@ -272,20 +276,58 @@
                 /***** Ajouter aux prêts *****/
                 if(isset($_POST['submit-pret'])) {
                     if($_POST['start'] < $_POST['end']) {
-                        $req = "INSERT INTO pret (reference, start, end, client) 
-                                VALUES ('{$_POST['ref']}', '{$_POST['start']}', '{$_POST['end']}', '{$_POST['client']}')";
-                        $updatereq = "UPDATE stock SET etat = 'déjà prêté' 
-                                            WHERE reference = '{$_POST['ref']}' AND etat = 'disponible'";
-                            for($i = 0; $i < $_POST['number']; $i++) {
-                                try {
-                                $bdd->query($req);
+                        $updatereq = "UPDATE stock SET etat = 'déjà prêté' WHERE reference = '{$_POST['ref']}' 
+                            AND materiel = '{$_POST['mat']}' AND marque = '{$_POST['marque']}' 
+                            AND etat = '{$_POST['etat']}' AND note = '{$_POST['note']}' LIMIT {$_POST['number']}";
+                        $req = "INSERT INTO pret (ident, reference, start, end, client) 
+                            VALUES ('{$_POST['id']}', '{$_POST['ref']}', '{$_POST['start']}', '{$_POST['end']}', '{$_POST['client']}')";
+                        for($i = 0; $i < $_POST['number']; $i++) {
+                            try {
+                                $bdd->getPdo()->query($req);
                                 $bdd->getPdo()->query($updatereq);
-                                } catch(Exception $e) {
-                                die("Erreur: Impossible d'ajouter le prêt dans la BDD".$e->getMessage());
-                                }
+                            } catch(Exception $e) {
+                                die("Impossible d'ajouter dans la table des prêts: ". $e->getMessage());
                             }
+                        }
                     }
                 }
+                /***** Supprimer un prêt *****/
+                if(isset($_POST['submit-supp'])) {
+                    $req = "DELETE FROM pret WHERE ident = {$_POST['id']} ";
+                    $updatereq = "UPDATE stock SET etat = 'disponible' 
+                                    WHERE ident = {$_POST['id']}";
+                    /*$bdd->getPdo()->exec($req);*/
+                    try {
+                        $bdd->getPdo()->query($updatereq);
+                        $bdd->getPdo()->query($req);
+                    } catch(Exception $e) {
+                        die("Erreur: Impossible de supprimer dans la BDD".$e->getMessage());
+                    }
+                }
+                /***** Boutons de tri *****/
+                $tri = "";
+                if(isset($_POST['submit-reference'])) {
+                    $tri = ' ORDER BY reference';
+                }
+                if(isset($_POST['submit-materiel'])) {
+                    $tri = ' ORDER BY materiel';
+                }
+                if(isset($_POST['submit-marque'])) {
+                    $tri = ' ORDER BY marque';
+                }
+                if(isset($_POST['submit-note'])) {
+                    $tri = ' ORDER BY note';
+                }
+                if(isset($_POST['submit-start'])) {
+                    $trie = ' ORDER BY start';
+                }
+                if(isset($_POST['submit-end'])) {
+                    $tri = ' ORDER BY end';
+                }
+                if(isset($_POST['submit-client'])) {
+                    $tri = ' ORDER BY client';
+                }
+
                 ?>
             
 
@@ -296,12 +338,17 @@
                     <ul class="pret-form">
                         <li>
                             <label for="reference">Référence</label><br/>
+                            <input type="hidden" id="id" name="id" value="<?php if(isset($_POST['submit-add'])) echo($_POST['id']); ?>"/>
                             <input type="text" id="ref" name="ref" value="<?php if(isset($_POST['submit-add'])) echo($_POST['ref']);?>" required placeholder=""/>
+                            <input type="hidden" id="mat" name="mat" value="<?php if(isset($_POST['submit-add'])) echo($_POST['mat']); ?>"/>
+                            <input type="hidden" id="marque" name="marque" value="<?php if(isset($_POST['submit-add'])) echo($_POST['marque']); ?>"/>
+                            <input type="hidden" id="etat" name="etat" value="<?php if(isset($_POST['submit-add'])) echo($_POST['etat']); ?>"/>
+                            <input type="hidden" id="note" name="note" value="<?php if(isset($_POST['submit-add'])) echo($_POST['note']); ?>"/>
                         </li>
                         <li>
                             <label for="nombre">Nombre à prêter</label><br/>
                             <input type="number" id="number" name="number" min="1" max="<?php if(isset($_POST['submit-add'])) { echo($_POST['number']); } else { echo("1"); }?>" 
-                                               value="<?php if(isset($_POST['submit-add'])) echo($_POST['number']);?>" required placeholder=""/>
+                                               value="1" required placeholder=""/>
                         </li>
                         <li>
                             <label for="client">*Client</label><br/>
@@ -424,20 +471,7 @@
                     </tr>
 <!-----------------------------------------------BOUTONS DE TRI DES PRETS------------------------------------------------------>
                     <?php 
-                        $trie = "";
-                        if(isset($_POST['submit-reference'])) {
-                            $trie = ' ORDER BY reference';
-                        }
-                        if(isset($_POST['submit-start'])) {
-                            $trie = ' ORDER BY start';
-                        }
-                        if(isset($_POST['submit-end'])) {
-                            $trie = ' ORDER BY end';
-                        }
-                        if(isset($_POST['submit-client'])) {
-                            $trie = ' ORDER BY client';
-                        }
-                        $result = $bdd->getPdo()->query('SELECT * FROM stock INNER JOIN pret ON stock.reference = pret.reference'.$trie);
+                        $result = $bdd->getPdo()->query("SELECT * FROM stock INNER JOIN pret ON stock.ident = pret.ident WHERE etat = 'déjà prêté'".$tri);
                         foreach($result as $res) {
                     ?>
                     <tr class="pret-table">
@@ -466,18 +500,7 @@
                     </tr>
                     <?php
                         }
-                        if(isset($_POST['submit-supp'])) {
-                            $req = "DELETE FROM pret WHERE ident = {$_POST['id']} ";
-                            $updatereq = "UPDATE stock SET etat = 'disponible' 
-                                            WHERE ident = {$_POST['id']}";
-                            $bdd->getPdo()->exec($req);
-                            try {
-                                $bdd->getPdo()->query($updatereq);
-                                $bdd->getPdo()->query($req);
-                            } catch(Exception $e) {
-                                die("Erreur: Impossible de supprimer dans la BDD".$e->getMessage());
-                            }
-                        }
+                        
                     ?>
                 </table>
 
@@ -566,10 +589,10 @@
         ?>
 
     </div>
-    
+    <!--
     <div class="footer">
     <h3>Message d'erreur :</h3>
     <p><?php echo $erreur; ?></p>
     </div>
-       
+        -->
 </body>

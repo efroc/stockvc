@@ -73,6 +73,7 @@ JOUR 9:
     
 TO DO !!!!!!!!!!!!
     - ERREUR : MODIFICATION DE PRET : ne marche pas
+    - ERREUR : suppression de pret fonctionne seulement pour un objet unique
 
     - A FAIRE : Une pseudo console en bas de page pour écrire les messages d'erreurs
                 pour éviter qu'ils ne s'affichent n'importe où dans la page

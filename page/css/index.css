@@ -213,6 +213,7 @@ select, input:not(input[name="etat"]):not(input[name="ref-edit"]):not(input[name
 .footer > h3 {
     margin-top: 0.5em;
     margin-left: 2%;
+    font-weight:normal;
 }
 
 
