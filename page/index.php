@@ -7,7 +7,7 @@
     <!--<meta http-equiv="refresh" content="5">-->
     <link href="css/index.css" rel="stylesheet"/>
     <title>Stock Informatique Vitré Communauté</title>
-    <link rel="website icon" type="png" href="../ressources/images/VClogo.png"/>
+    <link rel="website icon" type="png" href="../images/VClogo.png"/>
 </head>
 
 <!----------------------------------------------------- BODY PAGE ------------------------------------------------------------->
@@ -16,8 +16,8 @@
 <!------------------------------------------------------- MENU ---------------------------------------------------------------->
     <h1 class="title"><p><a class="jebaited" title="Clique pour gagner 500€" target="_blank" href="https://www.youtube.com/watch?v=-a5Ba-CG8uc">G</a>estion du stock et des prêts</p></h1>
     <ul class="menu">
-        <li style="float:left"><a class="redirection" target="_blank" href="https://www.vitrecommunaute.org/"><img src="../ressources/images/VClogo.png" alt="logo" height="59px"></a></li>
-        <li style="float:left"><a class="redirection" target="_blank" href="https://www.mairie-vitre.com/"><img src="../ressources/images/mairielogo.png" alt="logo" height="59px"></a></li>
+        <li style="float:left"><a class="redirection" target="_blank" href="https://www.vitrecommunaute.org/"><img src="../images/VClogo.png" alt="logo" height="59px"></a></li>
+        <li style="float:left"><a class="redirection" target="_blank" href="https://www.mairie-vitre.com/"><img src="../images/mairielogo.png" alt="logo" height="59px"></a></li>
         <li><a href="index.php?menu=1"><p class="menu-text">Stock</p></a></li>
         <li><a href="index.php?menu=2"><p class="menu-text">Prêts et Alertes</p></a></li>
         <li><a href="index.php?menu=3"><p class="menu-text">Historique</p></a></li>
@@ -71,11 +71,13 @@
                     } catch(Exception $e) {
                         $erreur = "Erreur: Impossible de modifier la BDD".$e->getMessage();
                     }
+                    header('Location: redirection.php'); 
                 }
 
                 /***** Retrait du stock *****/
                 if(isset($_POST['submit-supp']) && ($_POST['etat'] === 'disponible')) {
                     $bdd->suppMaterielFromStock($_POST['id']);
+                    header('Location: redirection.php'); 
                 }
                 /***** BOUTONS DE TRI *****/
                 if(isset($_POST['submit-reference'])) {
@@ -199,7 +201,7 @@
                             <input type="hidden" value="<?php echo $etat ?>" name="etat"/>
                             <input type="hidden" value="<?php echo $note ?>" name="note"/>
                             <input type="hidden" value="<?php echo $num ?>" name="number"/>
-                            <img src="../ressources/images/ajouter.png" alt="ajouter" height="20px">
+                            <img src="../images/ajouter.png" alt="ajouter" height="20px">
                             </button>
                         </form>
                     </td>
@@ -212,7 +214,7 @@
                             <input type="hidden" value="<?php echo $marque; ?>" name="marque"/>
                             <input type="hidden" value="<?php echo $etat; ?>" name="etat"/>
                             <input type="hidden" value="<?php echo $note; ?>" name="note"/>
-                            <img src="../ressources/images/modifier.png" alt="modifier" height="20px">
+                            <img src="../images/modifier.png" alt="modifier" height="20px">
                         </form>
                     </td>
                     <td class="button">
@@ -220,7 +222,7 @@
                             <button type="submit" name="submit-supp" title="Supprimer">
                             <input type="hidden" value="<?php echo $etat; ?>" name="etat"/>
                             <input type="hidden" value="<?php echo $id; ?>" name="id"/>
-                            <img src="../ressources/images/basket.png" alt="supprimer" height="20px">
+                            <img src="../images/basket.png" alt="supprimer" height="20px">
                             </button>
                         </form>
                     </td>
@@ -294,6 +296,7 @@
                         }
                     }
                 }
+                /***** Modifier un prêt *****/
                 /***** Supprimer un prêt *****/
                 if(isset($_POST['submit-supp'])) {
                     $req = "DELETE FROM pret WHERE ident = {$_POST['id']} ";
@@ -489,14 +492,14 @@
                             <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-edit" title="Modifier">
                                 <input type="hidden" value="<?php echo $id; ?>" name="id"/>
-                                <img src="../ressources/images/modifier.png" alt="modifier" height="20px">
+                                <img src="../images/modifier.png" alt="modifier" height="20px">
                             </form>
                          </td>
                         <td class="button">
                             <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-supp" title="Supprimer">
                                 <input type="hidden" value="<?php echo $id; ?>" name="id"/>
-                                <img src="../ressources/images/basket.png" alt="supprimer" height="20px">
+                                <img src="../images/basket.png" alt="supprimer" height="20px">
                                 </button>
                             </form>
                         </td>
