@@ -37,10 +37,19 @@
         $bdd = new BDD();
         $bdd->connect();
         $localdate = date('Y-m-d');
+        $dateAlerte = date('Y-m-d', strtotime("+2 Days"));
         echo("Date du jour : ". $localdate);
+        $alertes = [];
         $erreur = "";
     ?>
-
+<!--------------------------------------------------FONCTION ALERTE------------------------------------------------------------>
+    <?php
+        $resAlerte = "SELECT * FROM pret WHERE end < '{$dateAlerte}'";
+        $result = $bdd->getPdo()->query($resAlerte);
+        foreach ($result as $res) {
+            echo($res['ident']." ".$res['reference']);
+        }
+    ?>
 <!----------------------------------------------- AFFICHAGE SELON MENU -------------------------------------------------------->
     <div class="contenu">
         <?php
@@ -64,7 +73,8 @@
                     
                     for($i = 0; $i < $_POST['number']; $i++) {
                         $bdd->addMaterielToStock($newmat); 
-                    } 
+                    }
+
                     header('Location: redirection.php');     
                 }
                 /***** Modifier du stock *****/
