@@ -28,7 +28,7 @@
     <?php
         require '../src/traitement/BDD.php';
         require '../src/class/Stock.php';
-        require '../src/traitement/Erreur.php';
+        require '../src/traitement/Traitement.php';
         $bdd = new BDD();
         $bdd->connect();
         $localdate = date('Y-m-d');
@@ -59,7 +59,8 @@
                     
                     for($i = 0; $i < $_POST['number']; $i++) {
                         $bdd->addMaterielToStock($newmat); 
-                    }      
+                    } 
+                    header('Location: redirection.php');     
                 }
                 /***** Modifier du stock *****/
                 if(isset($_POST["confirm-edit"])) {
@@ -73,7 +74,7 @@
                 }
 
                 /***** Retrait du stock *****/
-                if(isset($_POST['submit-supp'])) {
+                if(isset($_POST['submit-supp']) && ($_POST['etat'] === 'disponible')) {
                     $bdd->suppMaterielFromStock($_POST['id']);
                 }
                 /***** BOUTONS DE TRI *****/
@@ -182,14 +183,14 @@
                         $id; $ref; $mat; $marque; $etat; $note; $num;
                 ?>  
                 <tr class="stock-table">     
-                    <td><?php print $res['reference']; $id = $res['ident']; $ref = $res['reference']; ?></td>
+                    <td class="ref"><?php print $res['reference']; $id = $res['ident']; $ref = $res['reference']; ?></td>
                     <td><?php print $res['materiel']; $mat = $res['materiel']; ?></td>
                     <td><?php print $res['number']; $num = $res['number']; ?></td>
                     <td><?php print $res['marque']; $marque = $res['marque']; ?></td>
                     <td><?php print $res['etat']; $etat = $res['etat']; ?></td>
                     <td><?php print $res['note']; $note = $res['note']; ?></td>
                     <td class="button">
-                        <form action="index.php?menu=2" method="POST">
+                        <form action="<?php if($etat !== 'disponible') { echo("index.php?menu=1"); } else { echo("index.php?menu=2"); }?>" method="POST">
                             <button type="submit" name="submit-add" title="Ajouter aux prêts">
                             <input type="hidden" value="<?php echo $id ?>" name="id"/>
                             <input type="hidden" value="<?php echo $ref ?>" name="ref"/>
@@ -217,6 +218,7 @@
                     <td class="button">
                         <form action="index.php?menu=1" method="POST">
                             <button type="submit" name="submit-supp" title="Supprimer">
+                            <input type="hidden" value="<?php echo $etat; ?>" name="etat"/>
                             <input type="hidden" value="<?php echo $id; ?>" name="id"/>
                             <img src="../ressources/images/basket.png" alt="supprimer" height="20px">
                             </button>
@@ -256,6 +258,7 @@
                     <button type="submit" name="cancel-edit" title="Annuler">Annuler</button>
                 </form>
             <?php
+                unset($_POST);
                 }
             ?>
             </div>
