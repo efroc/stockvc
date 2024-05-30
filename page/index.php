@@ -14,9 +14,13 @@
 <body>
 
 <!------------------------------------------------------- MENU ---------------------------------------------------------------->
+    
     <h1 class="title"><p><a class="jebaited" title="Clique pour gagner 500€" target="_blank" href="https://www.youtube.com/watch?v=-a5Ba-CG8uc">G</a>estion du stock et des prêts</p></h1>
     <ul class="menu">
-        <li style="float:left"><a class="redirection" target="_blank" href="https://www.vitrecommunaute.org/"><img src="../images/VClogo.png" alt="logo" height="59px"></a></li>
+        <li style="float:left"><a class="redirection" target="_blank" href="https://www.vitrecommunaute.org/">
+            <img class="DSIlogo" src="../images/DSIlogo.png" alt="logo" height="59px">
+            <img src="../images/VClogo.png" alt="logo" height="59px"></a>
+        </li>
         <li style="float:left"><a class="redirection" target="_blank" href="https://www.mairie-vitre.com/"><img src="../images/mairielogo.png" alt="logo" height="59px"></a></li>
         <li><a href="index.php?menu=1"><p class="menu-text">Stock</p></a></li>
         <li><a href="index.php?menu=2"><p class="menu-text">Prêts et Alertes</p></a></li>
