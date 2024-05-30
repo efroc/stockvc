@@ -204,6 +204,12 @@ select, input:not(input[name="etat"]):not(input[name="ref-edit"]):not(input[name
     border-left: 2px solid black;
 }
 
+/*********************************STYLE UNIQUE ALERTE********************************/
+.list-alerte {
+    text-decoration: none;
+    list-style-type: none;
+    margin-left: 0%;
+}
 /**************************************FOOTER****************************************/
 .footer {
     width: 96%;

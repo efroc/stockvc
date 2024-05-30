@@ -247,7 +247,6 @@
                     <br/>
                     <label for="etat">Etat: </label> 
                     <input type="radio" id="etat-edit" name="etat-edit" value="disponible" checked/>Disponible
-                    <input type="radio" id="etat-edit" name="etat-edit" value="déjà prêté"/>Prêté
                     <input type="radio" id="etat-edit" name="etat-edit" value="affecté"/>Affecté
                     <input type="radio" id="etat-edit" name="etat-edit" value="en réparation"/>En réparation
                     <input type="radio" id="etat-edit" name="etat-edit" value="rebut"/>Rebut
@@ -431,7 +430,18 @@
                 
 <!--------------------------------------------------- LISTE DES ALERTES ------------------------------------------------------->
                 <h3>Alertes</h3>
+                <form class="list-alerte">
+                    <ul class="list-alerte">
+                        <li class="list-alerte">
+                            <p>Alerte 1 : blabla</p>
+                        </li>
+                        <li class="list-alerte">
+                            <p>Alerte 2 : blabla</p>
+                        </li>
+                    </ul>
+                </form>
             </div>
+
 <!-----------------------------------------------------LISTE DES PRETS--------------------------------------------------------->
             <div class="pret-liste">
                 <h3>Liste des prêts en cours</h3>
@@ -475,7 +485,6 @@
                         <th></th>
                         <th></th>
                     </tr>
-<!-----------------------------------------------BOUTONS DE TRI DES PRETS------------------------------------------------------>
                     <?php 
                         $result = $bdd->getPdo()->query("SELECT * FROM stock INNER JOIN pret ON stock.ident = pret.ident WHERE etat = 'déjà prêté'".$tri);
                         foreach($result as $res) {
@@ -505,8 +514,7 @@
                         </td>
                     </tr>
                     <?php
-                        }
-                        
+                        } 
                     ?>
                 </table>
 
@@ -588,7 +596,9 @@
                 break;
                 case 4:
         ?>
-
+        <div class="log-in">
+            <p>Non fonctionnel</p>
+        </div>
         <?php            
                 break;
             }
