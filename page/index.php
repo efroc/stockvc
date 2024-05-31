@@ -171,6 +171,37 @@
                         </li>
                     </ul>
                 </form>
+                <?php
+                    if(isset($_POST["submit-edit"])) {
+                ?>
+                    <h3>Modification du stock</h3>
+                    <div class="modif-stock">
+                        <form class="modif" action="index.php?menu=1" method="POST">
+                            <input type="hidden" value="<?php echo $_POST['id']; ?>" name="id-edit"/>
+                            <label for="ref">Référence: </label>
+                            <input type="text" id="ref-edit" name="ref-edit" value="<?php echo $_POST['ref']; ?>" required readonly><br/>
+                            <label for="mat">Matériel: </label> 
+                            <input type="text" id="mat-edit" name="mat-edit" value="<?php echo $_POST['materiel']; ?>" required placeholder=""/><br/>
+                            <label for="marque">Marque: </label>
+                            <input type="text" id="marque-edit" name="marque-edit" value="<?php echo $_POST['marque']; ?>" placeholder=""/>
+                            <br/>
+                            <label for="etat">Etat: </label> 
+                            <input type="radio" id="etat-edit" name="etat-edit" value="disponible" checked/>Disponible
+                            <input type="radio" id="etat-edit" name="etat-edit" value="affecté"/>Affecté
+                            <input type="radio" id="etat-edit" name="etat-edit" value="en réparation"/>En réparation
+                            <input type="radio" id="etat-edit" name="etat-edit" value="rebut"/>Rebut<br/>
+                            <label for="note">Note: </label> 
+                            <input type="text" id="note-edit" name="note-edit" value="<?php echo $_POST['note']; ?>"/><br/>
+                            <button type="submit" name="confirm-edit" title="Confirmer">Confirmer</button>
+                            <input type="hidden" value="<?php echo $_POST['id'] ?>" name="id"/>
+                        </form>
+                        <form action="index.php?menu=1" method="POST">
+                            <button type="submit" name="cancel-edit" title="Annuler">Annuler</button>
+                        </form>
+                    </div>
+                <?php
+                    }
+                ?>
             </div>
 
 <!---------------------------------------------- AFFICHAGE DU STOCK ----------------------------------------------------------->
@@ -265,36 +296,6 @@
                 ?>
 <!------------------------------------------------- FORMULAIRE STOCK EDIT ----------------------------------------------------->
             </table>   
-            <br/>
-            <?php
-                if(isset($_POST["submit-edit"])) {
-            ?>
-                <form class="modif-stock" action="index.php?menu=1" method="POST">
-                    <input type="hidden" value="<?php echo $_POST['id']; ?>" name="id-edit"/>
-                    <label for="ref">Référence: </label>
-                    <input type="text" id="ref-edit" name="ref-edit" value="<?php echo $_POST['ref']; ?>" required readonly>
-                    <label for="mat">Matériel: </label> 
-                    <input type="text" id="mat-edit" name="mat-edit" value="<?php echo $_POST['materiel']; ?>" required placeholder=""/>
-                    <label for="marque">Marque: </label>
-                    <input type="text" id="marque-edit" name="marque-edit" value="<?php echo $_POST['marque']; ?>" placeholder=""/>
-                    <br/>
-                    <label for="etat">Etat: </label> 
-                    <input type="radio" id="etat-edit" name="etat-edit" value="disponible" checked/>Disponible
-                    <input type="radio" id="etat-edit" name="etat-edit" value="affecté"/>Affecté
-                    <input type="radio" id="etat-edit" name="etat-edit" value="en réparation"/>En réparation
-                    <input type="radio" id="etat-edit" name="etat-edit" value="rebut"/>Rebut
-                    <label for="note">Note: </label> 
-                    <input type="text" id="note-edit" name="note-edit" value="<?php echo $_POST['note']; ?>"/>
-                    <button type="submit" name="confirm-edit" title="Confirmer">Confirmer</button>
-                    <input type="hidden" value="<?php echo $_POST['id'] ?>" name="id"/>
-                </form>
-                <form class="modif-stock" action="index.php?menu=1" method="POST">
-                    <button type="submit" name="cancel-edit" title="Annuler">Annuler</button>
-                </form>
-            <?php
-                unset($_POST);
-                }
-            ?>
             </div>
 
         </div>
