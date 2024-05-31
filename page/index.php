@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
-    <!--<meta http-equiv="refresh" content="5">-->
     <link href="css/index.css" rel="stylesheet"/>
     <title>Stock Informatique Vitré Communauté</title>
     <link rel="website icon" type="png" href="../images/VClogo.png"/>
@@ -19,7 +18,6 @@
             <img class="DSIlogo" src="../images/DSIlogo.png" alt="logo" height="59px"><img src="../images/VClogo.png" alt="logo" height="59px">
         </a>
         <p class="title"><a class="jebaited" title="Clique pour gagner 500€" target="_blank" href="https://www.youtube.com/watch?v=-a5Ba-CG8uc">G</a>estion du stock et des prêts</p>
-        <!--<h1 class="title"><p><a class="jebaited" title="Clique pour gagner 500€" target="_blank" href="https://www.youtube.com/watch?v=-a5Ba-CG8uc">G</a>estion du stock et des prêts</p></h1>-->
         <a class="redirection-right" target="_blank" href="https://www.mairie-vitre.com/"><img src="../images/mairielogo.png" alt="logo" height="59px"></a>
     </div>
     <ul class="menu">
@@ -34,8 +32,10 @@
         require '../src/traitement/BDD.php';
         require '../src/class/Stock.php';
         require '../src/traitement/Traitement.php';
+        /***** Affiche connexion *****/ 
         $bdd = new BDD();
         $bdd->connect();
+        /***** Affiche date *****/
         $localdate = date('Y-m-d');
         $dateAlerte = date('Y-m-d', strtotime("+5 Days"));
         echo("Date du jour : " .$localdate. " | ");
@@ -47,6 +47,7 @@
         $resAlerte = $bdd->getPdo()->query($req);
     ?>
 <!----------------------------------------------- AFFICHAGE SELON MENU -------------------------------------------------------->
+<!--CASE 1: STOCK-----CASE 2: PRET-----CASE 3: HISTORIQUE-----CASE 4: LOGIN---------------------------------------------------->
     <div class="contenu">
         <?php
             if(isset($_GET['menu'])) switch($_GET['menu']) {
@@ -60,7 +61,6 @@
         <div class="stock">
 <!-------------------------------------- TRAITEMENT DE TOUTES LES ACTIONS DE STOCK -------------------------------------------->
             <?php
-                $id = ""; 
                 $tri ="";
                 /***** Ajout au stock *****/
                 if(isset($_POST['submit-stock'])) {
@@ -99,7 +99,6 @@
                     }
                     header('Location: redirection.php'); 
                 }
-
                 /***** Retrait du stock *****/
                 if(isset($_POST['submit-supp']) && ($_POST['etat'] === 'disponible')) {
                     $bdd->suppMaterielFromStock($_POST['id']);
