@@ -128,6 +128,14 @@ button[name="submit-end"], button[name="submit-client"],
 button[name="submit-date"], button[name="submit-action"],
 button[name="submit-message"], button[name="submit-nb"] {
     width: 100%;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
+
+button[name="submit-stock"], button[name="submit-pret"] {
+    border-radius: 10px;
+    background-color: white;
 }
 
 table tr:hover:not(:first-child) {
@@ -239,8 +247,4 @@ select, input:not(input[name="etat"]):not(input[name="ref-edit"]):not(input[name
     margin-left: 2%;
     font-weight:normal;
 }
-
-
-
-
 

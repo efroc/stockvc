@@ -264,7 +264,7 @@
                 <?php
                     }
                 ?>
-<!------------------------------------------ BOUTONS DES ACTIONS DU STOCK ----------------------------------------------------->
+<!------------------------------------------------- FORMULAIRE STOCK EDIT ----------------------------------------------------->
             </table>   
             <br/>
             <?php
@@ -341,7 +341,6 @@
                     $req = "DELETE FROM pret WHERE ident = {$_POST['id']} ";
                     $updatereq = "UPDATE stock SET etat = 'disponible' 
                                     WHERE ident = {$_POST['id']}";
-                    /*$bdd->getPdo()->exec($req);*/
                     try {
                         $bdd->getPdo()->query($updatereq);
                         $bdd->getPdo()->query($req);
@@ -545,7 +544,11 @@
                         <td class="button">
                             <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-edit" title="Modifier">
-                                <input type="hidden" value="<?php echo $id; ?>" name="id"/>
+                                <input  type="hidden" value="<?php echo $res['ident']; ?>"     name="id"/>
+                                <input  type="hidden" value="<?php echo $res['reference']; ?>" name="ref"/>
+                                <input  type="hidden" value="<?php echo $res['start']; ?>"     name="start"/>
+                                <input  type="hidden" value="<?php echo $res['end']; ?>"       name="end"/>
+                                <input  type="hidden" value="<?php echo $res['client']; ?>"    name="client"/>
                                 <img src="../images/modifier.png" alt="modifier" height="20px">
                             </form>
                          </td>
