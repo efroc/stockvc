@@ -220,11 +220,10 @@ select, input:not(input[name="etat"]):not(input[name="ref-edit"]):not(input[name
 }
 
 /*********************************STYLE UNIQUE ALERTE********************************/
-.list-alerte {
-    text-decoration: none;
-    list-style-type: none;
-    margin-left: 0%;
+.alerte:hover {
+    background-color: gray;
 }
+
 /**************************************FOOTER****************************************/
 .footer {
     width: 96%;

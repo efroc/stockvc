@@ -37,18 +37,14 @@
         $bdd = new BDD();
         $bdd->connect();
         $localdate = date('Y-m-d');
-        $dateAlerte = date('Y-m-d', strtotime("+2 Days"));
-        echo("Date du jour : ". $localdate);
-        $alertes = [];
+        $dateAlerte = date('Y-m-d', strtotime("+5 Days"));
+        echo("Date du jour : " .$localdate. " | ");
         $erreur = "";
     ?>
 <!--------------------------------------------------FONCTION ALERTE------------------------------------------------------------>
     <?php
-        $resAlerte = "SELECT * FROM pret WHERE end < '{$dateAlerte}'";
-        $result = $bdd->getPdo()->query($resAlerte);
-        foreach ($result as $res) {
-            echo($res['ident']." ".$res['reference']);
-        }
+        $req = "SELECT reference, end, client FROM pret WHERE end < '{$dateAlerte}'";
+        $resAlerte = $bdd->getPdo()->query($req);
     ?>
 <!----------------------------------------------- AFFICHAGE SELON MENU -------------------------------------------------------->
     <div class="contenu">
@@ -70,19 +66,34 @@
                 if(isset($_POST['submit-stock'])) {
                     $newmat = new Materiel($_POST['reference'], strtolower($_POST['materiel']), strtolower($_POST['marque']), 
                             strtolower($_POST['etat']), strtolower($_POST['note']));
+                    $historeq = "INSERT INTO historique (date, reference, action, message) 
+                                VALUES ('{$localdate}', '{$_POST['reference']}', 'Ajout au stock',
+                                 '{$_POST['number']} {$_POST['materiel']} ont été ajouté au stock.')";
                     
                     for($i = 0; $i < $_POST['number']; $i++) {
                         $bdd->addMaterielToStock($newmat); 
                     }
-
+                    try {
+                        $bdd->query($historeq);  
+                    } catch(Exception $e) {
+                        die("Impossible d'ajouter à l'historique : ".$e->getMessage());
+                    }                                                                                                       
                     header('Location: redirection.php');     
                 }
                 /***** Modifier du stock *****/
                 if(isset($_POST["confirm-edit"])) {
                     $req = "UPDATE stock SET materiel = '{$_POST['mat-edit']}', marque = '{$_POST['marque-edit']}', 
                             etat = '{$_POST['etat-edit']}', note = '{$_POST['note-edit']}' WHERE ident = '{$_POST['id-edit']}'";
+                    $historeq = "INSERT INTO historique (date, reference, action, message) 
+                            VALUES ('{$localdate}', '{$_POST['ref-edit']}', 'Modification du stock',
+                            'Un ou plusieurs paramètres du {$_POST['mat-edit']} ont été modifié dans le stock.')";
                     try {
-                        $bdd->query($req);
+                        $bdd->getPDO()->query($req);
+                        try {
+                            $bdd->getPdo()->query($historeq);
+                        } catch(PDOException $e) {
+                            die("Impossible d'ajouter à l'historique : ".$e->getMessage());
+                        }
                     } catch(Exception $e) {
                         $erreur = "Erreur: Impossible de modifier la BDD".$e->getMessage();
                     }
@@ -92,6 +103,14 @@
                 /***** Retrait du stock *****/
                 if(isset($_POST['submit-supp']) && ($_POST['etat'] === 'disponible')) {
                     $bdd->suppMaterielFromStock($_POST['id']);
+                    $historeq = "INSERT INTO historique (date, reference, action, message) 
+                                VALUES ('{$localdate}', '{$_POST['reference']}', 'Retrait du stock',
+                                 'Un {$_POST['materiel']} a été retiré du stock.')";
+                    try {
+                        $bdd->getPdo()->query($historeq);
+                    } catch(Exception $e) {
+                        die("Impossible d'ajouter à l'historique : ".$e->getMessage());
+                    }
                     header('Location: redirection.php'); 
                 }
                 /***** BOUTONS DE TRI *****/
@@ -209,11 +228,9 @@
                     <td class="button">
                         <form action="<?php if($etat !== 'disponible') { echo("index.php?menu=1"); } else { echo("index.php?menu=2"); }?>" method="POST">
                             <button type="submit" name="submit-add" title="Ajouter aux prêts">
-                            <input type="hidden" value="<?php echo $id ?>" name="id"/>
                             <input type="hidden" value="<?php echo $ref ?>" name="ref"/>
                             <input type="hidden" value="<?php echo $mat ?>" name="mat"/>
                             <input type="hidden" value="<?php echo $marque ?>" name="marque"/>
-                            <input type="hidden" value="<?php echo $etat ?>" name="etat"/>
                             <input type="hidden" value="<?php echo $note ?>" name="note"/>
                             <input type="hidden" value="<?php echo $num ?>" name="number"/>
                             <img src="../images/ajouter.png" alt="ajouter" height="20px">
@@ -236,6 +253,8 @@
                         <form action="index.php?menu=1" method="POST">
                             <button type="submit" name="submit-supp" title="Supprimer">
                             <input type="hidden" value="<?php echo $etat; ?>" name="etat"/>
+                            <input type="hidden" value="<?php echo $mat; ?>" name="materiel"/>
+                            <input type="hidden" value="<?php echo $ref; ?>" name="reference"/>
                             <input type="hidden" value="<?php echo $id; ?>" name="id"/>
                             <img src="../images/basket.png" alt="supprimer" height="20px">
                             </button>
@@ -295,20 +314,26 @@
                 /***** Ajouter aux prêts *****/
                 if(isset($_POST['submit-pret'])) {
                     if($_POST['start'] < $_POST['end']) {
-                        $updatereq = "UPDATE stock SET etat = 'déjà prêté' WHERE reference = '{$_POST['ref']}' 
-                            AND materiel = '{$_POST['mat']}' AND marque = '{$_POST['marque']}' 
-                            AND etat = '{$_POST['etat']}' AND note = '{$_POST['note']}' LIMIT {$_POST['number']}";
-                        $req = "INSERT INTO pret (ident, reference, start, end, client) 
-                            VALUES ('{$_POST['id']}', '{$_POST['ref']}', '{$_POST['start']}', '{$_POST['end']}', '{$_POST['client']}')";
-                        for($i = 0; $i < $_POST['number']; $i++) {
-                            try {
-                                $bdd->getPdo()->query($req);
-                                $bdd->getPdo()->query($updatereq);
-                            } catch(Exception $e) {
-                                die("Impossible d'ajouter dans la table des prêts: ". $e->getMessage());
+                        $requete = "SELECT * FROM stock WHERE reference = '{$_POST['ref']}' AND materiel = '{$_POST['mat']}' 
+                            AND marque = '{$_POST['marque']}' AND etat = 'disponible' AND note = '{$_POST['note']}'  LIMIT {$_POST['number']}";
+                        try {
+                            $result = $bdd->getPdo()->query($requete);
+                            foreach($result as $res) {
+                                $requete = "INSERT INTO pret (ident, reference, start, end, client) 
+                                            VALUES ('{$res['ident']}', '{$res['reference']}', '{$_POST['start']}', '{$_POST['end']}', '{$_POST['client']}')";
+                                $updatereq = "UPDATE stock SET etat = 'déjà prêté' WHERE ident = '{$res['ident']}'";
+                                $bdd->getPdo()->query($requete);
+                                try {
+                                    $bdd->getPdo()->query($updatereq);
+                                } catch (Exception $e) {
+                                    die("Impossible d'actualiser le stock : ".$e->getMessage());
+                                }
                             }
+                        } catch(Exception $e) {
+                            die("Impossible d'ajouter aux prêts : ".$e->getMessage());
                         }
-                    }
+                    }                                                                                                       
+                    header('Location: redirection.php');  
                 }
                 /***** Modifier un prêt *****/
                 /***** Supprimer un prêt *****/
@@ -322,12 +347,13 @@
                         $bdd->getPdo()->query($req);
                     } catch(Exception $e) {
                         die("Erreur: Impossible de supprimer dans la BDD".$e->getMessage());
-                    }
+                    }                                                                                                       
+                    header('Location: redirection.php');  
                 }
                 /***** Boutons de tri *****/
                 $tri = "";
                 if(isset($_POST['submit-reference'])) {
-                    $tri = ' ORDER BY reference';
+                    $tri = ' ORDER BY pret.reference';
                 }
                 if(isset($_POST['submit-materiel'])) {
                     $tri = ' ORDER BY materiel';
@@ -358,12 +384,11 @@
                     <ul class="pret-form">
                         <li>
                             <label for="reference">Référence</label><br/>
-                            <input type="hidden" id="id" name="id" value="<?php if(isset($_POST['submit-add'])) echo($_POST['id']); ?>"/>
-                            <input type="text" id="ref" name="ref" value="<?php if(isset($_POST['submit-add'])) echo($_POST['ref']);?>" required placeholder=""/>
-                            <input type="hidden" id="mat" name="mat" value="<?php if(isset($_POST['submit-add'])) echo($_POST['mat']); ?>"/>
+                            <input type="text"   id="ref"    name="ref"    value="<?php if(isset($_POST['submit-add'])) echo($_POST['ref']);    ?>" required placeholder=""/>
+                            <input type="hidden" id="mat"    name="mat"    value="<?php if(isset($_POST['submit-add'])) echo($_POST['mat']);    ?>"/>
                             <input type="hidden" id="marque" name="marque" value="<?php if(isset($_POST['submit-add'])) echo($_POST['marque']); ?>"/>
-                            <input type="hidden" id="etat" name="etat" value="<?php if(isset($_POST['submit-add'])) echo($_POST['etat']); ?>"/>
-                            <input type="hidden" id="note" name="note" value="<?php if(isset($_POST['submit-add'])) echo($_POST['note']); ?>"/>
+                            <!--<input type="hidden" id="etat"   name="etat"   value="<?php /*if(isset($_POST['submit-add'])) echo($_POST['etat']);   */?>"/>-->
+                            <input type="hidden" id="note"   name="note"   value="<?php if(isset($_POST['submit-add'])) echo($_POST['note']);   ?>"/>
                         </li>
                         <li>
                             <label for="nombre">Nombre à prêter</label><br/>
@@ -445,16 +470,21 @@
                 
 <!--------------------------------------------------- LISTE DES ALERTES ------------------------------------------------------->
                 <h3>Alertes</h3>
-                <form class="list-alerte">
-                    <ul class="list-alerte">
-                        <li class="list-alerte">
-                            <p>Alerte 1 : blabla</p>
-                        </li>
-                        <li class="list-alerte">
-                            <p>Alerte 2 : blabla</p>
-                        </li>
-                    </ul>
-                </form>
+                <!--<table class="list-alerte">
+                    <?php
+                        foreach($resAlerte as $res) {
+                    ?>    
+                    <tr class="alerte">
+                        <td>
+                            <?php echo $res['reference']?><br/>
+                            <?php echo $res['client']?><br/>
+                            <?php echo $res['end']?>
+                        </td>
+                    </tr>
+                    <?php
+                        }
+                    ?>
+                </table>-->
             </div>
 
 <!-----------------------------------------------------LISTE DES PRETS--------------------------------------------------------->
@@ -579,7 +609,7 @@
                         $trie = ' ORDER BY action';
                     }
                     if(isset($_POST['submit-reference'])) {
-                        $trie = ' ORDER BY identMateriel';
+                        $trie = ' ORDER BY reference';
                     }
                     if(isset($_POST['submit-message'])) {
                         $trie = ' ORDER BY message';
@@ -590,7 +620,7 @@
                 <tr class="historique-table">
                     <td><?php print $res['date']; ?></td>
                     <td><?php print $res['action']; ?></td>
-                    <td><?php print $res['identMateriel']; ?></td>
+                    <td><?php print $res['reference']; ?></td>
                     <td><?php print $res['message']; ?></td>
                 </tr>
                 <?php
