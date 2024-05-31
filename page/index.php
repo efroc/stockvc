@@ -38,7 +38,7 @@
         /***** Affiche date *****/
         $localdate = date('Y-m-d');
         $dateAlerte = date('Y-m-d', strtotime("+5 Days"));
-        echo("Date du jour : " .$localdate. " | ");
+        echo("Date du jour : " .$localdate);
         $erreur = "";
     ?>
 <!--------------------------------------------------FONCTION ALERTE------------------------------------------------------------>
@@ -357,8 +357,7 @@
                         $bdd->getPdo()->query($req);
                     } catch(Exception $e) {
                         die("Erreur: Impossible de supprimer dans la BDD".$e->getMessage());
-                    }                                                                                                       
-                    header('Location: redirection.php');  
+                    } 
                 }
                 /***** Boutons de tri *****/
                 $tri = "";
