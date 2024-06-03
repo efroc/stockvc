@@ -821,12 +821,15 @@
                 break;
             }
         ?>
+    </div>
 
-    </div>
-    <!--
+<!-------------------------------------------------------FOOTER CONSOLE-------------------------------------------------------->
     <div class="footer">
-    <h3>Message d'erreur :</h3>
-    <p><?php echo $erreur; ?></p>
+<!-----------------------------------------------------ACTIONS CONSOLE--------------------------------------------------------->
+        
+        <div class="footer-content">
+            <p>Message d'erreur :</p>
+            <p><?php echo($erreur); ?></p>
+        </div>
     </div>
-        -->
 </body>
