@@ -36,6 +36,19 @@ body {
     font-size: 20px;
 }
 
+.menu-text-alerte {
+    font-size: 20px;
+    animation-duration: .8s;
+    animation-name: clignoter;
+    animation-iteration-count: infinite;
+    transition: none;
+}
+
+@keyframes clignoter {
+    0%   { color:black;    }
+    100% { color: red;     }
+}
+
 .menu > li {
     float: left;
 }
@@ -239,8 +252,17 @@ select, input:not(input[name="etat"]):not(input[name="ref-edit"]):not(input[name
 }
 
 /*********************************STYLE UNIQUE ALERTE********************************/
-.alerte:hover {
-    background-color: gray;
+.clignote {
+    background-color: red;
+    animation-duration: .8s;
+    animation-name: clignoter;
+    animation-iteration-count: infinite;
+    transition: none;
+}
+
+@keyframes clignoter {
+    0%   { color:black;    }
+    100% { color: red;     }
 }
 
 /**************************************FOOTER****************************************/

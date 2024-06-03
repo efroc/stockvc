@@ -8,14 +8,14 @@ class BDD {
     private $pdo;
     private string $currentQuery;
     
-    public function connect() {
+    public function connect(): string {
         try {
             $this->pdo = new PDO("mysql:host=$this->servername;dbname=stockvc", $this->username, $this->password);
             $this ->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            print("Connecté à la base de données | ");
+            return ("Connecté à la base de données | ");
         }
         catch(Exception $e) {
-            die("Impossible de se connecter à la base de données: " .$e->getMessage().print nl2br("\n"));
+            return ("Impossible de se connecter à la base de données: " .$e->getMessage().print nl2br("\n"));
         }
     }
 

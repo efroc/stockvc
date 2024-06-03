@@ -11,6 +11,27 @@
 
 <!----------------------------------------------------- BODY PAGE ------------------------------------------------------------->
 <body>
+<!--------------------------------------------------- CONNEXION BDD ----------------------------------------------------------->
+<?php
+        require '../src/traitement/BDD.php';
+        require '../src/class/Stock.php';
+        require '../src/traitement/Traitement.php';
+        /***** Affiche connexion *****/ 
+        $bdd = new BDD();
+        $connexion = $bdd->connect();
+        /***** Affiche date *****/
+        $localdate = date('Y-m-d');
+        $dateAlerte = date('Y-m-d', strtotime("+5 Days"));
+        $erreur = "";
+        /***** Alertes *****/
+        $requete = "SELECT ident FROM pret WHERE end < '{$dateAlerte}'";
+        $resAlerte = $bdd->getPdo()->query($requete);
+        $tabAlerte = array();
+        foreach($resAlerte as $res) { 
+            array_push($tabAlerte, $res['ident']);
+        } 
+        //print_r($tabAlerte);
+?>
 
 <!------------------------------------------------------- MENU ---------------------------------------------------------------->
     <div class="head">
@@ -22,30 +43,15 @@
     </div>
     <ul class="menu">
         <li><a href="index.php?menu=1"><p class="menu-text">Stock</p></a></li>
-        <li><a href="index.php?menu=2"><p class="menu-text">Prêts et Alertes</p></a></li>
+        <li><a href="index.php?menu=2"><p class=<?php if(count($tabAlerte) > 0) {echo("menu-text-alerte");} else { echo("menu-text"); }?>>Prêts et Alertes</p></a></li>
         <li><a href="index.php?menu=3"><p class="menu-text">Historique</p></a></li>
         <li style="float:right"><a class="login" href="index.php?menu=4"><p class="menu-text">Se connecter</p></a></li> 
     </ul>
 
-<!--------------------------------------------------- CONNEXION BDD ----------------------------------------------------------->
-    <?php
-        require '../src/traitement/BDD.php';
-        require '../src/class/Stock.php';
-        require '../src/traitement/Traitement.php';
-        /***** Affiche connexion *****/ 
-        $bdd = new BDD();
-        $bdd->connect();
-        /***** Affiche date *****/
-        $localdate = date('Y-m-d');
-        $dateAlerte = date('Y-m-d', strtotime("+5 Days"));
-        echo("Date du jour : " .$localdate);
-        $erreur = "";
-    ?>
-<!--------------------------------------------------FONCTION ALERTE------------------------------------------------------------>
-    <?php
-        $req = "SELECT reference, end, client FROM pret WHERE end < '{$dateAlerte}'";
-        $resAlerte = $bdd->getPdo()->query($req);
-    ?>
+<!------------------------------------------------AFFICHE INFOS CONNEXION------------------------------------------------------>    
+<?php 
+    echo $connexion; echo("Date du jour : " .$localdate);
+?>
 <!----------------------------------------------- AFFICHAGE SELON MENU -------------------------------------------------------->
 <!--CASE 1: STOCK-----CASE 2: PRET-----CASE 3: HISTORIQUE-----CASE 4: LOGIN---------------------------------------------------->
     <div class="contenu">
@@ -371,9 +377,10 @@
                     try {
                         $bdd->getPdo()->query($req);
                         try {
+                            $client = str_replace('\'', ' ', $_POST['client']);
                             $historeq = "INSERT INTO historique (date, reference, action, message) 
                                         VALUES ('{$localdate}', '{$_POST['ref']}', 'Suppression de prêt',
-                                        'Le prêt de {$_POST['materiel']} à {$_POST['client']} du {$_POST['start']} au {$_POST['end']} a été supprimé.')";
+                                        'Le prêt de {$_POST['materiel']} à {$client} du {$_POST['start']} au {$_POST['end']} a été supprimé.')";
                             $bdd->getPdo()->query($updatereq);
                             try {
                                 $bdd->getPdo()->query($historeq);
@@ -410,7 +417,6 @@
                 if(isset($_POST['submit-client'])) {
                     $tri = ' ORDER BY client';
                 }
-
                 ?>
             
 
@@ -589,24 +595,6 @@
                 <?php
                     }
                 ?>
-                
-<!--------------------------------------------------- LISTE DES ALERTES ------------------------------------------------------->
-                <!--<h3>Alertes</h3>-->
-                <!--<table class="list-alerte">
-                    <?php
-                        foreach($resAlerte as $res) {
-                    ?>    
-                    <tr class="alerte">
-                        <td>
-                            <?php echo $res['reference']?><br/>
-                            <?php echo $res['client']?><br/>
-                            <?php echo $res['end']?>
-                        </td>
-                    </tr>
-                    <?php
-                        }
-                    ?>
-                </table>-->
             </div>
 
 <!-----------------------------------------------------LISTE DES PRETS--------------------------------------------------------->
@@ -653,11 +641,17 @@
                         <th></th>
                     </tr>
                     <?php 
+                        
                         $result = $bdd->getPdo()->query("SELECT * FROM stock INNER JOIN pret ON stock.ident = pret.ident WHERE etat = 'déjà prêté'".$tri);
                         foreach($result as $res) {
                     ?>
                     <tr class="pret-table">
-                        <td class="ref"><?php print $res['reference']; $id = $res['ident']; ?></td>
+                        <td class="ref">
+                            <?php if(in_array($res['ident'], $tabAlerte))  {
+                                echo("<p class='clignote'>"); echo($res['reference']); echo("</p>"); }
+                                else { print $res['reference']; }
+                             ?>
+                        </td>
                         <td class="mat"><?php print $res['materiel']; ?> </td>
                         <td class="marque"><?php print $res['marque']; ?></td>
                         <td class="note"><?php print $res['note']; ?></td>
