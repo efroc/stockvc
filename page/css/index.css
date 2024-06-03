@@ -232,6 +232,12 @@ select, input:not(input[name="etat"]):not(input[name="ref-edit"]):not(input[name
     border-left: 2px solid black;
 }
 
+.export {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
 /*********************************STYLE UNIQUE ALERTE********************************/
 .alerte:hover {
     background-color: gray;

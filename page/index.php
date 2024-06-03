@@ -712,6 +712,7 @@
 <!----------------------------------- TRAITEMENT DE TOUTES LES ACTIONS DE L'HISTORIQUE----------------------------------------->
             <?php
                 $trie ="";
+                $export ="";
                 if(isset($_POST['submit-date'])) {
                     $trie = ' ORDER BY date DESC';
                 }
@@ -724,9 +725,51 @@
                 if(isset($_POST['submit-message'])) {
                     $trie = ' ORDER BY message';
                 }
+
+                if(isset($_POST['submit-histo'])) {
+                    try {
+                        $requete = "SELECT * FROM historique";
+                        $result = $bdd->getPdo()->query($requete);
+                        $export .= '
+                            <table>
+                            <tr>
+                            <td>id</id>
+                            <td>date</id>
+                            <td>reference</id>
+                            <td>action</id>
+                            <td>message</id>
+                            </tr>
+                        ';
+                        foreach($result as $res) {
+                            $export .= '
+                                <tr>
+                                <td>'.$res['id'].'</td>
+                                <td>'.$res['date'].'</td>
+                                <td>'.$res['reference'].'</td>
+                                <td>'.$res['action'].'</td>
+                                <td>'.$res['message'].'</td>
+                                </tr>
+                            ';
+                        }
+                        $export .= '</table>';
+                        $fileName = "historique-".$localdate.".xls";
+                        header('Content-Type: application/xls');
+                        header('Content-Disposition: attachment; filename='.$fileName);
+                        echo $export;
+                    } catch (Exception $e) {
+                        echo("Impossible de récupérer l'historique : ". $e->getMessage());
+                    }
+                    
+                }
             ?>
-            <h3>Tout l'historique</h3>
+            <div class="export">
+                <h3 class="title-histo">Tout l'historique</h3>
+                <form name="submit-histo" action="index.php?menu=3" method="POST">
+                    <input type="submit" name="submit-histo" value="Exporter l'historique en .xls"/>
+                </form>
+            </div>
             <table>
+<!------------------------------------------------- AFFICHAGE HISTORIQUE ------------------------------------------------------>
                 <tr class="historique-table">
                     <th class="date">
                         <form action="index.php?menu=3" method="POST">
@@ -749,7 +792,6 @@
                         </form>
                     </th>
                 </tr>
-<!-----------------------------------------------------BOUTONS DE TRI HISTORIQUE----------------------------------------------->
                 <?php
                     $result = $bdd->getPdo()->query("SELECT * FROM historique ".$trie);
                     foreach($result as $res) {
