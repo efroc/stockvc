@@ -321,10 +321,18 @@
                             foreach($result as $res) {
                                 $requete = "INSERT INTO pret (ident, reference, start, end, client) 
                                             VALUES ('{$res['ident']}', '{$res['reference']}', '{$_POST['start']}', '{$_POST['end']}', '{$_POST['client']}')";
+                                $historeq = "INSERT INTO historique (date, reference, action, message) 
+                                            VALUES ('{$localdate}', '{$res['reference']}', 'Ajout aux prêts',
+                                            'Un {$res['materiel']} a été prêté à {$_POST['client']} du {$_POST['start']} au {$_POST['end']}.')";
                                 $updatereq = "UPDATE stock SET etat = 'déjà prêté' WHERE ident = '{$res['ident']}'";
                                 $bdd->getPdo()->query($requete);
                                 try {
                                     $bdd->getPdo()->query($updatereq);
+                                    try {
+                                        $bdd->getPdo()->query($historeq);
+                                    } catch(Exception $e) {
+                                        die("Impossible d'ajouter à l'historique : ". $e->getMessage());
+                                    }
                                 } catch (Exception $e) {
                                     die("Impossible d'actualiser le stock : ".$e->getMessage());
                                 }
@@ -341,7 +349,15 @@
                         $requete = "UPDATE pret SET start = '{$_POST['start']}', end = '{$_POST['end']}', 
                         client = '{$_POST['client']}' WHERE ident = '{$_POST['id-edit']}'";
                         try {
+                            $historeq = "INSERT INTO historique (date, reference, action, message) 
+                                        VALUES ('{$localdate}', '{$_POST['ref-edit']}', 'Modification de prêt',
+                                        'Le prêt de {$_POST['mat-edit']} à {$_POST['client']} du {$_POST['start']} au {$_POST['end']} a été modifié.')";
                             $bdd->getPdo()->query($requete);
+                            try {
+                                $bdd->getPdo()->query($historeq);
+                            } catch(Exception $e) {
+                                die("Impossible d'ajouter dans l'historique : ".$e->getMessage());
+                            }
                         } catch (Exception $e) {
                             die("Impossible de modifier le prêt : ".$e->getMessage());
                         }
@@ -353,8 +369,20 @@
                     $updatereq = "UPDATE stock SET etat = 'disponible' 
                                     WHERE ident = {$_POST['id']}";
                     try {
-                        $bdd->getPdo()->query($updatereq);
                         $bdd->getPdo()->query($req);
+                        try {
+                            $historeq = "INSERT INTO historique (date, reference, action, message) 
+                                        VALUES ('{$localdate}', '{$_POST['ref']}', 'Suppression de prêt',
+                                        'Le prêt de {$_POST['materiel']} à {$_POST['client']} du {$_POST['start']} au {$_POST['end']} a été supprimé.')";
+                            $bdd->getPdo()->query($updatereq);
+                            try {
+                                $bdd->getPdo()->query($historeq);
+                            } catch(Exception $e) {
+                                die("Impossible d'ajouter dans l'historique : ".$e->getMessage());
+                            }
+                        } catch (Exception $e) {
+                            die("Impossible de mettre à jour le stock. ".$e->getMessage());
+                        }
                     } catch(Exception $e) {
                         die("Erreur: Impossible de supprimer dans la BDD".$e->getMessage());
                     } 
@@ -653,7 +681,12 @@
                         <td class="button">
                             <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-supp" title="Supprimer">
-                                <input type="hidden" value="<?php echo $id; ?>" name="id"/>
+                                <input type="hidden" value="<?php echo $res['ident']; ?>" name="id"/>
+                                <input  type="hidden" value="<?php echo $res['reference']; ?>" name="ref"/>
+                                <input  type="hidden" value="<?php echo $res['materiel']; ?>"     name="materiel"/>
+                                <input  type="hidden" value="<?php echo $res['start']; ?>"     name="start"/>
+                                <input  type="hidden" value="<?php echo $res['end']; ?>"       name="end"/>
+                                <input  type="hidden" value="<?php echo $res['client']; ?>"    name="client"/>
                                 <img src="../images/basket.png" alt="supprimer" height="20px">
                                 </button>
                             </form>
@@ -676,6 +709,22 @@
                 case 3:
         ?>
         <div class="historique">
+<!----------------------------------- TRAITEMENT DE TOUTES LES ACTIONS DE L'HISTORIQUE----------------------------------------->
+            <?php
+                $trie ="";
+                if(isset($_POST['submit-date'])) {
+                    $trie = ' ORDER BY date DESC';
+                }
+                if(isset($_POST['submit-action'])) {
+                    $trie = ' ORDER BY action';
+                }
+                if(isset($_POST['submit-reference'])) {
+                    $trie = ' ORDER BY reference';
+                }
+                if(isset($_POST['submit-message'])) {
+                    $trie = ' ORDER BY message';
+                }
+            ?>
             <h3>Tout l'historique</h3>
             <table>
                 <tr class="historique-table">
@@ -702,19 +751,6 @@
                 </tr>
 <!-----------------------------------------------------BOUTONS DE TRI HISTORIQUE----------------------------------------------->
                 <?php
-                    $trie ="";
-                    if(isset($_POST['submit-date'])) {
-                        $trie = ' ORDER BY date';
-                    }
-                    if(isset($_POST['submit-action'])) {
-                        $trie = ' ORDER BY action';
-                    }
-                    if(isset($_POST['submit-reference'])) {
-                        $trie = ' ORDER BY reference';
-                    }
-                    if(isset($_POST['submit-message'])) {
-                        $trie = ' ORDER BY message';
-                    }
                     $result = $bdd->getPdo()->query("SELECT * FROM historique ".$trie);
                     foreach($result as $res) {
                 ?>

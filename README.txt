@@ -70,14 +70,15 @@ JOUR 9:
 3e SEMAINE:
     Page de stock et pret quasi-finie, erreur de modification de ligne à corriger
     Réunion de présentation de l'appli. Page historique à faire et autres modifs et améliorations.
-    
-TO DO !!!!!!!!!!!!
-    - ERREUR : MODIFICATION DE PRET : ne marche pas
 
+FIN SEMAINE 3:
+    Page de stock et prêts terminées, historique fonctionnels. Reste à faire les alertes
+    et les possibles améliorations en vue d'une prochaine réunion.
+
+TO DO !!!!!!!!!!!!
     - A FAIRE : Une pseudo console en bas de page pour écrire les messages d'erreurs
                 pour éviter qu'ils ne s'affichent n'importe où dans la page
-    - A FAIRE : un historique
-    - A FAIRE
-
+    - A FAIRE : pouvoir exporter un fichier historique
+    - A FAIRE : trie par ref 
 
 
