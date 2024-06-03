@@ -13,24 +13,23 @@
 <body>
 <!--------------------------------------------------- CONNEXION BDD ----------------------------------------------------------->
 <?php
-        require '../src/traitement/BDD.php';
-        require '../src/class/Stock.php';
-        require '../src/traitement/Traitement.php';
-        /***** Affiche connexion *****/ 
-        $bdd = new BDD();
-        $connexion = $bdd->connect();
-        /***** Affiche date *****/
-        $localdate = date('Y-m-d');
-        $dateAlerte = date('Y-m-d', strtotime("+5 Days"));
-        $erreur = "";
-        /***** Alertes *****/
-        $requete = "SELECT ident FROM pret WHERE end < '{$dateAlerte}'";
-        $resAlerte = $bdd->getPdo()->query($requete);
-        $tabAlerte = array();
-        foreach($resAlerte as $res) { 
-            array_push($tabAlerte, $res['ident']);
-        } 
-        //print_r($tabAlerte);
+    require '../src/traitement/BDD.php';
+    require '../src/class/Stock.php';
+    /***** Création de la connexion *****/ 
+    $bdd = new BDD();
+    $connexion = $bdd->connect();
+    /***** Date locale *****/
+    $localdate = date('Y-m-d');
+    $dateAlerte = date('Y-m-d', strtotime("+5 Days"));
+    /***** Création var globale erreur ******/   
+    $erreur = "";
+    /***** Alertes *****/
+    $requete = "SELECT ident FROM pret WHERE end < '{$dateAlerte}'";
+    $resAlerte = $bdd->getPdo()->query($requete);
+    $tabAlerte = array();
+    foreach($resAlerte as $res) { 
+        array_push($tabAlerte, $res['ident']);
+    } 
 ?>
 
 <!------------------------------------------------------- MENU ---------------------------------------------------------------->
@@ -52,6 +51,7 @@
 <?php 
     echo $connexion; echo("Date du jour : " .$localdate);
 ?>
+
 <!----------------------------------------------- AFFICHAGE SELON MENU -------------------------------------------------------->
 <!--CASE 1: STOCK-----CASE 2: PRET-----CASE 3: HISTORIQUE-----CASE 4: LOGIN---------------------------------------------------->
     <div class="contenu">
@@ -300,10 +300,8 @@
                 <?php
                     }
                 ?>
-<!------------------------------------------------- FORMULAIRE STOCK EDIT ----------------------------------------------------->
             </table>   
             </div>
-
         </div>
 <!------------------------------------------------------------------------------------------------------------------------------        
 --------------------------------------------------------------------------------------------------------------------------------       
@@ -419,7 +417,6 @@
                 }
                 ?>
             
-
             <div class="pret-action">
 <!----------------------------------------------AJOUTER AUX PRETS-------------------------------------------------------------->
                 <h3>Effectuer un prêt</h3>
@@ -430,7 +427,6 @@
                             <input type="text"   id="ref"    name="ref"    value="<?php if(isset($_POST['submit-add'])) echo($_POST['ref']);    ?>" required placeholder=""/>
                             <input type="hidden" id="mat"    name="mat"    value="<?php if(isset($_POST['submit-add'])) echo($_POST['mat']);    ?>"/>
                             <input type="hidden" id="marque" name="marque" value="<?php if(isset($_POST['submit-add'])) echo($_POST['marque']); ?>"/>
-                            <!--<input type="hidden" id="etat"   name="etat"   value="<?php /*if(isset($_POST['submit-add'])) echo($_POST['etat']);   */?>"/>-->
                             <input type="hidden" id="note"   name="note"   value="<?php if(isset($_POST['submit-add'])) echo($_POST['note']);   ?>"/>
                         </li>
                         <li>
@@ -641,7 +637,6 @@
                         <th></th>
                     </tr>
                     <?php 
-                        
                         $result = $bdd->getPdo()->query("SELECT * FROM stock INNER JOIN pret ON stock.ident = pret.ident WHERE etat = 'déjà prêté'".$tri);
                         foreach($result as $res) {
                     ?>
@@ -800,10 +795,6 @@
                     }
                 ?>
             </table>
-
-
-
-
         </div>
 <!------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------------
