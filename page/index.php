@@ -807,6 +807,7 @@
         ?>
         <div class="log-in">
             <p>Non fonctionnel</p>
+            <p>Développé par Evan Froc</p>
         </div>
         <?php            
                 break;
