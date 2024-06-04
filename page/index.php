@@ -14,7 +14,6 @@
 <!--------------------------------------------------- CONNEXION BDD ----------------------------------------------------------->
 <?php
     require '../src/traitement/BDD.php';
-    require '../src/class/Stock.php';
     /***** Création de la connexion *****/ 
     $bdd = new BDD();
     $connexion = $bdd->connect();
@@ -90,7 +89,7 @@
                             $erreur = ("Impossible d'ajouter au stock : ".$e->getMessage());
                         }
                     }                                                                                                 
-                    header('Location: redirection.php');     
+                    header('Location: redirection.php');   
                 }
                 /***** Modifier du stock *****/
                 if(isset($_POST["confirm-edit"])) {
