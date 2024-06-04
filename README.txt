@@ -78,6 +78,5 @@ FIN SEMAINE 3:
 TO DO !!!!!!!!!!!!
     - A FAIRE : Une pseudo console en bas de page pour écrire les messages d'erreurs
                 pour éviter qu'ils ne s'affichent n'importe où dans la page
-    - A FAIRE : trie par ref 
 
 

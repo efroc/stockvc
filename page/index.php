@@ -619,6 +619,11 @@
                                 <button type="submit" name="submit-materiel" title="Trier par materiel">Matériel</button>
                             </form>
                         </th>
+                        <th class="nb">
+                            <form action="index.php?menu=2" method="POST">
+                                <button type="submit" name="submit-nb" title="Trier par nombre">Nombre</button>
+                            </form>
+                        </th>
                         <th class="marque">
                             <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-marque" title="Trier par marque">Marque</button>
@@ -648,7 +653,8 @@
                         <th></th>
                     </tr>
                     <?php 
-                        $result = $bdd->getPdo()->query("SELECT * FROM stock INNER JOIN pret ON stock.ident = pret.ident WHERE etat = 'déjà prêté'".$tri);
+                        $result = $bdd->getPdo()->query("SELECT *, COUNT(*) as number FROM stock INNER JOIN pret ON stock.ident = pret.ident WHERE etat = 'déjà prêté' GROUP BY stock.reference, materiel, marque, etat, note".$tri);
+                        /*$result = $bdd->getPdo()->query("SELECT *  FROM stock INNER JOIN pret ON stock.ident = pret.ident WHERE etat = 'déjà prêté'".$tri);*/
                         foreach($result as $res) {
                     ?>
                     <tr class="pret-table">
@@ -659,6 +665,7 @@
                              ?>
                         </td>
                         <td class="mat"><?php print $res['materiel']; ?> </td>
+                        <td class="nb"><?php print $res['number']; ?> </td>
                         <td class="marque"><?php print $res['marque']; ?></td>
                         <td class="note"><?php print $res['note']; ?></td>
                         <td class="start"><?php print $res['start']; ?></td>
