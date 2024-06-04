@@ -70,20 +70,26 @@
                 $tri ="";
                 /***** Ajout au stock *****/
                 if(isset($_POST['submit-stock'])) {
-                    $newmat = new Materiel($_POST['reference'], strtolower($_POST['materiel']), strtolower($_POST['marque']), 
-                            strtolower($_POST['etat']), strtolower($_POST['note']));
+                    $ref = $_POST['reference']; $mat = strtolower($_POST['materiel']); 
+                    $marque = strtolower($_POST['marque']); $etat = strtolower($_POST['etat']); 
+                    $note = strtolower($_POST['note']);
+                    $requete = "INSERT INTO stock (reference, materiel, marque, etat, note) 
+                                VALUES ('{$ref}', '{$mat}', '{$mat}', '{$etat}', '{$note}')";
                     $historeq = "INSERT INTO historique (date, reference, action, message) 
                                 VALUES ('{$localdate}', '{$_POST['reference']}', 'Ajout au stock',
                                  '{$_POST['number']} {$_POST['materiel']} ont été ajouté au stock.')";
-                    
                     for($i = 0; $i < $_POST['number']; $i++) {
-                        $bdd->addMaterielToStock($newmat); 
-                    }
-                    try {
-                        $bdd->query($historeq);  
-                    } catch(Exception $e) {
-                        die("Impossible d'ajouter à l'historique : ".$e->getMessage());
-                    }                                                                                                       
+                        try {
+                            $bdd->getPdo()->query($requete);
+                            try {
+                                $bdd->query($historeq);  
+                            } catch(Exception $e) {
+                                $erreur = ("Impossible d'ajouter à l'historique : ".$e->getMessage());
+                            } 
+                        } catch(Exception $e) {
+                            $erreur = ("Impossible d'ajouter au stock : ".$e->getMessage());
+                        }
+                    }                                                                                                 
                     header('Location: redirection.php');     
                 }
                 /***** Modifier du stock *****/
