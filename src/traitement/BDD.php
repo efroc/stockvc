@@ -52,34 +52,6 @@ class BDD {
     public function query(string $query) {
         $this->pdo->query($query);
     }
-
-    public function addMaterielToStock(Materiel $materiel) {
-        $req = "INSERT INTO stock (reference, materiel, marque, etat, note) VALUES ('{$materiel->getReference()}', '{$materiel->getMateriel()}', 
-                '{$materiel->getMarque()}', '{$materiel->getEtat()}', '{$materiel->getNote()}')";
-        try {
-            $this->query($req);
-        } catch(Exception $e) {
-            die("Impossible d'ajouter au stock".$e->getMessage());
-        }
-    }
-
-    public function suppMaterielFromStock(int $ident) {
-        $req = "DELETE FROM stock WHERE ident = {$ident} ";
-        try {
-            $this->query($req);
-        } catch(Exception $e) {
-            die("Impossible de supprimer du stock".$e->getMessage());
-        }
-    }
-
-
-
-
-
-
-
-
-
 }
 
 ?>
