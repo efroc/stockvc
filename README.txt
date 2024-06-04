@@ -79,6 +79,5 @@ TO DO !!!!!!!!!!!!
     - A FAIRE : Une pseudo console en bas de page pour écrire les messages d'erreurs
                 pour éviter qu'ils ne s'affichent n'importe où dans la page
     - A FAIRE : trie par ref 
-    - A FAIRE : supprimer ligne 73 independance avec class Stock
 
 

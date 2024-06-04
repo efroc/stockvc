@@ -74,7 +74,7 @@
                     $marque = strtolower($_POST['marque']); $etat = strtolower($_POST['etat']); 
                     $note = strtolower($_POST['note']);
                     $requete = "INSERT INTO stock (reference, materiel, marque, etat, note) 
-                                VALUES ('{$ref}', '{$mat}', '{$mat}', '{$etat}', '{$note}')";
+                                VALUES ('{$ref}', '{$mat}', '{$marque}', '{$etat}', '{$note}')";
                     $historeq = "INSERT INTO historique (date, reference, action, message) 
                                 VALUES ('{$localdate}', '{$_POST['reference']}', 'Ajout au stock',
                                  '{$_POST['number']} {$_POST['materiel']} ont été ajouté au stock.')";
@@ -113,14 +113,19 @@
                 }
                 /***** Retrait du stock *****/
                 if(isset($_POST['submit-supp']) && ($_POST['etat'] === 'disponible')) {
-                    $bdd->suppMaterielFromStock($_POST['id']);
+                    $requete = "DELETE FROM stock WHERE ident = {$_POST['id']} ";
                     $historeq = "INSERT INTO historique (date, reference, action, message) 
                                 VALUES ('{$localdate}', '{$_POST['reference']}', 'Retrait du stock',
                                  'Un {$_POST['materiel']} a été retiré du stock.')";
                     try {
-                        $bdd->getPdo()->query($historeq);
+                        $bdd->getPdo()->query($requete);
+                        try {
+                            $bdd->getPdo()->query($historeq);
+                        } catch(Exception $e) {
+                            die("Impossible d'ajouter à l'historique : ".$e->getMessage());
+                        }
                     } catch(Exception $e) {
-                        die("Impossible d'ajouter à l'historique : ".$e->getMessage());
+                        $erreur = ("Impossible de supprimer du stock : ".$e->getMessage());
                     }
                     header('Location: redirection.php'); 
                 }
