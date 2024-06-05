@@ -157,11 +157,11 @@
                     <ul class="stock-form">
                         <li>
                             <label for="reference">Référence</label><br/>
-                            <input type="text" id="reference" name="reference" placeholder="Ex: N° de série"/>
+                            <input type="text" id="reference" name="reference" value="<?php if(isset($_POST['submit-add-stock'])) echo($_POST['ref']); ?>" placeholder="Ex: N° de série"/>
                         </li>
                         <li>
                             <label for="materiel">*Matériel</label><br/>
-                            <input type="text" id="materiel" name="materiel" required placeholder="Ex: clavier"/>
+                            <input type="text" id="materiel" name="materiel" value="<?php if(isset($_POST['submit-add-stock'])) echo($_POST['mat']); ?>" required placeholder="Ex: clavier"/>
                         </li>
                         <li>
                             <label for="marque">Marque</label><br/>
@@ -268,7 +268,15 @@
                 <tr class="stock-table">     
                     <td class="ref"><?php print $res['reference']; $id = $res['ident']; $ref = $res['reference']; ?></td>
                     <td><?php print $res['materiel']; $mat = $res['materiel']; ?></td>
-                    <td><?php print $res['number']; $num = $res['number']; ?></td>
+                    <td><?php print $res['number']; $num = $res['number']; ?>
+                        <form action="index.php?menu=1" method="POST">
+                            <button type="submit" name="submit-add-stock" title="Ajouter du stock">
+                            <input type="hidden" value="<?php echo $ref ?>" name="ref"/>
+                            <input type="hidden" value="<?php echo $mat ?>" name="mat"/>
+                            <img src="../images/ajouter.png" alt="ajouter" height="10px" width="10px">
+                            </button>
+                        </form>
+                    </td>
                     <td><?php print $res['marque']; $marque = $res['marque']; ?></td>
                     <td><?php print $res['etat']; $etat = $res['etat']; ?></td>
                     <td><?php print $res['note']; $note = $res['note']; ?></td>
