@@ -112,20 +112,30 @@
                     header('Location: redirection.php'); 
                 }
                 /***** Retrait du stock *****/
-                if(isset($_POST['submit-supp']) && ($_POST['etat'] === 'disponible')) {
-                    $requete = "DELETE FROM stock WHERE ident = {$_POST['id']} ";
-                    $historeq = "INSERT INTO historique (date, reference, action, message) 
-                                VALUES ('{$localdate}', '{$_POST['reference']}', 'Retrait du stock',
-                                 'Un {$_POST['materiel']} a été retiré du stock.')";
+                if(isset($_POST['confirm-supp']) && ($_POST['etat-supp'] === 'disponible')) {
+                    $requete = "SELECT ident FROM stock WHERE reference = '{$_POST['ref-supp']}' AND materiel = '{$_POST['mat-supp']}' AND 
+                                marque = '{$_POST['marque-supp']}' AND etat = '{$_POST['etat-supp']}' AND note = '{$_POST['note-supp']}' LIMIT {$_POST['number-supp']}";
+                    $success = 0;
                     try {
-                        $bdd->getPdo()->query($requete);
-                        try {
-                            $bdd->getPdo()->query($historeq);
-                        } catch(Exception $e) {
-                            die("Impossible d'ajouter à l'historique : ".$e->getMessage());
+                        $result = $bdd->getPDO()->query($requete);
+                        foreach($result as $res) {
+                            try {
+                                $bdd->getPdo()->query("DELETE FROM stock WHERE ident = {$res['ident']} ");
+                                $success+=1;
+                            } catch(Exception $e) {
+                                die("Impossible de supprimer du stock : ".$e->getMessage());
+                            }
                         }
                     } catch(Exception $e) {
-                        die("Impossible de supprimer du stock : ".$e->getMessage());
+                        die("".$e->getMessage());
+                    }
+                     $historeq = "INSERT INTO historique (date, reference, action, message) 
+                                VALUES ('{$localdate}', '{$_POST['reference']}', 'Retrait du stock',
+                                '{$success} {$_POST['materiel']} a été retiré du stock.')";
+                    try {
+                        $bdd->getPdo()->query($historeq);
+                    } catch(Exception $e) {
+                        die("Impossible d'ajouter à l'historique : ".$e->getMessage());
                     }
                     header('Location: redirection.php'); 
                 }
@@ -200,7 +210,7 @@
                             <input type="text" id="ref-edit" name="ref-edit" value="<?php echo $_POST['ref']; ?>" required <?php if($_POST['etat']!=='disponible') echo("readonly");?>><br/>
                             <label for="mat">*Matériel</label> 
                             <input type="text" id="mat-edit" name="mat-edit" value="<?php echo $_POST['materiel']; ?>" required placeholder=""/><br/>
-                            <label for="marque">Marque</label>
+                            <label for="marque">Marque</label><br/>
                             <input type="text" id="marque-edit" name="marque-edit" value="<?php echo $_POST['marque']; ?>" placeholder=""/>
                             <br/>
                             <label for="etat">*Etat</label><br/>
@@ -217,9 +227,37 @@
                             <button type="submit" name="cancel-edit" title="Annuler">Annuler</button>
                         </form>
                     </div>
+<!---------------------------------------------FORMULAIRE SUPPRESSION DE STOCK------------------------------------------------->
+                <?php
+                    }
+                    if(isset($_POST["submit-supp"])) {
+                ?>
+                    <h3>Suppression du stock</h3>
+                    <div class="supp-stock">
+                        <form class="supp" action="index.php?menu=1" method="POST"><br/>
+                            <label for="ref">Référence</label><br/>
+                            <input type="text" id="ref-supp" name="ref-supp" value="<?php echo $_POST['reference']; ?>" required readonly><br/>
+                            <label for="mat">Matériel</label><br/> 
+                            <input type="text" id="mat-supp" name="mat-supp" value="<?php echo $_POST['materiel']; ?>" required readonly/><br/>
+                            <label for="marque">Marque</label><br/>
+                            <input type="text" id="marque-supp" name="marque-supp" value="<?php echo $_POST['marque']; ?>" readonly/><br/>
+                            <label for="nombre">Nombre à supprimer</label><br/>
+                            <input type="number" id="number-supp" name="number-supp" min="1" max="<?php echo $_POST['number'];?>" value="1"/><br/>
+                            <label for="etat">Etat</label><br/>
+                            <input type="text" id="etat-supp" name="etat-supp" value="<?php echo $_POST['etat'];?>" readonly/><br/>
+                            <label for="note">Note</label><br/> 
+                            <input type="text" id="note-supp" name="note-supp" value="<?php echo $_POST['note']; ?>" readonly/><br/>
+                            <button type="submit" name="confirm-supp" title="Confirmer">Confirmer</button>
+                        </form>
+                        <form action="index.php?menu=1" method="POST">
+                            <button type="submit" name="cancel-supp" title="Annuler">Annuler</button>
+                        </form>
+                    </div>
                 <?php
                     }
                 ?>
+
+                    
             </div>
 
 <!---------------------------------------------- AFFICHAGE DU STOCK ----------------------------------------------------------->
@@ -308,10 +346,12 @@
                     <td class="button">
                         <form action="index.php?menu=1" method="POST">
                             <button type="submit" name="submit-supp" title="Supprimer">
-                            <input type="hidden" value="<?php echo $etat; ?>" name="etat"/>
-                            <input type="hidden" value="<?php echo $mat; ?>" name="materiel"/>
                             <input type="hidden" value="<?php echo $ref; ?>" name="reference"/>
-                            <input type="hidden" value="<?php echo $id; ?>" name="id"/>
+                            <input type="hidden" value="<?php echo $marque; ?>" name="marque"/>
+                            <input type="hidden" value="<?php echo $mat; ?>" name="materiel"/>
+                            <input type="hidden" value="<?php echo $etat; ?>" name="etat"/>
+                            <input type="hidden" value="<?php echo $num ?>" name="number"/>
+                            <input type="hidden" value="<?php echo $note; ?>" name="note"/>
                             <img src="../images/basket.png" alt="supprimer" height="20px">
                             </button>
                         </form>

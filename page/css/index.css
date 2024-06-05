@@ -150,7 +150,8 @@ button[name="submit-message"], button[name="submit-nb"] {
     cursor: pointer;
 }
 
-button[name="submit-stock"], button[name="submit-pret"] {
+button[name="submit-stock"], button[name="submit-pret"], button[name="confirm-edit"],
+button[name="cancel-edit"], button[name="confirm-supp"], button[name="cancel-supp"] {
     border-radius: 10px;
     background-color: white;
 }
@@ -194,10 +195,6 @@ tr > .button {
     border-radius: 20px;
 }
 
-.modif-stock label {
-    margin-left: 20px;
-}
-
 .modif > * {
     margin-top: 5px;
 }
@@ -231,7 +228,7 @@ select, input:not(input[name="etat"]):not(input[name="ref-edit"]):not(input[name
     border-radius: 20px;
 }
 
-.modif-pret {
+.modif-pret, .supp-stock {
     border: 2px solid black;
     border-radius: 20px;
 }
