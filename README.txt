@@ -75,8 +75,10 @@ FIN SEMAINE 3:
     Page de stock et prêts terminées, historique fonctionnels. Reste à faire les alertes
     et les possibles améliorations en vue d'une prochaine réunion.
 
-TO DO !!!!!!!!!!!!
-    - A FAIRE : Une pseudo console en bas de page pour écrire les messages d'erreurs
-                pour éviter qu'ils ne s'affichent n'importe où dans la page
 
+INTERVENTION A LA MAIRIE d'ETRELLES AVEC BENJAMIN 3e SEMAINE:
+    Intervenir auprès des travailleurs, analyse et découverte de leur environnement de travail pour pouvoir l'améliorer.
+    Remplacement de matériel obsolète ou néfaste. Ajout ou conseil de matériel (repose-pied, souris ergo etc) pour
+    améliorer le confort de travail. 
+    Conseiller sur le matériel à avoir ou commander.
 

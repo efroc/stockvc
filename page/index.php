@@ -19,9 +19,8 @@
     $connexion = $bdd->connect();
     /***** Date locale *****/
     $localdate = date('Y-m-d');
+    /***** Date pour alerte *****/
     $dateAlerte = date('Y-m-d', strtotime("+5 Days"));
-    /***** Création var globale erreur ******/   
-    $erreur = "";
     /***** Alertes *****/
     $requete = "SELECT ident FROM pret WHERE end < '{$dateAlerte}'";
     $resAlerte = $bdd->getPdo()->query($requete);
@@ -189,6 +188,7 @@
                         </li>
                     </ul>
                 </form>
+<!----------------------------------------------FORMULAIRE EDITION DE STOCK---------------------------------------------------->
                 <?php
                     if(isset($_POST["submit-edit"])) {
                 ?>
@@ -528,6 +528,7 @@
                         </li>
                     </ul>
                 </form>
+<!--------------------------------------------------- FORMULAIRE EDITION DE PRET ---------------------------------------------->
                 <?php
                     if(isset($_POST["submit-edit"])) {
                 ?>
