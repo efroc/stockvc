@@ -79,6 +79,7 @@
 
                     for($i = 0; $i < $_POST['number']; $i++) {
                         if($bdd->getPdo()->query($requete) === false) {
+                            echo("Ajout dans le stock échoué");
                             $success-=1;
                         } 
                     }
@@ -88,7 +89,7 @@
                     try {
                         $bdd->query($historeq);  
                     } catch(Exception $e) {
-                        $erreur = ("Impossible d'ajouter à l'historique : ".$e->getMessage());
+                        die("Impossible d'ajouter à l'historique : ".$e->getMessage());
                     } 
                     header('Location: redirection.php');
                 }
@@ -107,7 +108,7 @@
                             die("Impossible d'ajouter à l'historique : ".$e->getMessage());
                         }
                     } catch(Exception $e) {
-                        $erreur = "Erreur: Impossible de modifier la BDD".$e->getMessage();
+                        die("Erreur: Impossible de modifier la BDD".$e->getMessage());
                     }
                     header('Location: redirection.php'); 
                 }
@@ -125,7 +126,7 @@
                             die("Impossible d'ajouter à l'historique : ".$e->getMessage());
                         }
                     } catch(Exception $e) {
-                        $erreur = ("Impossible de supprimer du stock : ".$e->getMessage());
+                        die("Impossible de supprimer du stock : ".$e->getMessage());
                     }
                     header('Location: redirection.php'); 
                 }
@@ -156,8 +157,8 @@
                 <form action="index.php?menu=1" method="POST">
                     <ul class="stock-form">
                         <li>
-                            <label for="reference">Référence</label><br/>
-                            <input type="text" id="reference" name="reference" value="<?php if(isset($_POST['submit-add-stock'])) echo($_POST['ref']); ?>" placeholder="Ex: N° de série"/>
+                            <label for="reference">*Référence</label><br/>
+                            <input type="text" id="reference" name="reference" value="<?php if(isset($_POST['submit-add-stock'])) echo($_POST['ref']); ?>" required placeholder="Ex: N° de série"/>
                         </li>
                         <li>
                             <label for="materiel">*Matériel</label><br/>
@@ -193,21 +194,21 @@
                 ?>
                     <h3>Modification du stock</h3>
                     <div class="modif-stock">
-                        <form class="modif" action="index.php?menu=1" method="POST">
+                        <form class="modif" action="index.php?menu=1" method="POST"><br/>
                             <input type="hidden" value="<?php echo $_POST['id']; ?>" name="id-edit"/>
-                            <label for="ref">Référence: </label>
+                            <label for="ref">*Référence</label>
                             <input type="text" id="ref-edit" name="ref-edit" value="<?php echo $_POST['ref']; ?>" required <?php if($_POST['etat']!=='disponible') echo("readonly");?>><br/>
-                            <label for="mat">Matériel: </label> 
+                            <label for="mat">*Matériel</label> 
                             <input type="text" id="mat-edit" name="mat-edit" value="<?php echo $_POST['materiel']; ?>" required placeholder=""/><br/>
-                            <label for="marque">Marque: </label>
+                            <label for="marque">Marque</label>
                             <input type="text" id="marque-edit" name="marque-edit" value="<?php echo $_POST['marque']; ?>" placeholder=""/>
                             <br/>
-                            <label for="etat">Etat: </label> 
+                            <label for="etat">*Etat</label><br/>
                             <input type="radio" id="etat-edit" name="etat-edit" value="disponible" checked/>Disponible
-                            <input type="radio" id="etat-edit" name="etat-edit" value="affecté"/>Affecté
+                            <input type="radio" id="etat-edit" name="etat-edit" value="affecté"/>Affecté<br/>
                             <input type="radio" id="etat-edit" name="etat-edit" value="en réparation"/>En réparation
                             <input type="radio" id="etat-edit" name="etat-edit" value="rebut"/>Rebut<br/>
-                            <label for="note">Note: </label> 
+                            <label for="note">Note</label><br/> 
                             <input type="text" id="note-edit" name="note-edit" value="<?php echo $_POST['note']; ?>"/><br/>
                             <button type="submit" name="confirm-edit" title="Confirmer">Confirmer</button>
                             <input type="hidden" value="<?php echo $_POST['id'] ?>" name="id"/>
@@ -543,9 +544,9 @@
                             <label for="note">Note: </label> 
                             <input type="text" id="note-edit" name="note-edit" value="<?php echo $_POST['note']; ?>" readonly/>
                             <label for="start">*Début du prêt</label>
-                            <input type="date" id="start" name="start" value="<?php echo $_POST['start']; ?>" required/>
+                            <input type="date" id="start" name="start" value="<?php echo $_POST['start']; ?>" required/><br/>
                             <label for="end">*Fin du prêt</label>
-                            <input type="date" id="end" name="end" value="<?php echo $_POST['end']; ?>" required/>
+                            <input type="date" id="end" name="end" value="<?php echo $_POST['end']; ?>" required/><br/>
                             <label for="client">*Client</label>
                             <select name="client" id="client" required>
                                 <option value="Mairie d\'Argentré du Plessis">Mairie d'Argentré du Plessis</option>
@@ -844,12 +845,13 @@
     </div>
 
 <!-------------------------------------------------------FOOTER CONSOLE-------------------------------------------------------->
-    <div class="footer">
+    
+<!--<div class="footer">-->
 <!-----------------------------------------------------ACTIONS CONSOLE--------------------------------------------------------->
-        
-        <div class="footer-content">
+    <!--<div class="footer-content">
             <p>Message d'erreur :</p>
-            <p><?php echo($erreur); ?></p>
+            <p><?php /*echo($erreur);*/ ?></p>
         </div>
     </div>
+    -->
 </body>

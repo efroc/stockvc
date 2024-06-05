@@ -230,6 +230,11 @@ select, input:not(input[name="etat"]):not(input[name="ref-edit"]):not(input[name
     margin-left: 2%;
     border-radius: 20px;
 }
+
+.modif-pret {
+    border: 2px solid black;
+    border-radius: 20px;
+}
 /******************************STYLE UNIQUE HISTORIQUE*******************************/
 .historique {
     text-align: center;
