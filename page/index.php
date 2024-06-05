@@ -63,33 +63,34 @@
 -------------------------------------------------------CASE 1 STOCK-------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------->
+        
         <div class="stock">
 <!-------------------------------------- TRAITEMENT DE TOUTES LES ACTIONS DE STOCK -------------------------------------------->
             <?php
                 $tri ="";
                 /***** Ajout au stock *****/
                 if(isset($_POST['submit-stock'])) {
-                    $ref = $_POST['reference']; $mat = strtolower($_POST['materiel']); 
-                    $marque = strtolower($_POST['marque']); $etat = strtolower($_POST['etat']); 
-                    $note = strtolower($_POST['note']);
+                    $ref = $_POST['reference']; $mat = strtolower($_POST['materiel']); $marque = strtolower($_POST['marque']);
+                    $etat = strtolower($_POST['etat']); $note = strtolower($_POST['note']);
+
                     $requete = "INSERT INTO stock (reference, materiel, marque, etat, note) 
                                 VALUES ('{$ref}', '{$mat}', '{$marque}', '{$etat}', '{$note}')";
+                    $success = $_POST['number'];
+
+                    for($i = 0; $i < $_POST['number']; $i++) {
+                        if($bdd->getPdo()->query($requete) === false) {
+                            $success-=1;
+                        } 
+                    }
                     $historeq = "INSERT INTO historique (date, reference, action, message) 
                                 VALUES ('{$localdate}', '{$_POST['reference']}', 'Ajout au stock',
-                                 '{$_POST['number']} {$_POST['materiel']} ont été ajouté au stock.')";
-                    for($i = 0; $i < $_POST['number']; $i++) {
-                        try {
-                            $bdd->getPdo()->query($requete);
-                            try {
-                                $bdd->query($historeq);  
-                            } catch(Exception $e) {
-                                $erreur = ("Impossible d'ajouter à l'historique : ".$e->getMessage());
-                            } 
-                        } catch(Exception $e) {
-                            $erreur = ("Impossible d'ajouter au stock : ".$e->getMessage());
-                        }
-                    }                                                                                                 
-                    header('Location: redirection.php');   
+                                 '{$success} {$_POST['materiel']} ont été ajouté au stock.')";
+                    try {
+                        $bdd->query($historeq);  
+                    } catch(Exception $e) {
+                        $erreur = ("Impossible d'ajouter à l'historique : ".$e->getMessage());
+                    } 
+                    header('Location: redirection.php');
                 }
                 /***** Modifier du stock *****/
                 if(isset($_POST["confirm-edit"])) {
@@ -195,7 +196,7 @@
                         <form class="modif" action="index.php?menu=1" method="POST">
                             <input type="hidden" value="<?php echo $_POST['id']; ?>" name="id-edit"/>
                             <label for="ref">Référence: </label>
-                            <input type="text" id="ref-edit" name="ref-edit" value="<?php echo $_POST['ref']; ?>" required readonly><br/>
+                            <input type="text" id="ref-edit" name="ref-edit" value="<?php echo $_POST['ref']; ?>" required <?php if($_POST['etat']!=='disponible') echo("readonly");?>><br/>
                             <label for="mat">Matériel: </label> 
                             <input type="text" id="mat-edit" name="mat-edit" value="<?php echo $_POST['materiel']; ?>" required placeholder=""/><br/>
                             <label for="marque">Marque: </label>
@@ -330,29 +331,31 @@
                     if($_POST['start'] < $_POST['end']) {
                         $requete = "SELECT * FROM stock WHERE reference = '{$_POST['ref']}' AND materiel = '{$_POST['mat']}' 
                             AND marque = '{$_POST['marque']}' AND etat = 'disponible' AND note = '{$_POST['note']}'  LIMIT {$_POST['number']}";
+                        $success = 0;
                         try {
                             $result = $bdd->getPdo()->query($requete);
                             foreach($result as $res) {
                                 $requete = "INSERT INTO pret (ident, reference, start, end, client) 
                                             VALUES ('{$res['ident']}', '{$res['reference']}', '{$_POST['start']}', '{$_POST['end']}', '{$_POST['client']}')";
-                                $historeq = "INSERT INTO historique (date, reference, action, message) 
-                                            VALUES ('{$localdate}', '{$res['reference']}', 'Ajout aux prêts',
-                                            'Un {$res['materiel']} a été prêté à {$_POST['client']} du {$_POST['start']} au {$_POST['end']}.')";
                                 $updatereq = "UPDATE stock SET etat = 'déjà prêté' WHERE ident = '{$res['ident']}'";
                                 $bdd->getPdo()->query($requete);
+                                $success+=1;
                                 try {
                                     $bdd->getPdo()->query($updatereq);
-                                    try {
-                                        $bdd->getPdo()->query($historeq);
-                                    } catch(Exception $e) {
-                                        die("Impossible d'ajouter à l'historique : ". $e->getMessage());
-                                    }
                                 } catch (Exception $e) {
                                     die("Impossible d'actualiser le stock : ".$e->getMessage());
                                 }
                             }
                         } catch(Exception $e) {
                             die("Impossible d'ajouter aux prêts : ".$e->getMessage());
+                        }
+                        $historeq = "INSERT INTO historique (date, reference, action, message) 
+                                    VALUES ('{$localdate}', '{$res['reference']}', 'Ajout aux prêts',
+                                    '{$success} {$res['materiel']} a/ont été prêté à {$_POST['client']} du {$_POST['start']} au {$_POST['end']}.')";
+                        try {
+                            $bdd->getPdo()->query($historeq);
+                        } catch(Exception $e) {
+                            die("Impossible d'ajouter à l'historique : ". $e->getMessage());
                         }
                     }                                                                                                       
                     header('Location: redirection.php');  
