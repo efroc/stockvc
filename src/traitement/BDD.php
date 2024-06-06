@@ -3,8 +3,8 @@
 class BDD {
 
     private string $servername = "localhost";
-    private string $username = "root";
-    private string $password = "";
+    private string $username = "gestion";
+    private string $password = "Gestion35500*";
     private $pdo;
     private string $currentQuery;
     
