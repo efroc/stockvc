@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 06 juin 2024 à 08:48
+-- Généré le : jeu. 06 juin 2024 à 09:07
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -100,7 +100,22 @@ INSERT INTO `historique` (`id`, `date`, `reference`, `action`, `message`) VALUES
 (441, '2024-06-05', '000', 'Suppression de prêt', 'Le prêt de exemple à Mairie d Argentré du Plessis du 2024-06-05 au 2024-06-12 a été supprimé.'),
 (442, '2024-06-05', '000', 'Ajout au stock', '1 exemple ont été ajouté au stock.'),
 (443, '2024-06-05', '', 'Retrait du stock', '1  a été retiré du stock.'),
-(444, '2024-06-05', '', 'Retrait du stock', '5  a été retiré du stock.');
+(444, '2024-06-05', '', 'Retrait du stock', '5  a été retiré du stock.'),
+(445, '2024-06-06', '000', 'Ajout au stock', '10 exemple ont été ajouté au stock.'),
+(446, '2024-06-06', '000', 'Ajout aux prêts', '10 exemple a/ont été prêté à Mairie d\'Argentré du Plessis du 2024-06-06 au 2024-06-13.'),
+(447, '2024-06-06', '000', 'Suppression de prêt', 'Le prêt de exemple à Mairie d Argentré du Plessis du 2024-06-06 au 2024-06-13 a été supprimé.'),
+(448, '2024-06-06', '000', 'Suppression de prêt', 'Le prêt de exemple à Mairie d Argentré du Plessis du 2024-06-06 au 2024-06-13 a été supprimé.'),
+(449, '2024-06-06', '000', 'Suppression de prêt', 'Le prêt de exemple à Mairie d Argentré du Plessis du 2024-06-06 au 2024-06-13 a été supprimé.'),
+(450, '2024-06-06', '000', 'Suppression de prêt', 'Le prêt de exemple à Mairie d Argentré du Plessis du 2024-06-06 au 2024-06-13 a été supprimé.'),
+(451, '2024-06-06', '000', 'Suppression de prêt', 'Le prêt de exemple à Mairie d Argentré du Plessis du 2024-06-06 au 2024-06-13 a été supprimé.'),
+(452, '2024-06-06', '000', 'Suppression de prêt', 'Le prêt de exemple à Mairie d Argentré du Plessis du 2024-06-06 au 2024-06-13 a été supprimé.'),
+(453, '2024-06-06', '000', 'Suppression de prêt', 'Le prêt de exemple à Mairie d Argentré du Plessis du 2024-06-06 au 2024-06-13 a été supprimé.'),
+(454, '2024-06-06', '000', 'Suppression de prêt', 'Le prêt de exemple à Mairie d Argentré du Plessis du 2024-06-06 au 2024-06-13 a été supprimé.'),
+(455, '2024-06-06', '000', 'Suppression de prêt', 'Le prêt de exemple à Mairie d Argentré du Plessis du 2024-06-06 au 2024-06-13 a été supprimé.'),
+(456, '2024-06-06', '000', 'Suppression de prêt', 'Le prêt de exemple à Mairie d Argentré du Plessis du 2024-06-06 au 2024-06-13 a été supprimé.'),
+(457, '2024-06-06', '', 'Retrait du stock', '10  a été retiré du stock.'),
+(458, '2024-06-06', '', 'Retrait du stock', '1  a été retiré du stock.'),
+(459, '2024-06-06', '', 'Retrait du stock', '1  a été retiré du stock.');
 
 -- --------------------------------------------------------
 
@@ -145,8 +160,6 @@ INSERT INTO `stock` (`ident`, `reference`, `materiel`, `marque`, `etat`, `note`)
 (191, '3', 'cable alim', '', 'disponible', ''),
 (192, '3-S', 'cable alim special', '', 'disponible', ''),
 (193, '4', 'cable tripolaire', '', 'disponible', ''),
-(194, '999-999-999', 'pc portable', 'acer', 'disponible', ''),
-(196, '888-888-888', 'pc', 'asus', 'disponible', ''),
 (210, '1-05', 'cable ethernet 50cm', '', 'disponible', '');
 
 --
@@ -179,13 +192,13 @@ ALTER TABLE `stock`
 -- AUTO_INCREMENT pour la table `historique`
 --
 ALTER TABLE `historique`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=445;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=460;
 
 --
 -- AUTO_INCREMENT pour la table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `ident` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=212;
+  MODIFY `ident` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=222;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
