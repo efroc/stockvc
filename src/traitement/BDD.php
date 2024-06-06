@@ -10,7 +10,7 @@ class BDD {
     
     public function connect(): string {
         try {
-            $this->pdo = new PDO("mysql:host=$this->servername;dbname=stockvc", $this->username, $this->password);
+            $this->pdo = new PDO("mysql:host=$this->servername;dbname=STOCK", $this->username, $this->password);
             $this ->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return ("Connecté à la base de données | ");
         }
