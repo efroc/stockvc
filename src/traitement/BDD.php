@@ -23,8 +23,7 @@ class BDD {
         $this->pdo = null;
     }
 
-    /** Getters/Setters
-     */
+    /** Getters/Setters **/
     public function getServerName(): string {
         return $this->servername;
     }
