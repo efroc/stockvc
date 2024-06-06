@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
-    <link href="css/index.css" rel="stylesheet"/>
+    <link href="page/css/index.css" rel="stylesheet"/>
     <title>Stock Informatique Vitré Communauté</title>
-    <link rel="website icon" type="png" href="../images/VClogo.png"/>
+    <link rel="website icon" type="png" href="images/VClogo.png"/>
 </head>
 
 <!----------------------------------------------------- BODY PAGE ------------------------------------------------------------->
 <body>
 <!--------------------------------------------------- CONNEXION BDD ----------------------------------------------------------->
 <?php
-    require '../src/traitement/BDD.php';
+    require 'src/traitement/BDD.php';
     /***** Création de la connexion *****/ 
     $bdd = new BDD();
     $connexion = $bdd->connect();
@@ -33,10 +33,10 @@
 <!------------------------------------------------------- MENU ---------------------------------------------------------------->
     <div class="head">
         <a class="redirection-left" target="_blank" href="https://www.vitrecommunaute.org/">
-            <img class="DSIlogo" src="../images/DSIlogo.png" alt="logo" height="59px"><img src="../images/VClogo.png" alt="logo" height="59px">
+            <img class="DSIlogo" src="images/DSIlogo.png" alt="logo" height="59px"><img src="images/VClogo.png" alt="logo" height="59px">
         </a>
         <p class="title"><a class="jebaited" title="Clique pour gagner 500€" target="_blank" href="https://www.youtube.com/watch?v=-a5Ba-CG8uc">G</a>estion du stock et des prêts</p>
-        <a class="redirection-right" target="_blank" href="https://www.mairie-vitre.com/"><img src="../images/mairielogo.png" alt="logo" height="59px"></a>
+        <a class="redirection-right" target="_blank" href="https://www.mairie-vitre.com/"><img src="images/mairielogo.png" alt="logo" height="59px"></a>
     </div>
     <ul class="menu">
         <li><a href="index.php?menu=1"><p class="menu-text">Stock</p></a></li>
@@ -90,7 +90,7 @@
                     } catch(Exception $e) {
                         die("Impossible d'ajouter à l'historique : ".$e->getMessage());
                     } 
-                    header('Location: redirection.php');
+                    header('Location: page/redirection.php');
                 }
                 /***** Modifier du stock *****/
                 if(isset($_POST["confirm-edit"])) {
@@ -109,7 +109,7 @@
                     } catch(Exception $e) {
                         die("Erreur: Impossible de modifier la BDD".$e->getMessage());
                     }
-                    header('Location: redirection.php'); 
+                    header('Location: page/redirection.php'); 
                 }
                 /***** Retrait du stock *****/
                 if(isset($_POST['confirm-supp']) && ($_POST['etat-supp'] === 'disponible')) {
@@ -137,7 +137,7 @@
                     } catch(Exception $e) {
                         die("Impossible d'ajouter à l'historique : ".$e->getMessage());
                     }
-                    header('Location: redirection.php'); 
+                    header('Location: page/redirection.php'); 
                 }
                 /***** BOUTONS DE TRI *****/
                 if(isset($_POST['submit-reference'])) {
@@ -312,7 +312,7 @@
                             <button type="submit" name="submit-add-stock" title="Ajouter du stock">
                             <input type="hidden" value="<?php echo $ref ?>" name="ref"/>
                             <input type="hidden" value="<?php echo $mat ?>" name="mat"/>
-                            <img src="../images/ajouter.png" alt="ajouter" height="10px" width="10px">
+                            <img src="images/ajouter.png" alt="ajouter" height="10px" width="10px">
                             </button>
                         </form>
                     </td>
@@ -327,7 +327,7 @@
                             <input type="hidden" value="<?php echo $marque ?>" name="marque"/>
                             <input type="hidden" value="<?php echo $note ?>" name="note"/>
                             <input type="hidden" value="<?php echo $num ?>" name="number"/>
-                            <img src="../images/ajouter.png" alt="ajouter" height="20px">
+                            <img src="images/ajouter.png" alt="ajouter" height="20px">
                             </button>
                         </form>
                     </td>
@@ -340,7 +340,7 @@
                             <input type="hidden" value="<?php echo $marque; ?>" name="marque"/>
                             <input type="hidden" value="<?php echo $etat; ?>" name="etat"/>
                             <input type="hidden" value="<?php echo $note; ?>" name="note"/>
-                            <img src="../images/modifier.png" alt="modifier" height="20px">
+                            <img src="images/modifier.png" alt="modifier" height="20px">
                         </form>
                     </td>
                     <td class="button">
@@ -352,7 +352,7 @@
                             <input type="hidden" value="<?php echo $etat; ?>" name="etat"/>
                             <input type="hidden" value="<?php echo $num ?>" name="number"/>
                             <input type="hidden" value="<?php echo $note; ?>" name="note"/>
-                            <img src="../images/basket.png" alt="supprimer" height="20px">
+                            <img src="images/basket.png" alt="supprimer" height="20px">
                             </button>
                         </form>
                     </td>
@@ -407,7 +407,7 @@
                             die("Impossible d'ajouter à l'historique : ". $e->getMessage());
                         }
                     }                                                                                                       
-                    header('Location: redirection.php');  
+                    header('Location: page/redirection.php');  
                 }
                 /***** Modifier un prêt *****/
                 if(isset($_POST['confirm-edit'])) {
@@ -734,7 +734,7 @@
                                 <input  type="hidden" value="<?php echo $res['start']; ?>"     name="start"/>
                                 <input  type="hidden" value="<?php echo $res['end']; ?>"       name="end"/>
                                 <input  type="hidden" value="<?php echo $res['client']; ?>"    name="client"/>
-                                <img src="../images/modifier.png" alt="modifier" height="20px">
+                                <img src="images/modifier.png" alt="modifier" height="20px">
                             </form>
                          </td>
                         <td class="button">
@@ -746,7 +746,7 @@
                                 <input  type="hidden" value="<?php echo $res['start']; ?>"     name="start"/>
                                 <input  type="hidden" value="<?php echo $res['end']; ?>"       name="end"/>
                                 <input  type="hidden" value="<?php echo $res['client']; ?>"    name="client"/>
-                                <img src="../images/basket.png" alt="supprimer" height="20px">
+                                <img src="images/basket.png" alt="supprimer" height="20px">
                                 </button>
                             </form>
                         </td>

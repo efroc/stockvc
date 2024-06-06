@@ -3,11 +3,13 @@
 class BDD {
 
     private string $servername = "localhost";
+    //gestion -> root
     private string $username = "gestion";
+    //Gestion35500* -> ""
     private string $password = "Gestion35500*";
     private $pdo;
     private string $currentQuery;
-    
+    //dbname=STOCK
     public function connect(): string {
         try {
             $this->pdo = new PDO("mysql:host=$this->servername;dbname=STOCK", $this->username, $this->password);
