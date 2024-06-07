@@ -912,7 +912,56 @@
                 break;
                 case 4:
         ?>
-        
+        <div class="utilisation">
+            <h3>Navigation</h3>
+            <p>Bienvenue dans le guide d'utilisation de l'application. On va d'abord commencer par parcourir les onglets.</p>
+            <br/>
+            <div class="navigation">
+                <img src="images/utilisation1.png" alt="utilisation" height="100px">
+                <p>On retrouve ici le menu principal, avec les onglets Stock, Prêts et Historique. 
+                    Ceux-ci sont pointés grâce aux flèches rouges. On retrouve également les logos 
+                    au haut pointés par 2 flèches bleues. En cliquant dessus, vous serez redirigés vers leur site internet. </p>
+            </div>
+            <br/>
+            <h3>Stock</h3>
+            <div class="utilisation-stock">
+                <img src="images/utilisation-stock1.png" alt="utilisation" height="250px">
+                <p>En cliquant sur l'onglet Stock, cette interface se présentera devant vous. A droite se trouve la liste du stock, 
+                    et à gauche les actions. Pour ajouter un matériel dans le stock, il vous suffit de compléter le formulaire à gauche,
+                    ou alors vous pouvez simplement cliquer sur le bouton dans la colonne Nombre sur un matériel déjà existant (flèche bleue), 
+                    pour pouvoir en ajouter plus. Vous devrez dans tous les cas cliquer sur le bouton Ajouter au stock.</p>
+                <p>A droite de chaque matériel du stock se trouvent 3 boutons, représentés par les flèches rouges. Le premier vous permet de 
+                    l'ajouter en prêt, nous y reviendrons plus tard. Sachez juste que vous ne pouvez faire un prêt que si le matériel est disponible.
+                    <br/>Le second bouton vous permet de modifier les caractéristiques d'un matériel. En cliquant dessus, une fenêtre 
+                    Modifier du stock s'affichera en dessous à gauche. 
+                    <br/>Le troisième bouton permet de supprimer un matériel de la liste du stock. En cliquant dessus, une autre fenêtre s'affichera 
+                    également en dessous à gauche. Vous ne pouvez pas supprimer 
+                    un matériel si celui-ci est déjà prêté.</p>
+            </div>
+            <br/>
+            <h3>Prêts</h3>
+            <div class="utilisation-pret">
+                <img src="images/utilisation-pret1.png" alt="utilisation" height="250px">
+                <p>En cliquant sur l'onglet Prêts, cette interface se présentera devant vous. A droite se trouve la liste des prêts, et à gauche les actions.
+                    Pour ajouter un prêt, vous pouvez remplir le formulaire Effectuer un prêt. Vous pouvez aussi cliquer sur Ajouter aux prêts sur 
+                    un matériel depuis l'onglet Stock comme cité précédemment, et la référence s'affichera automatiquement (flèche bleue). 
+                    <br/>Vous pouvez faire un prêt d'un maximum 50 même matériel en une seule fois. N'oubliez pas d'inscrire une date valide 
+                    (date de fin égale ou après la date de début).
+                    <br/>Pour modifier les caractéristiques d'un prêt, vous pouvez cliquer sur le bouton Modifier à droite. Celui-ci vous affichera 
+                    une fenêtre en bas à gauche. Attention : vous ne pouvez pas modifier les caractéristiques du matériel, seulement du prêt. 
+                    <br/>Pour supprimer un prêt, cliquer sur le bouton Supprimer à droite.
+                    <br/>Lorsque le prêt atteindra la date butoir de 5 jours, une alerte se déclenchera.</p>
+            </div>
+            <br/>
+            <h3>Historique</h3>
+            <div class="utilisation-historique">
+                <img src="images/utilisation-historique1.png" alt="utilisation" height="250px">
+                <p>En cliquant sur l'onglet Historique, cette interface se présentera devant vous. Elle contient la liste de toute les actions effectuées 
+                    sur l'application. On retrouve la date locale lors de l'action, et la référence du matériel.
+                    <br/>Vous pouvez exporter l'historique grâce au bouton en haut à droite de la page.
+                </p>
+            </div>
+        </div>
 <!------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------CASE 5 SE CONNECTER-------------------------------------------------------
