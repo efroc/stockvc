@@ -72,6 +72,7 @@
                 if(isset($_POST['submit-stock'])) {
                     $ref = $_POST['reference']; $mat = strtolower($_POST['materiel']); $marque = strtolower($_POST['marque']);
                     $etat = strtolower($_POST['etat']); $note = strtolower($_POST['note']); $proprietaire = $_POST['proprietaire'];
+                    $num = $_POST['number'];
 
                     $requete = "INSERT INTO stock (reference, materiel, marque, etat, note, proprietaire) 
                                 VALUES ('{$ref}', '{$mat}', '{$marque}', '{$etat}', '{$note}', '{$proprietaire}')";
@@ -85,7 +86,7 @@
                     }
                     $historeq = "INSERT INTO historique (date, reference, action, message) 
                                 VALUES ('{$localdate}', '{$_POST['reference']}', 'Ajout au stock',
-                                 '{$success} {$_POST['materiel']} ont été ajouté au stock.')";
+                                 'Matériel: $mat | Marque: $marque | Etat: $etat | Propriétaire: $proprietaire | Nombre: $num | Note: $note')";
                     try {
                         $bdd->query($historeq);  
                     } catch(Exception $e) {
@@ -99,7 +100,8 @@
                             etat = '{$_POST['etat-edit']}', note = '{$_POST['note-edit']}', proprietaire = '{$_POST['proprietaire-edit']}' WHERE ident = '{$_POST['id-edit']}'";
                     $historeq = "INSERT INTO historique (date, reference, action, message) 
                             VALUES ('{$localdate}', '{$_POST['ref-edit']}', 'Modification du stock',
-                            'Un ou plusieurs paramètres du {$_POST['mat-edit']} ont été modifié dans le stock.')";
+                            'Matériel -> {$_POST['mat-edit']} | Marque -> {$_POST['marque-edit']} | Marque -> {$_POST['etat-edit']} | Propriétaire -> {$_POST['propriétaire-edit']} 
+                            | Note -> {$_POST['note-edit']}')";
                     try {
                         $bdd->getPDO()->query($req);
                         try {
@@ -114,6 +116,8 @@
                 }
                 /***** Retrait du stock *****/
                 if(isset($_POST['confirm-supp']) && ($_POST['etat-supp'] === 'disponible')) {
+                    $ref = $_POST['ref-supp']; $mat = strtolower($_POST['mat-supp']); $marque = strtolower($_POST['marque-supp']); $num = $_POST['number-supp'];
+                    $etat = strtolower($_POST['etat-supp']); $note = strtolower($_POST['note-supp']); $proprietaire = $_POST['proprietaire-supp'];
                     $requete = "SELECT ident FROM stock WHERE reference = '{$_POST['ref-supp']}' AND materiel = '{$_POST['mat-supp']}' AND 
                                 marque = '{$_POST['marque-supp']}' AND etat = '{$_POST['etat-supp']}' AND note = '{$_POST['note-supp']}' AND 
                                 proprietaire = '{$_POST['proprietaire-supp']}' LIMIT {$_POST['number-supp']}";
@@ -131,9 +135,9 @@
                     } catch(Exception $e) {
                         die("".$e->getMessage());
                     }
-                     $historeq = "INSERT INTO historique (date, reference, action, message) 
-                                VALUES ('{$localdate}', '{$_POST['reference']}', 'Retrait du stock',
-                                '{$success} {$_POST['materiel']} a été retiré du stock.')";
+                    $historeq = "INSERT INTO historique (date, reference, action, message) 
+                                VALUES ('{$localdate}', '{$ref}', 'Retrait du stock',
+                                'Matériel: $mat | Marque: $marque | Etat: $etat | Propriétaire: $proprietaire | Nombre: $num | Note: $note')";
                     try {
                         $bdd->getPdo()->query($historeq);
                     } catch(Exception $e) {
