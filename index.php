@@ -176,15 +176,15 @@
                     <ul class="stock-form">
                         <li>
                             <label for="reference">*Référence</label><br/>
-                            <input type="text" id="reference" name="reference" value="<?php if(isset($_POST['submit-add-stock'])) echo($_POST['ref']); ?>" required placeholder="Ex: N° de série"/>
+                            <input type="text" id="reference" maxlength="30" name="reference" value="<?php if(isset($_POST['submit-add-stock'])) echo($_POST['ref']); ?>" required placeholder="Ex: N° de série"/>
                         </li>
                         <li>
                             <label for="materiel">*Matériel</label><br/>
-                            <input type="text" id="materiel" name="materiel" value="<?php if(isset($_POST['submit-add-stock'])) echo($_POST['mat']); ?>" required placeholder="Ex: clavier"/>
+                            <input type="text" id="materiel" name="materiel" maxlength="30" value="<?php if(isset($_POST['submit-add-stock'])) echo($_POST['mat']); ?>" required placeholder="Ex: clavier"/>
                         </li>
                         <li>
                             <label for="marque">Marque</label><br/>
-                            <input type="text" id="marque" name="marque" value="<?php if(isset($_POST['submit-add-stock'])) echo($_POST['marque']); ?>" placeholder="Ex: logitech"/>
+                            <input type="text" id="marque" name="marque" maxlength="30" value="<?php if(isset($_POST['submit-add-stock'])) echo($_POST['marque']); ?>" placeholder="Ex: logitech"/>
                         </li>
                         <li>
                             <label for="nombre">Nombre à ajouter</label><br/>
@@ -200,7 +200,7 @@
                         </li>
                         <li>
                             <label for="note">Note</label><br/>
-                            <input type="text" id="note" name="note" value="<?php if(isset($_POST['submit-add-stock'])) echo($_POST['note']); ?>" placeholder="Facultatif"/>
+                            <input type="text" id="note" name="note" maxlength="150" value="<?php if(isset($_POST['submit-add-stock'])) echo($_POST['note']); ?>" placeholder="Facultatif"/>
                         </li>
                         <li>
                             <label for="proprietaire">*Propriétaire</label><br/>
@@ -229,11 +229,11 @@
                         <form class="modif" action="index.php?menu=1" method="POST"><br/>
                             <input type="hidden" value="<?php echo $_POST['id']; ?>" name="id-edit"/>
                             <label for="ref">*Référence</label>
-                            <input type="text" id="ref-edit" name="ref-edit" value="<?php echo $_POST['ref']; ?>" required <?php if($_POST['etat']!=='disponible') echo("readonly");?>><br/>
+                            <input type="text" id="ref-edit" maxlength="30" name="ref-edit" value="<?php echo $_POST['ref']; ?>" required <?php if($_POST['etat']!=='disponible') echo("readonly");?>><br/>
                             <label for="mat">*Matériel</label> 
-                            <input type="text" id="mat-edit" name="mat-edit" value="<?php echo $_POST['materiel']; ?>" required placeholder=""/><br/>
+                            <input type="text" id="mat-edit" maxlength="30" name="mat-edit" value="<?php echo $_POST['materiel']; ?>" required placeholder=""/><br/>
                             <label for="marque">Marque</label><br/>
-                            <input type="text" id="marque-edit" name="marque-edit" value="<?php echo $_POST['marque']; ?>" placeholder=""/>
+                            <input type="text" id="marque-edit" maxlength="30" name="marque-edit" value="<?php echo $_POST['marque']; ?>" placeholder=""/>
                             <br/>
                             <label for="etat">*Etat</label><br/>
                             <input type="radio" id="etat-edit" name="etat-edit" value="disponible" checked/>Disponible
@@ -241,7 +241,7 @@
                             <input type="radio" id="etat-edit" name="etat-edit" value="en réparation"/>En réparation
                             <input type="radio" id="etat-edit" name="etat-edit" value="rebut"/>Rebut<br/>
                             <label for="note">Note</label><br/> 
-                            <input type="text" id="note-edit" name="note-edit" value="<?php echo $_POST['note']; ?>"/><br/>
+                            <input type="text" id="note-edit" maxlength="150" name="note-edit" value="<?php echo $_POST['note']; ?>"/><br/>
                             <label for="proprietaire">Propriétaire</label><br/> 
                             <select name="proprietaire-edit" id="proprietaire-edit" required>
                                 <option <?php if($_POST['proprietaire'] === 'Vitré Communauté') echo("selected=\"selected\""); ?> value="Vitré Communauté">Vitré Communauté</option>
@@ -262,17 +262,17 @@
                     <div class="supp-stock">
                         <form class="supp" action="index.php?menu=1" method="POST"><br/>
                             <label for="ref">Référence</label><br/>
-                            <input type="text" id="ref-supp" name="ref-supp" value="<?php echo $_POST['reference']; ?>" required readonly><br/>
+                            <input type="text" id="ref-supp" maxlength="30" name="ref-supp" value="<?php echo $_POST['reference']; ?>" required readonly><br/>
                             <label for="mat">Matériel</label><br/> 
-                            <input type="text" id="mat-supp" name="mat-supp" value="<?php echo $_POST['materiel']; ?>" required readonly/><br/>
+                            <input type="text" id="mat-supp" maxlength="30" name="mat-supp" value="<?php echo $_POST['materiel']; ?>" required readonly/><br/>
                             <label for="marque">Marque</label><br/>
-                            <input type="text" id="marque-supp" name="marque-supp" value="<?php echo $_POST['marque']; ?>" readonly/><br/>
+                            <input type="text" id="marque-supp" maxlength="30" name="marque-supp" value="<?php echo $_POST['marque']; ?>" readonly/><br/>
                             <label for="nombre">Nombre à supprimer</label><br/>
                             <input type="number" id="number-supp" name="number-supp" min="1" max="<?php echo $_POST['number'];?>" value="1"/><br/>
                             <label for="etat">Etat</label><br/>
                             <input type="text" id="etat-supp" name="etat-supp" value="<?php echo $_POST['etat'];?>" readonly/><br/>
                             <label for="note">Note</label><br/> 
-                            <input type="text" id="note-supp" name="note-supp" value="<?php echo $_POST['note']; ?>" readonly/><br/>
+                            <input type="text" id="note-supp" maxlength="150" name="note-supp" value="<?php echo $_POST['note']; ?>" readonly/><br/>
                             <label for="proprietaire">Propriétaire</label><br/>
                             <input type="text" id="proprietaire-supp" name="proprietaire-supp" value="<?php echo $_POST['proprietaire'];?>" readonly/><br/>
                             <button type="submit" name="confirm-supp" title="Confirmer">Confirmer</button>
@@ -527,7 +527,7 @@
                     <ul class="pret-form">
                         <li>
                             <label for="reference">Référence</label><br/>
-                            <input type="text"   id="ref"    name="ref"    value="<?php if(isset($_POST['submit-add'])) echo($_POST['ref']);    ?>" required placeholder=""/>
+                            <input type="text"   id="ref"  maxlength="30"   name="ref"    value="<?php if(isset($_POST['submit-add'])) echo($_POST['ref']);    ?>" required placeholder=""/>
                             <input type="hidden" id="mat"    name="mat"    value="<?php if(isset($_POST['submit-add'])) echo($_POST['mat']);    ?>"/>
                             <input type="hidden" id="marque" name="marque" value="<?php if(isset($_POST['submit-add'])) echo($_POST['marque']); ?>"/>
                             <input type="hidden" id="note"   name="note"   value="<?php if(isset($_POST['submit-add'])) echo($_POST['note']);   ?>"/>
