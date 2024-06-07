@@ -42,7 +42,8 @@
         <li><a href="index.php?menu=1"><p class="menu-text">Stock</p></a></li>
         <li><a href="index.php?menu=2"><p class=<?php if(count($tabAlerte) > 0) {echo("menu-text-alerte");} else { echo("menu-text"); }?>>Prêts et Alertes</p></a></li>
         <li><a href="index.php?menu=3"><p class="menu-text">Historique</p></a></li>
-        <li style="float:right"><a class="login" href="index.php?menu=4"><p class="menu-text">Se connecter</p></a></li> 
+        <li style="float:right"><a class="login" href="index.php?menu=5"><p class="menu-text">Se connecter</p></a></li> 
+        <li style="float:right"><a href="index.php?menu=4"><p class="menu-text">Utilisation</p></a></li>
     </ul>
 
 <!------------------------------------------------AFFICHE INFOS CONNEXION------------------------------------------------------>    
@@ -70,10 +71,10 @@
                 /***** Ajout au stock *****/
                 if(isset($_POST['submit-stock'])) {
                     $ref = $_POST['reference']; $mat = strtolower($_POST['materiel']); $marque = strtolower($_POST['marque']);
-                    $etat = strtolower($_POST['etat']); $note = strtolower($_POST['note']);
+                    $etat = strtolower($_POST['etat']); $note = strtolower($_POST['note']); $proprietaire = $_POST['proprietaire'];
 
-                    $requete = "INSERT INTO stock (reference, materiel, marque, etat, note) 
-                                VALUES ('{$ref}', '{$mat}', '{$marque}', '{$etat}', '{$note}')";
+                    $requete = "INSERT INTO stock (reference, materiel, marque, etat, note, proprietaire) 
+                                VALUES ('{$ref}', '{$mat}', '{$marque}', '{$etat}', '{$note}', '{$proprietaire}')";
                     $success = $_POST['number'];
 
                     for($i = 0; $i < $_POST['number']; $i++) {
@@ -95,7 +96,7 @@
                 /***** Modifier du stock *****/
                 if(isset($_POST["confirm-edit"])) {
                     $req = "UPDATE stock SET materiel = '{$_POST['mat-edit']}', marque = '{$_POST['marque-edit']}', 
-                            etat = '{$_POST['etat-edit']}', note = '{$_POST['note-edit']}' WHERE ident = '{$_POST['id-edit']}'";
+                            etat = '{$_POST['etat-edit']}', note = '{$_POST['note-edit']}', proprietaire = '{$_POST['proprietaire-edit']}' WHERE ident = '{$_POST['id-edit']}'";
                     $historeq = "INSERT INTO historique (date, reference, action, message) 
                             VALUES ('{$localdate}', '{$_POST['ref-edit']}', 'Modification du stock',
                             'Un ou plusieurs paramètres du {$_POST['mat-edit']} ont été modifié dans le stock.')";
@@ -114,7 +115,8 @@
                 /***** Retrait du stock *****/
                 if(isset($_POST['confirm-supp']) && ($_POST['etat-supp'] === 'disponible')) {
                     $requete = "SELECT ident FROM stock WHERE reference = '{$_POST['ref-supp']}' AND materiel = '{$_POST['mat-supp']}' AND 
-                                marque = '{$_POST['marque-supp']}' AND etat = '{$_POST['etat-supp']}' AND note = '{$_POST['note-supp']}' LIMIT {$_POST['number-supp']}";
+                                marque = '{$_POST['marque-supp']}' AND etat = '{$_POST['etat-supp']}' AND note = '{$_POST['note-supp']}' AND 
+                                proprietaire = '{$_POST['proprietaire-supp']}' LIMIT {$_POST['number-supp']}";
                     $success = 0;
                     try {
                         $result = $bdd->getPDO()->query($requete);
@@ -158,6 +160,9 @@
                 if(isset($_POST['submit-note'])) {
                     $tri = ' ORDER BY note DESC';
                 }
+                if(isset($_POST['submit-proprietaire'])) {
+                    $tri = ' ORDER BY proprietaire';
+                }
 
             ?>
             <div class="stock-action">
@@ -175,7 +180,7 @@
                         </li>
                         <li>
                             <label for="marque">Marque</label><br/>
-                            <input type="text" id="marque" name="marque" placeholder="Ex: logitech"/>
+                            <input type="text" id="marque" name="marque" value="<?php if(isset($_POST['submit-add-stock'])) echo($_POST['marque']); ?>" placeholder="Ex: logitech"/>
                         </li>
                         <li>
                             <label for="nombre">Nombre à ajouter</label><br/>
@@ -191,7 +196,20 @@
                         </li>
                         <li>
                             <label for="note">Note</label><br/>
-                            <input type="text" id="note" name="note" placeholder="Facultatif"/>
+                            <input type="text" id="note" name="note" value="<?php if(isset($_POST['submit-add-stock'])) echo($_POST['note']); ?>" placeholder="Facultatif"/>
+                        </li>
+                        <li>
+                            <label for="proprietaire">*Propriétaire</label><br/>
+                            <select name="proprietaire" id="proprietaire" required>
+                                <option <?php if(isset($_POST['submit-add-stock'])) { 
+                                                if($_POST['proprietaire'] === 'Vitré Communauté') echo("selected=\"selected\"");
+                                              } ?> value="Vitré Communauté">Vitré Communauté
+                                </option>
+                                <option <?php if(isset($_POST['submit-add-stock'])) { 
+                                                if($_POST['proprietaire'] === 'Mairie') echo("selected=\"selected\"");
+                                              } ?> value="Mairie">Mairie
+                                </option>
+                            </select>
                         </li>
                         <li>
                             <button type="submit" name="submit-stock">Ajouter au stock</button>
@@ -220,8 +238,12 @@
                             <input type="radio" id="etat-edit" name="etat-edit" value="rebut"/>Rebut<br/>
                             <label for="note">Note</label><br/> 
                             <input type="text" id="note-edit" name="note-edit" value="<?php echo $_POST['note']; ?>"/><br/>
+                            <label for="proprietaire">Propriétaire</label><br/> 
+                            <select name="proprietaire-edit" id="proprietaire-edit" required>
+                                <option <?php if($_POST['proprietaire'] === 'Vitré Communauté') echo("selected=\"selected\""); ?> value="Vitré Communauté">Vitré Communauté</option>
+                                <option <?php if($_POST['proprietaire'] === 'Mairie') echo("selected=\"selected\""); ?> value="Mairie">Mairie</option>
+                            </select>
                             <button type="submit" name="confirm-edit" title="Confirmer">Confirmer</button>
-                            <input type="hidden" value="<?php echo $_POST['id'] ?>" name="id"/>
                         </form>
                         <form action="index.php?menu=1" method="POST">
                             <button type="submit" name="cancel-edit" title="Annuler">Annuler</button>
@@ -247,6 +269,8 @@
                             <input type="text" id="etat-supp" name="etat-supp" value="<?php echo $_POST['etat'];?>" readonly/><br/>
                             <label for="note">Note</label><br/> 
                             <input type="text" id="note-supp" name="note-supp" value="<?php echo $_POST['note']; ?>" readonly/><br/>
+                            <label for="proprietaire">Propriétaire</label><br/>
+                            <input type="text" id="proprietaire-supp" name="proprietaire-supp" value="<?php echo $_POST['proprietaire'];?>" readonly/><br/>
                             <button type="submit" name="confirm-supp" title="Confirmer">Confirmer</button>
                         </form>
                         <form action="index.php?menu=1" method="POST">
@@ -295,30 +319,40 @@
                             <button type="submit" name="submit-note" title="Trier par note">Note</button>
                         </form>
                     </th>
+                    <th class="proprietaire">
+                        <form action="index.php?menu=1" method="POST">
+                            <button type="submit" name="submit-proprietaire" title="Trier par propriétaire">Propriétaire</button>
+                        </form>
+                    </th>
                     <th class="button"></th>
                     <th class="button"></th>
                     <th class="button"></th>
                 </tr>
                 <?php 
-                    $result = $bdd->getPdo()->query('SELECT *, COUNT(*) as number FROM stock GROUP BY reference, materiel, marque, etat, note'.$tri);
+                    $result = $bdd->getPdo()->query('SELECT *, COUNT(*) as number FROM stock GROUP BY reference, materiel, marque, etat, note, proprietaire'.$tri);
                     foreach($result as $res) {
-                        $id; $ref; $mat; $marque; $etat; $note; $num;
+                        $id = $res['ident']; $ref = $res['reference']; $mat = $res['materiel']; $marque = $res['marque']; 
+                        $etat = $res['etat']; $note = $res['note']; $num = $res['number'];; $proprietaire = $res['proprietaire'];
                 ?>  
                 <tr class="stock-table">     
-                    <td class="ref"><?php print $res['reference']; $id = $res['ident']; $ref = $res['reference']; ?></td>
-                    <td><?php print $res['materiel']; $mat = $res['materiel']; ?></td>
-                    <td><?php print $res['number']; $num = $res['number']; ?>
+                    <td class="ref"><?php print $res['reference']; ?></td>
+                    <td><?php print $res['materiel']; ?></td>
+                    <td><?php print $res['number']; ?>
                         <form action="index.php?menu=1" method="POST">
                             <button type="submit" name="submit-add-stock" title="Ajouter du stock">
                             <input type="hidden" value="<?php echo $ref ?>" name="ref"/>
                             <input type="hidden" value="<?php echo $mat ?>" name="mat"/>
+                            <input type="hidden" value="<?php echo $marque; ?>" name="marque"/>
+                            <input type="hidden" value="<?php echo $note ?>" name="note"/>
+                            <input type="hidden" value="<?php echo $proprietaire ?>" name="proprietaire"/>
                             <img src="images/ajouter.png" alt="ajouter" height="10px" width="10px">
                             </button>
                         </form>
                     </td>
-                    <td><?php print $res['marque']; $marque = $res['marque']; ?></td>
-                    <td><?php print $res['etat']; $etat = $res['etat']; ?></td>
-                    <td><?php print $res['note']; $note = $res['note']; ?></td>
+                    <td><?php print $res['marque']; ?></td>
+                    <td><?php print $res['etat']; ?></td>
+                    <td><?php print $res['note']; ?></td>
+                    <td><?php print $res['proprietaire']; ?></td>
                     <td class="button">
                         <form action="<?php if($etat !== 'disponible') { echo("index.php?menu=1"); } else { echo("index.php?menu=2"); }?>" method="POST">
                             <button type="submit" name="submit-add" title="Ajouter aux prêts">
@@ -326,6 +360,7 @@
                             <input type="hidden" value="<?php echo $mat ?>" name="mat"/>
                             <input type="hidden" value="<?php echo $marque ?>" name="marque"/>
                             <input type="hidden" value="<?php echo $note ?>" name="note"/>
+                            <input type="hidden" value="<?php echo $proprietaire ?>" name="proprietaire"/>
                             <input type="hidden" value="<?php echo $num ?>" name="number"/>
                             <img src="images/ajouter.png" alt="ajouter" height="20px">
                             </button>
@@ -340,6 +375,7 @@
                             <input type="hidden" value="<?php echo $marque; ?>" name="marque"/>
                             <input type="hidden" value="<?php echo $etat; ?>" name="etat"/>
                             <input type="hidden" value="<?php echo $note; ?>" name="note"/>
+                            <input type="hidden" value="<?php echo $proprietaire ?>" name="proprietaire"/>
                             <img src="images/modifier.png" alt="modifier" height="20px">
                         </form>
                     </td>
@@ -352,6 +388,7 @@
                             <input type="hidden" value="<?php echo $etat; ?>" name="etat"/>
                             <input type="hidden" value="<?php echo $num ?>" name="number"/>
                             <input type="hidden" value="<?php echo $note; ?>" name="note"/>
+                            <input type="hidden" value="<?php echo $proprietaire ?>" name="proprietaire"/>
                             <img src="images/basket.png" alt="supprimer" height="20px">
                             </button>
                         </form>
@@ -868,12 +905,22 @@
         </div>
 <!------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------CASE 4 SE CONNECTER-------------------------------------------------------
+------------------------------------------------------CASE 4 UTILISATION -------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------->
         <?php
                 break;
                 case 4:
+        ?>
+        
+<!------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------CASE 5 SE CONNECTER-------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------->
+        <?php
+                break;
+                case 5:
         ?>
         <div class="log-in">
             <p>Non fonctionnel</p>

@@ -143,7 +143,7 @@ button[name="submit-marque"], button[name="submit-etat"],
 button[name="submit-note"], button[name="submit-start"],
 button[name="submit-end"], button[name="submit-client"], 
 button[name="submit-date"], button[name="submit-action"],
-button[name="submit-message"], button[name="submit-nb"] {
+button[name="submit-message"], button[name="submit-nb"], button[name="submit-proprietaire"] {
     width: 100%;
     background-color: white;
     color: black;
@@ -165,7 +165,7 @@ tr > .button {
 }
 
 /******************************STYLE UNIQUE STOCK************************/
-.stock-table > td:not(:first-child):not(:last-child):not(:nth-child(8)) {
+.stock-table > td:not(:first-child):not(:last-child):not(:nth-child(9)) {
     border-left: 2px solid black;
     
 }
