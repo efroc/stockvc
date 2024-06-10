@@ -164,6 +164,11 @@ tr > .button {
     width: 3%;
 }
 
+.action-clignote {
+    animation: clignoter 0.5s linear;
+    animation-iteration-count: 10;
+}
+
 /******************************STYLE UNIQUE STOCK************************/
 .stock-table > td:not(:first-child):not(:last-child):not(:nth-child(9)) {
     border-left: 2px solid black;

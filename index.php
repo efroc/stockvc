@@ -188,7 +188,10 @@
             ?>
             <div class="stock-action">
 <!-------------------------------------------- FORMULAIRE AJOUTER AU STOCK ---------------------------------------------------->
-                <h3>Ajouter en stock</h3>
+            <?php
+                if(isset($_POST['submit-add-stock'])) {
+            ?>   
+                <h3 class="action-clignote">Ajouter en stock</h3>
                 <form action="index.php?menu=1" method="POST">
                     <ul class="stock-form">
                         <li>
@@ -210,7 +213,7 @@
                         <li>
                             <label for="etat">*Etat</label><br/>
                             <input type="radio" id="etat" name="etat" value="disponible" checked/>Disponible
-                            <input type="radio" id="etat" name="etat" value="déjà prêté"/>Prêté
+                            <!--<input type="radio" id="etat" name="etat" value="déjà prêté"/>Prêté-->
                             <input type="radio" id="etat" name="etat" value="affecté"/>Affecté<br/>
                             <input type="radio" id="etat" name="etat" value="en réparation"/>En réparation
                             <input type="radio" id="etat" name="etat" value="rebut"/>Rebut
@@ -237,11 +240,14 @@
                         </li>
                     </ul>
                 </form>
+                <?php
+                    }
+                ?>
 <!----------------------------------------------FORMULAIRE EDITION DE STOCK---------------------------------------------------->
                 <?php
                     if(isset($_POST["submit-edit"])) {
                 ?>
-                    <h3>Modification du stock</h3>
+                    <h3 class="action-clignote">Modification du stock</h3>
                     <div class="modif-stock">
                         <form class="modif" action="index.php?menu=1" method="POST"><br/>
                             <input type="hidden" value="<?php echo $_POST['id']; ?>" name="id-edit"/>
@@ -275,7 +281,7 @@
                     }
                     if(isset($_POST["submit-supp"])) {
                 ?>
-                    <h3>Suppression du stock</h3>
+                    <h3 class="action-clignote">Suppression du stock</h3>
                     <div class="supp-stock">
                         <form class="supp" action="index.php?menu=1" method="POST"><br/>
                             <label for="ref">Référence</label><br/>
