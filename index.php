@@ -553,7 +553,7 @@
                 <?php
                     if(isset($_POST["submit-edit"])) {
                 ?>
-                    <h3>Modification du prêt</h3>
+                    <h3 class="action-clignote">Modification du prêt</h3>
                     <div class="modif-pret">
                         <form class="edit" action="index.php?menu=2" method="POST">
                             <input type="hidden" value="<?php echo $_POST['id']; ?>" name="id-edit"/>
@@ -636,7 +636,7 @@
                     } else {
                 ?>
                 <!----------------------------------------------AJOUTER AUX PRETS-------------------------------------------------------------->
-                <h3>Effectuer un prêt</h3>
+                <h3 class="action-clignote">Effectuer un prêt</h3>
                 <form action="index.php?menu=2" method="POST">
                     <ul class="pret-form">
                         <li>
