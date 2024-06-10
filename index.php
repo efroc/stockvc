@@ -97,24 +97,37 @@
                 }
                 /***** Modifier du stock *****/
                 if(isset($_POST["confirm-edit"])) {
-                    if($_POST['edit'] === 'rebut') {
-                        $rebut = true;
-                    }
-                    $req = "UPDATE stock SET materiel = '{$_POST['mat-edit']}', marque = '{$_POST['marque-edit']}', 
-                            etat = '{$_POST['etat-edit']}', note = '{$_POST['note-edit']}', proprietaire = '{$_POST['proprietaire-edit']}' WHERE ident = '{$_POST['id-edit']}'";
-                    $historeq = "INSERT INTO historique (date, reference, action, message) 
-                            VALUES ('{$localdate}', '{$_POST['ref-edit']}', 'Modification du stock',
-                            'Matériel -> {$_POST['mat-edit']} | Marque -> {$_POST['marque-edit']} | Marque -> {$_POST['etat-edit']} | Propriétaire -> {$_POST['propriétaire-edit']} 
-                            | Note -> {$_POST['note-edit']}')";
-                    try {
-                        $bdd->getPDO()->query($req);
+                    if($_POST['etat-edit'] === 'rebut') {
                         try {
-                            $bdd->getPdo()->query($historeq);
-                        } catch(PDOException $e) {
-                            die("Impossible d'ajouter à l'historique : ".$e->getMessage());
+                            $bdd->getPdo()->query("DELETE FROM stock WHERE ident = {$_POST['id-edit']}");
+                            try {
+                                $bdd->getPdo()->query("INSERT INTO historique (date, reference, action, message) 
+                                VALUES ('{$localdate}', '{$_POST['ref-edit']}', 'Rebut',
+                                'Matériel: {$_POST['mat-edit']} | Marque: {$_POST['marque-edit']} | Etat: rebut 
+                                | Propriétaire: {$_POST['propriétaire-edit']} |  Note: {$_POST['note-edit']}')");
+                            } catch (Exception $e) {
+                                die("Impossible d'ajouter à l'historique : ".$e->getMessage());
+                            }
+                        } catch(Exception $e) {
+                            die("Impossible de supprimer du stock : ".$e->getMessage());
                         }
-                    } catch(Exception $e) {
-                        die("Erreur: Impossible de modifier la BDD".$e->getMessage());
+                    } else {
+                        $req = "UPDATE stock SET materiel = '{$_POST['mat-edit']}', marque = '{$_POST['marque-edit']}', 
+                                etat = '{$_POST['etat-edit']}', note = '{$_POST['note-edit']}', proprietaire = '{$_POST['proprietaire-edit']}' WHERE ident = '{$_POST['id-edit']}'";
+                        $historeq = "INSERT INTO historique (date, reference, action, message) 
+                                VALUES ('{$localdate}', '{$_POST['ref-edit']}', 'Modification du stock',
+                                'Matériel -> {$_POST['mat-edit']} | Marque -> {$_POST['marque-edit']} | Marque -> {$_POST['etat-edit']} | Propriétaire -> {$_POST['propriétaire-edit']} 
+                                | Note -> {$_POST['note-edit']}')";
+                        try {
+                            $bdd->getPDO()->query($req);
+                            try {
+                                $bdd->getPdo()->query($historeq);
+                            } catch(PDOException $e) {
+                                die("Impossible d'ajouter à l'historique : ".$e->getMessage());
+                            }
+                        } catch(Exception $e) {
+                            die("Erreur: Impossible de modifier la BDD".$e->getMessage());
+                        }
                     }
                     header('Location: page/redirection.php'); 
                 }
