@@ -548,7 +548,94 @@
                 ?>
             
             <div class="pret-action">
-<!----------------------------------------------AJOUTER AUX PRETS-------------------------------------------------------------->
+
+<!--------------------------------------------------- FORMULAIRE EDITION DE PRET ---------------------------------------------->
+                <?php
+                    if(isset($_POST["submit-edit"])) {
+                ?>
+                    <h3>Modification du prêt</h3>
+                    <div class="modif-pret">
+                        <form class="edit" action="index.php?menu=2" method="POST">
+                            <input type="hidden" value="<?php echo $_POST['id']; ?>" name="id-edit"/>
+                            <label for="ref">Référence: </label>
+                            <input type="text" id="ref-edit" name="ref-edit" value="<?php echo $_POST['ref']; ?>" required readonly/>
+                            <label for="mat">Matériel: </label> 
+                            <input type="text" id="mat-edit" name="mat-edit" value="<?php echo $_POST['materiel']; ?>" required placeholder="" readonly/>
+                            <label for="marque">Marque: </label>
+                            <input type="text" id="marque-edit" name="marque-edit" value="<?php echo $_POST['marque']; ?>" placeholder="" readonly/>
+                            <label for="note">Note: </label> 
+                            <input type="text" id="note-edit" name="note-edit" value="<?php echo $_POST['note']; ?>" readonly/>
+                            <label for="start">*Début du prêt</label>
+                            <input type="date" id="start" name="start" value="<?php echo $_POST['start']; ?>" required/><br/>
+                            <label for="end">*Fin du prêt</label>
+                            <input type="date" id="end" name="end" value="<?php echo $_POST['end']; ?>" required/><br/>
+                            <label for="client">*Client</label>
+                            <select name="client" id="client" required>
+                                <option value="Mairie d\'Argentré du Plessis">Mairie d'Argentré du Plessis</option>
+                                <option value="Mairie d\'Availles-sur-Seiche">Mairie d'Availles-sur-Seiche</option>
+                                <option value="Mairie de Bais">Mairie de Bais</option>
+                                <option value="Mairie de Balazé">Mairie de Balazé</option>
+                                <option value="Mairie de Bréal-sous-Vitré">Mairie de Bréal-sous-Vitré</option>
+                                <option value="Mairie de Brielles">Mairie de Brielles</option>
+                                <option value="Mairie de Champeaux">Mairie de Champeaux</option>
+                                <option value="Mairie de Châteaubourg">Mairie de Châteaubourg</option>
+                                <option value="Mairie de Châtillon-en-Vendelais">Mairie de Châtillon-en-Vendelais</option>
+                                <option value="Mairie de Cornillé">Mairie de Cornillé</option>
+                                <option value="Mairie de Domagné">Mairie de Domagné</option>
+                                <option value="Mairie de Domalain">Mairie de Domalain</option>
+                                <option value="Mairie de Drouges">Mairie de Drouges</option>
+                                <option value="Mairie d\'Erbrée">Mairie d'Erbrée</option>
+                                <option value="Mairie d\'Étrelles">Mairie d'Étrelles</option>
+                                <option value="Mairie de Gennes-sur-Seiche">Mairie de Gennes-sur-Seiche</option>
+                                <option value="Mairie de La Chapelle-Erbrée">Mairie de La Chapelle-Erbrée</option>
+                                <option value="Mairie de La Guerche-de-Bretagne">Mairie de La Guerche-de-Bretagne</option>
+                                <option value="Mairie de La Selle-Guerchaise">Mairie de La Selle-Guerchaise</option>
+                                <option value="Mairie de Landavran">Mairie de Landavran</option>
+                                <option value="Mairie de Le Pertre">Mairie de Le Pertre</option>
+                                <option value="Mairie de Louvigné-de-Bais">Mairie de Louvigné-de-Bais</option>
+                                <option value="Mairie de Marpiré">Mairie de Marpiré</option>
+                                <option value="Mairie de Mecé">Mairie de Mecé</option>
+                                <option value="Mairie de Mondevert">Mairie de Mondevert</option>
+                                <option value="Mairie de Montautour">Mairie de Montautour</option>
+                                <option value="Mairie de Montreuil-des-Landes">Mairie de Montreuil-des-Landes</option>
+                                <option value="Mairie de Montreuil-sous-Pérouse">Mairie de Montreuil-sous-Pérouse</option>
+                                <option value="Mairie de Moulins">Mairie de Moulins</option>
+                                <option value="Mairie de Moussé">Mairie de Moussé</option>
+                                <option value="Mairie de Pocé-les-Bois">Mairie de Pocé-les-Bois</option>
+                                <option value="Mairie de Princé">Mairie de Princé</option>
+                                <option value="Mairie de Rannée">Mairie de Rannée</option>
+                                <option value="Mairie de Saint-Aubin-des-Landes">Mairie de Saint-Aubin-des-Landes</option>
+                                <option value="Mairie de Saint-Christophe-des-Bois">Mairie de Saint-Christophe-des-Bois</option>
+                                <option value="Mairie de Saint-Didier">Mairie de Saint-Didier</option>
+                                <option value="Mairie de Saint-Germain-du-Pinel">Mairie de Saint-Germain-du-Pinel</option>
+                                <option value="Mairie de Saint-Jean-sur-Vilaine">Mairie de Saint-Jean-sur-Vilaine</option>
+                                <option value="Mairie de Saint-M\'Hervé">Mairie de Saint-M'Hervé</option>
+                                <option value="Mairie de Taillis">Mairie de Taillis</option>
+                                <option value="Mairie de Torcé">Mairie de Torcé</option>
+                                <option value="Mairie de Val D\'Izé">Mairie de Val D'Izé</option>
+                                <option value="Mairie de Vergéal">Mairie de Vergéal</option>
+                                <option value="Mairie de Visseiche">Mairie de Visseiche</option>
+                                <option value="Mairie de Vitré">Mairie de Vitré</option>
+                                <option value="CCAS de Chateaubourg">CCAS de Chateaubourg</option>
+                                <option value="CCAS de Chatillon-en-Vendelais">CCAS de Chatillon-en-Vendelais</option>
+                                <option value="CCAS de Val d\'Izé">CCAS de Val d'Izé</option>
+                                <option value="CCAS de Vitré">CCAS de Vitré</option>
+                                <option value="Smictom Sud Est 35">Smictom Sud Est 35</option>
+                                <option value="Eau des Portes de Bretagne">Eau des Portes de Bretagne</option>
+                                <option value="Syndicat d\'Urbanisme du Pays de Vitré">Syndicat d'Urbanisme du Pays de Vitré</option>
+                                <option value="Vitré Communauté">Vitré Communauté</option>
+                                <option value="Syndicat de traitement S3TEC">Syndicat de traitement S3TEC</option>
+                            </select>
+                            <button type="submit" name="confirm-edit" title="Confirmer">Confirmer</button>
+                        </form>
+                        <form action="index.php?menu=2" method="POST">
+                            <button type="submit" name="cancel-edit" title="Annuler">Annuler</button>
+                        </form>
+                    </div>
+                <?php
+                    } else {
+                ?>
+                <!----------------------------------------------AJOUTER AUX PRETS-------------------------------------------------------------->
                 <h3>Effectuer un prêt</h3>
                 <form action="index.php?menu=2" method="POST">
                     <ul class="pret-form">
@@ -636,89 +723,6 @@
                         </li>
                     </ul>
                 </form>
-<!--------------------------------------------------- FORMULAIRE EDITION DE PRET ---------------------------------------------->
-                <?php
-                    if(isset($_POST["submit-edit"])) {
-                ?>
-                    <h3>Modification du prêt</h3>
-                    <div class="modif-pret">
-                        <form class="edit" action="index.php?menu=2" method="POST">
-                            <input type="hidden" value="<?php echo $_POST['id']; ?>" name="id-edit"/>
-                            <label for="ref">Référence: </label>
-                            <input type="text" id="ref-edit" name="ref-edit" value="<?php echo $_POST['ref']; ?>" required readonly/>
-                            <label for="mat">Matériel: </label> 
-                            <input type="text" id="mat-edit" name="mat-edit" value="<?php echo $_POST['materiel']; ?>" required placeholder="" readonly/>
-                            <label for="marque">Marque: </label>
-                            <input type="text" id="marque-edit" name="marque-edit" value="<?php echo $_POST['marque']; ?>" placeholder="" readonly/>
-                            <label for="note">Note: </label> 
-                            <input type="text" id="note-edit" name="note-edit" value="<?php echo $_POST['note']; ?>" readonly/>
-                            <label for="start">*Début du prêt</label>
-                            <input type="date" id="start" name="start" value="<?php echo $_POST['start']; ?>" required/><br/>
-                            <label for="end">*Fin du prêt</label>
-                            <input type="date" id="end" name="end" value="<?php echo $_POST['end']; ?>" required/><br/>
-                            <label for="client">*Client</label>
-                            <select name="client" id="client" required>
-                                <option value="Mairie d\'Argentré du Plessis">Mairie d'Argentré du Plessis</option>
-                                <option value="Mairie d\'Availles-sur-Seiche">Mairie d'Availles-sur-Seiche</option>
-                                <option value="Mairie de Bais">Mairie de Bais</option>
-                                <option value="Mairie de Balazé">Mairie de Balazé</option>
-                                <option value="Mairie de Bréal-sous-Vitré">Mairie de Bréal-sous-Vitré</option>
-                                <option value="Mairie de Brielles">Mairie de Brielles</option>
-                                <option value="Mairie de Champeaux">Mairie de Champeaux</option>
-                                <option value="Mairie de Châteaubourg">Mairie de Châteaubourg</option>
-                                <option value="Mairie de Châtillon-en-Vendelais">Mairie de Châtillon-en-Vendelais</option>
-                                <option value="Mairie de Cornillé">Mairie de Cornillé</option>
-                                <option value="Mairie de Domagné">Mairie de Domagné</option>
-                                <option value="Mairie de Domalain">Mairie de Domalain</option>
-                                <option value="Mairie de Drouges">Mairie de Drouges</option>
-                                <option value="Mairie d\'Erbrée">Mairie d'Erbrée</option>
-                                <option value="Mairie d\'Étrelles">Mairie d'Étrelles</option>
-                                <option value="Mairie de Gennes-sur-Seiche">Mairie de Gennes-sur-Seiche</option>
-                                <option value="Mairie de La Chapelle-Erbrée">Mairie de La Chapelle-Erbrée</option>
-                                <option value="Mairie de La Guerche-de-Bretagne">Mairie de La Guerche-de-Bretagne</option>
-                                <option value="Mairie de La Selle-Guerchaise">Mairie de La Selle-Guerchaise</option>
-                                <option value="Mairie de Landavran">Mairie de Landavran</option>
-                                <option value="Mairie de Le Pertre">Mairie de Le Pertre</option>
-                                <option value="Mairie de Louvigné-de-Bais">Mairie de Louvigné-de-Bais</option>
-                                <option value="Mairie de Marpiré">Mairie de Marpiré</option>
-                                <option value="Mairie de Mecé">Mairie de Mecé</option>
-                                <option value="Mairie de Mondevert">Mairie de Mondevert</option>
-                                <option value="Mairie de Montautour">Mairie de Montautour</option>
-                                <option value="Mairie de Montreuil-des-Landes">Mairie de Montreuil-des-Landes</option>
-                                <option value="Mairie de Montreuil-sous-Pérouse">Mairie de Montreuil-sous-Pérouse</option>
-                                <option value="Mairie de Moulins">Mairie de Moulins</option>
-                                <option value="Mairie de Moussé">Mairie de Moussé</option>
-                                <option value="Mairie de Pocé-les-Bois">Mairie de Pocé-les-Bois</option>
-                                <option value="Mairie de Princé">Mairie de Princé</option>
-                                <option value="Mairie de Rannée">Mairie de Rannée</option>
-                                <option value="Mairie de Saint-Aubin-des-Landes">Mairie de Saint-Aubin-des-Landes</option>
-                                <option value="Mairie de Saint-Christophe-des-Bois">Mairie de Saint-Christophe-des-Bois</option>
-                                <option value="Mairie de Saint-Didier">Mairie de Saint-Didier</option>
-                                <option value="Mairie de Saint-Germain-du-Pinel">Mairie de Saint-Germain-du-Pinel</option>
-                                <option value="Mairie de Saint-Jean-sur-Vilaine">Mairie de Saint-Jean-sur-Vilaine</option>
-                                <option value="Mairie de Saint-M\'Hervé">Mairie de Saint-M'Hervé</option>
-                                <option value="Mairie de Taillis">Mairie de Taillis</option>
-                                <option value="Mairie de Torcé">Mairie de Torcé</option>
-                                <option value="Mairie de Val D\'Izé">Mairie de Val D'Izé</option>
-                                <option value="Mairie de Vergéal">Mairie de Vergéal</option>
-                                <option value="Mairie de Visseiche">Mairie de Visseiche</option>
-                                <option value="Mairie de Vitré">Mairie de Vitré</option>
-                                <option value="CCAS de Chateaubourg">CCAS de Chateaubourg</option>
-                                <option value="CCAS de Chatillon-en-Vendelais">CCAS de Chatillon-en-Vendelais</option>
-                                <option value="CCAS de Val d\'Izé">CCAS de Val d'Izé</option>
-                                <option value="CCAS de Vitré">CCAS de Vitré</option>
-                                <option value="Smictom Sud Est 35">Smictom Sud Est 35</option>
-                                <option value="Eau des Portes de Bretagne">Eau des Portes de Bretagne</option>
-                                <option value="Syndicat d\'Urbanisme du Pays de Vitré">Syndicat d'Urbanisme du Pays de Vitré</option>
-                                <option value="Vitré Communauté">Vitré Communauté</option>
-                                <option value="Syndicat de traitement S3TEC">Syndicat de traitement S3TEC</option>
-                            </select>
-                            <button type="submit" name="confirm-edit" title="Confirmer">Confirmer</button>
-                        </form>
-                        <form action="index.php?menu=2" method="POST">
-                            <button type="submit" name="cancel-edit" title="Annuler">Annuler</button>
-                        </form>
-                    </div>
                 <?php
                     }
                 ?>
