@@ -187,10 +187,80 @@
 
             ?>
             <div class="stock-action">
+<!----------------------------------------------FORMULAIRE EDITION DE STOCK---------------------------------------------------->
+                <?php
+                    if(isset($_POST["submit-edit"])) {
+                ?>
+                    <h3 class="action-clignote">Modification du stock</h3>
+                    <div class="modif-stock">
+                        <form class="modif" action="index.php?menu=1" method="POST"><br/>
+                            <input type="hidden" value="<?php echo $_POST['id']; ?>" name="id-edit"/>
+                            <label for="ref">*Référence</label>
+                            <input type="text" id="ref-edit" maxlength="30" name="ref-edit" value="<?php echo $_POST['ref']; ?>" required <?php if($_POST['etat']!=='disponible') echo("readonly");?>><br/>
+                            <label for="mat">*Matériel</label> 
+                            <input type="text" id="mat-edit" maxlength="30" name="mat-edit" value="<?php echo $_POST['materiel']; ?>" required placeholder=""/><br/>
+                            <label for="marque">Marque</label><br/>
+                            <input type="text" id="marque-edit" maxlength="30" name="marque-edit" value="<?php echo $_POST['marque']; ?>" placeholder=""/>
+                            <br/>
+                            <label for="etat">*Etat</label><br/>
+                            <?php
+                                if($_POST['etat'] !== "déjà prêté") {
+                            ?>
+                            <input type="radio" id="etat-edit" name="etat-edit" value="disponible" checked/>Disponible
+                            <input type="radio" id="etat-edit" name="etat-edit" value="affecté"/>Affecté<br/>
+                            <input type="radio" id="etat-edit" name="etat-edit" value="en réparation"/>En réparation
+                            <input type="radio" id="etat-edit" name="etat-edit" value="rebut"/>Rebut<br/>
+                            <?php
+                                } else {
+                            ?>
+                            <input type="radio" id="etat-edit" name="etat-edit" value="déjà prêté" checked/>Prêté<br/>
+                            <?php
+                                }
+                            ?>
+                            <label for="note">Note</label><br/> 
+                            <input type="text" id="note-edit" maxlength="150" name="note-edit" value="<?php echo $_POST['note']; ?>"/><br/>
+                            <label for="proprietaire">Propriétaire</label><br/> 
+                            <select name="proprietaire-edit" id="proprietaire-edit" required>
+                                <option <?php if($_POST['proprietaire'] === 'Vitré Communauté') echo("selected=\"selected\""); ?> value="Vitré Communauté">Vitré Communauté</option>
+                                <option <?php if($_POST['proprietaire'] === 'Mairie') echo("selected=\"selected\""); ?> value="Mairie">Mairie</option>
+                            </select>
+                            <button type="submit" name="confirm-edit" title="Confirmer">Confirmer</button>
+                        </form>
+                        <form action="index.php?menu=1" method="POST">
+                            <button type="submit" name="cancel-edit" title="Annuler">Annuler</button>
+                        </form>
+                    </div>
+<!---------------------------------------------FORMULAIRE SUPPRESSION DE STOCK------------------------------------------------->
+                <?php
+                    } else if(isset($_POST["submit-supp"]) && $_POST['etat'] !== "déjà prêté") {
+                ?>
+                    <h3 class="action-clignote">Suppression du stock</h3>
+                    <div class="supp-stock">
+                        <form class="supp" action="index.php?menu=1" method="POST"><br/>
+                            <label for="ref">Référence</label><br/>
+                            <input type="text" id="ref-supp" maxlength="30" name="ref-supp" value="<?php echo $_POST['reference']; ?>" required readonly><br/>
+                            <label for="mat">Matériel</label><br/> 
+                            <input type="text" id="mat-supp" maxlength="30" name="mat-supp" value="<?php echo $_POST['materiel']; ?>" required readonly/><br/>
+                            <label for="marque">Marque</label><br/>
+                            <input type="text" id="marque-supp" maxlength="30" name="marque-supp" value="<?php echo $_POST['marque']; ?>" readonly/><br/>
+                            <label for="nombre">Nombre à supprimer</label><br/>
+                            <input type="number" id="number-supp" name="number-supp" min="1" max="<?php echo $_POST['number'];?>" value="1"/><br/>
+                            <label for="etat">Etat</label><br/>
+                            <input type="text" id="etat-supp" name="etat-supp" value="<?php echo $_POST['etat'];?>" readonly/><br/>
+                            <label for="note">Note</label><br/> 
+                            <input type="text" id="note-supp" maxlength="150" name="note-supp" value="<?php echo $_POST['note']; ?>" readonly/><br/>
+                            <label for="proprietaire">Propriétaire</label><br/>
+                            <input type="text" id="proprietaire-supp" name="proprietaire-supp" value="<?php echo $_POST['proprietaire'];?>" readonly/><br/>
+                            <button type="submit" name="confirm-supp" title="Confirmer">Confirmer</button>
+                        </form>
+                        <form action="index.php?menu=1" method="POST">
+                            <button type="submit" name="cancel-supp" title="Annuler">Annuler</button>
+                        </form>
+                    </div>
 <!-------------------------------------------- FORMULAIRE AJOUTER AU STOCK ---------------------------------------------------->
-            <?php
-                if(isset($_POST['submit-add-stock'])) {
-            ?>   
+                <?php
+                    } else {
+                ?>
                 <h3 class="action-clignote">Ajouter en stock</h3>
                 <form action="index.php?menu=1" method="POST">
                     <ul class="stock-form">
@@ -242,73 +312,7 @@
                 </form>
                 <?php
                     }
-                ?>
-<!----------------------------------------------FORMULAIRE EDITION DE STOCK---------------------------------------------------->
-                <?php
-                    if(isset($_POST["submit-edit"])) {
-                ?>
-                    <h3 class="action-clignote">Modification du stock</h3>
-                    <div class="modif-stock">
-                        <form class="modif" action="index.php?menu=1" method="POST"><br/>
-                            <input type="hidden" value="<?php echo $_POST['id']; ?>" name="id-edit"/>
-                            <label for="ref">*Référence</label>
-                            <input type="text" id="ref-edit" maxlength="30" name="ref-edit" value="<?php echo $_POST['ref']; ?>" required <?php if($_POST['etat']!=='disponible') echo("readonly");?>><br/>
-                            <label for="mat">*Matériel</label> 
-                            <input type="text" id="mat-edit" maxlength="30" name="mat-edit" value="<?php echo $_POST['materiel']; ?>" required placeholder=""/><br/>
-                            <label for="marque">Marque</label><br/>
-                            <input type="text" id="marque-edit" maxlength="30" name="marque-edit" value="<?php echo $_POST['marque']; ?>" placeholder=""/>
-                            <br/>
-                            <label for="etat">*Etat</label><br/>
-                            <input type="radio" id="etat-edit" name="etat-edit" value="disponible" checked/>Disponible
-                            <input type="radio" id="etat-edit" name="etat-edit" value="affecté"/>Affecté<br/>
-                            <input type="radio" id="etat-edit" name="etat-edit" value="en réparation"/>En réparation
-                            <input type="radio" id="etat-edit" name="etat-edit" value="rebut"/>Rebut<br/>
-                            <label for="note">Note</label><br/> 
-                            <input type="text" id="note-edit" maxlength="150" name="note-edit" value="<?php echo $_POST['note']; ?>"/><br/>
-                            <label for="proprietaire">Propriétaire</label><br/> 
-                            <select name="proprietaire-edit" id="proprietaire-edit" required>
-                                <option <?php if($_POST['proprietaire'] === 'Vitré Communauté') echo("selected=\"selected\""); ?> value="Vitré Communauté">Vitré Communauté</option>
-                                <option <?php if($_POST['proprietaire'] === 'Mairie') echo("selected=\"selected\""); ?> value="Mairie">Mairie</option>
-                            </select>
-                            <button type="submit" name="confirm-edit" title="Confirmer">Confirmer</button>
-                        </form>
-                        <form action="index.php?menu=1" method="POST">
-                            <button type="submit" name="cancel-edit" title="Annuler">Annuler</button>
-                        </form>
-                    </div>
-<!---------------------------------------------FORMULAIRE SUPPRESSION DE STOCK------------------------------------------------->
-                <?php
-                    }
-                    if(isset($_POST["submit-supp"])) {
-                ?>
-                    <h3 class="action-clignote">Suppression du stock</h3>
-                    <div class="supp-stock">
-                        <form class="supp" action="index.php?menu=1" method="POST"><br/>
-                            <label for="ref">Référence</label><br/>
-                            <input type="text" id="ref-supp" maxlength="30" name="ref-supp" value="<?php echo $_POST['reference']; ?>" required readonly><br/>
-                            <label for="mat">Matériel</label><br/> 
-                            <input type="text" id="mat-supp" maxlength="30" name="mat-supp" value="<?php echo $_POST['materiel']; ?>" required readonly/><br/>
-                            <label for="marque">Marque</label><br/>
-                            <input type="text" id="marque-supp" maxlength="30" name="marque-supp" value="<?php echo $_POST['marque']; ?>" readonly/><br/>
-                            <label for="nombre">Nombre à supprimer</label><br/>
-                            <input type="number" id="number-supp" name="number-supp" min="1" max="<?php echo $_POST['number'];?>" value="1"/><br/>
-                            <label for="etat">Etat</label><br/>
-                            <input type="text" id="etat-supp" name="etat-supp" value="<?php echo $_POST['etat'];?>" readonly/><br/>
-                            <label for="note">Note</label><br/> 
-                            <input type="text" id="note-supp" maxlength="150" name="note-supp" value="<?php echo $_POST['note']; ?>" readonly/><br/>
-                            <label for="proprietaire">Propriétaire</label><br/>
-                            <input type="text" id="proprietaire-supp" name="proprietaire-supp" value="<?php echo $_POST['proprietaire'];?>" readonly/><br/>
-                            <button type="submit" name="confirm-supp" title="Confirmer">Confirmer</button>
-                        </form>
-                        <form action="index.php?menu=1" method="POST">
-                            <button type="submit" name="cancel-supp" title="Annuler">Annuler</button>
-                        </form>
-                    </div>
-                <?php
-                    }
-                ?>
-
-                    
+                ?>  
             </div>
 
 <!---------------------------------------------- AFFICHAGE DU STOCK ----------------------------------------------------------->
