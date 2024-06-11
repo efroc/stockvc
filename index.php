@@ -19,7 +19,11 @@
     $connexion = $bdd->connect();
     /***** Date locale *****/
     $localdate = date('Y-m-d');
-    /***** Date pour alerte *****/
+    /***** Dates pour requetes *****/
+    $dateYear = date('Y-m-d', strtotime("-1 Year"));
+    $dateMonth = date("Y-m-d", strtotime("-1 Month"));
+    $dateWeek = date("Y-m-d", strtotime("-1 Week"));
+    $dateDay = date("Y-m-d", strtotime("-1 Day"));
     $dateAlerte = date('Y-m-d', strtotime("+5 Days"));
     /***** Alertes *****/
     $requete = "SELECT ident FROM pret WHERE end < '{$dateAlerte}'";
@@ -85,9 +89,8 @@
                             $success-=1;
                         } 
                     }
-                    $historeq = "INSERT INTO historique (date, reference, action, message) 
-                                VALUES ('{$localdate}', '{$_POST['reference']}', 'Ajout au stock',
-                                 'Matériel: $mat | Marque: $marque | Etat: $etat | Propriétaire: $proprietaire | Nombre: $num | Note: $note')";
+                    $historeq = "INSERT INTO historique (date, action, reference, materiel, marque, etat, proprietaire, nombre, note) 
+                                VALUES ('{$localdate}', 'Ajout au stock', '{$_POST['reference']}', '{$mat}', '{$marque}', '{$etat}', '{$proprietaire}', '{$num}', '{$note}')";
                     try {
                         $bdd->query($historeq);  
                     } catch(Exception $e) {
@@ -101,10 +104,9 @@
                         try {
                             $bdd->getPdo()->query("DELETE FROM stock WHERE ident = {$_POST['id-edit']}");
                             try {
-                                $bdd->getPdo()->query("INSERT INTO historique (date, reference, action, message) 
-                                VALUES ('{$localdate}', '{$_POST['ref-edit']}', 'Rebut',
-                                'Matériel: {$_POST['mat-edit']} | Marque: {$_POST['marque-edit']} | Etat: rebut 
-                                | Propriétaire: {$_POST['propriétaire-edit']} |  Note: {$_POST['note-edit']}')");
+                                $bdd->getPdo()->query("INSERT INTO historique (date, action, reference, materiel, marque, etat, proprietaire, nombre, note) 
+                                VALUES ('{$localdate}', 'Rebut', '{$_POST['ref-edit']}', '{$_POST['mat-edit']}', '{$_POST['marque-edit']}', 'rebut', 
+                                '{$_POST['propriétaire-edit']}', 1, '{$_POST['note-edit']}')");
                             } catch (Exception $e) {
                                 die("Impossible d'ajouter à l'historique : ".$e->getMessage());
                             }
@@ -114,10 +116,9 @@
                     } else {
                         $req = "UPDATE stock SET materiel = '{$_POST['mat-edit']}', marque = '{$_POST['marque-edit']}', 
                                 etat = '{$_POST['etat-edit']}', note = '{$_POST['note-edit']}', proprietaire = '{$_POST['proprietaire-edit']}' WHERE ident = '{$_POST['id-edit']}'";
-                        $historeq = "INSERT INTO historique (date, reference, action, message) 
-                                VALUES ('{$localdate}', '{$_POST['ref-edit']}', 'Modification du stock',
-                                'Matériel -> {$_POST['mat-edit']} | Marque -> {$_POST['marque-edit']} | Marque -> {$_POST['etat-edit']} | Propriétaire -> {$_POST['propriétaire-edit']} 
-                                | Note -> {$_POST['note-edit']}')";
+                        $historeq = "INSERT INTO historique (date, action, reference, materiel, marque, etat, proprietaire, nombre, note) 
+                                VALUES ('{$localdate}', 'Modification du stock', '{$_POST['ref-edit']}', '{$_POST['mat-edit']}', '{$_POST['marque-edit']}', 
+                                '{$_POST['etat-edit']}', '{$_POST['propriétaire-edit']}', 1, '{$_POST['note-edit']}')";
                         try {
                             $bdd->getPDO()->query($req);
                             try {
@@ -152,9 +153,8 @@
                     } catch(Exception $e) {
                         die("".$e->getMessage());
                     }
-                    $historeq = "INSERT INTO historique (date, reference, action, message) 
-                                VALUES ('{$localdate}', '{$ref}', 'Rebut',
-                                'Matériel: $mat | Marque: $marque | Etat: rebut | Propriétaire: $proprietaire | Nombre: $num | Note: $note')";
+                    $historeq = "INSERT INTO historique (date, action, reference, materiel, marque, etat, proprietaire, nombre, note) 
+                                VALUES ('{$localdate}', 'Rebut', '{$ref}', '{$mat}', '{$marque}', 'Rebut', '{$proprietaire}', '{$num}', '{$note}')";
                     try {
                         $bdd->getPdo()->query($historeq);
                     } catch(Exception $e) {
@@ -857,7 +857,7 @@
                     $trie = ' ORDER BY message';
                 }
 
-                if(isset($_POST['submit-histo'])) {
+                if(isset($_POST['submit-histo-xls'])) {
                     try {
                         $requete = "SELECT * FROM historique";
                         $result = $bdd->getPdo()->query($requete);
@@ -892,11 +892,32 @@
                     }
                     
                 }
+                if(isset($_POST['submit-tri-histo'])) {
+                    if($_POST['tri'] === 'annee') {
+                        $trie .= "WHERE date > '{$dateYear}'";
+                    } else if($_POST['tri'] === 'mois') {
+                        $trie .= "WHERE date > '{$dateMonth}'";
+                    } else if($_POST['tri'] === 'semaine') {
+                        $trie .= "WHERE date > '{$dateWeek}'";
+                    } else {
+                        $trie .= " WHERE date = '{$localdate}'";
+                    }
+                }
             ?>
             <div class="export">
                 <h3 class="title-histo">Tout l'historique</h3>
                 <form name="submit-histo" action="index.php?menu=3" method="POST">
-                    <input type="submit" name="submit-histo" value="Exporter l'historique en .xls"/>
+                    <input type="submit" name="submit-histo-xls" value="Exporter l'historique en .xls"/>
+                    <input type="submit" name="submit-histo-csv" value="Exporter l'historique en .csv"/>
+                </form>
+                <form name="tri-histo" action="index.php?menu=3" method="POST">
+                    <select name="tri" id="tri" required>
+                        <option value="annee">Afficher sur l'année</option>
+                        <option value="mois">Afficher sur le mois</option>
+                        <option value="semaine">Afficher sur la semaine</option>
+                        <option value="jour">Afficher sur le jour</option>
+                    </select>
+                    <button type="submit" name="submit-tri-histo">Ok</button>
                 </form>
             </div>
             <table>
@@ -917,9 +938,34 @@
                             <button type="submit" name="submit-reference" title="Trier par référence">Référence</button>
                         </form>
                     </th>
-                    <th class="message">
+                    <th>
                         <form action="index.php?menu=3" method="POST">
-                            <button type="submit" name="submit-message" title="Trier par message">Message</button>
+                            <button type="submit" name="submit-materiel" title="Trier par materiel">Materiel</button>
+                        </form>
+                    </th>
+                    <th>
+                        <form action="index.php?menu=3" method="POST">
+                            <button type="submit" name="submit-marque" title="Trier par marque">Marque</button>
+                        </form>
+                    </th>
+                    <th>
+                        <form action="index.php?menu=3" method="POST">
+                            <button type="submit" name="submit-etat" title="Trier par état">Etat</button>
+                        </form>
+                    </th>
+                    <th>
+                        <form action="index.php?menu=3" method="POST">
+                            <button type="submit" name="submit-proprietaire" title="Trier par propriétaire">Propriétaire</button>
+                        </form>
+                    </th>
+                    <th>
+                        <form action="index.php?menu=3" method="POST">
+                            <button type="submit" name="submit-nb" title="Trier par nombre">Nombre</button>
+                        </form>
+                    </th>
+                    <th>
+                        <form action="index.php?menu=3" method="POST">
+                            <button type="submit" name="submit-note" title="Trier par note">Note</button>
                         </form>
                     </th>
                 </tr>
@@ -931,7 +977,12 @@
                     <td><?php print $res['date']; ?></td>
                     <td><?php print $res['action']; ?></td>
                     <td><?php print $res['reference']; ?></td>
-                    <td><?php print $res['message']; ?></td>
+                    <td><?php print $res['materiel']; ?></td>
+                    <td><?php print $res['marque']; ?></td>
+                    <td><?php print $res['etat']; ?></td>
+                    <td><?php print $res['proprietaire']; ?></td>
+                    <td><?php print $res['nombre']; ?></td>
+                    <td><?php print $res['note']; ?></td>
                 </tr>
                 <?php
                     }
