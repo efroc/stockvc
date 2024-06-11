@@ -249,7 +249,7 @@ select, input:not(input[name="etat"]):not(input[name="ref-edit"]):not(input[name
 }
 
 .historique-table > .action {
-    width: 20%;
+    width: 10%;
 }
 
 .historique-table > td {

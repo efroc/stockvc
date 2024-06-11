@@ -466,9 +466,9 @@
                         } catch(Exception $e) {
                             die("Impossible d'ajouter aux prêts : ".$e->getMessage());
                         }
-                        $historeq = "INSERT INTO historique (date, reference, action, message) 
-                                    VALUES ('{$localdate}', '{$res['reference']}', 'Ajout aux prêts',
-                                    'Nombre: {$success} | Matériel: {$_POST['mat']} | Client: {$_POST['client']} | Début: {$_POST['start']} | Fin: {$_POST['end']}')";
+                        $historeq = "INSERT INTO historique (date, action, reference, materiel, marque, etat, proprietaire, nombre, note, client, start, end) 
+                                    VALUES ('{$localdate}', 'Ajout aux prêts', '{$res['reference']}', '{$_POST['mat']}', '{$_POST['marque']}', 'déjà prêté', '{$res['proprietaire']}',
+                                    '{$success}', '{$_POST['note']}', '{$_POST['client']}', '{$_POST['start']}', '{$_POST['end']}')";
                         try {
                             $bdd->getPdo()->query($historeq);
                         } catch(Exception $e) {
@@ -483,9 +483,8 @@
                         $requete = "UPDATE pret SET start = '{$_POST['start']}', end = '{$_POST['end']}', 
                         client = '{$_POST['client']}' WHERE ident = '{$_POST['id-edit']}'";
                         try {
-                            $historeq = "INSERT INTO historique (date, reference, action, message) 
-                                        VALUES ('{$localdate}', '{$_POST['ref-edit']}', 'Modification de prêt',
-                                        'Le prêt de {$_POST['mat-edit']} à {$_POST['client']} du {$_POST['start']} au {$_POST['end']} a été modifié.')";
+                            $historeq = "INSERT INTO historique (date, action, reference, materiel, client, start, end) 
+                                        VALUES ('{$localdate}', 'Modification de prêt', '{$_POST['ref-edit']}', '{$_POST['mat-edit']}', '{$_POST['client']}', '{$_POST['start']}', '{$_POST['end']}')";
                             $bdd->getPdo()->query($requete);
                             try {
                                 $bdd->getPdo()->query($historeq);
@@ -506,9 +505,8 @@
                         $bdd->getPdo()->query($req);
                         try {
                             $client = str_replace('\'', ' ', $_POST['client']);
-                            $historeq = "INSERT INTO historique (date, reference, action, message) 
-                                        VALUES ('{$localdate}', '{$_POST['ref']}', 'Suppression de prêt',
-                                        'Le prêt de {$_POST['materiel']} à {$client} du {$_POST['start']} au {$_POST['end']} a été supprimé.')";
+                            $historeq = "INSERT INTO historique (date, action, reference, materiel, nombre, client, start, end) 
+                                        VALUES ('{$localdate}', 'Suppression de prêt', '{$_POST['ref']}', '{$_POST['materiel']}', 1, '{$client}', '{$_POST['start']}', '{$_POST['end']}')";
                             $bdd->getPdo()->query($updatereq);
                             try {
                                 $bdd->getPdo()->query($historeq);
@@ -859,7 +857,7 @@
 
                 if(isset($_POST['submit-histo-xls'])) {
                     try {
-                        $requete = "SELECT * FROM historique";
+                        $requete = "SELECT * FROM historique ".$trie;
                         $result = $bdd->getPdo()->query($requete);
                         $export .= '
                             <table>
@@ -888,9 +886,18 @@
                         header('Content-Disposition: attachment; filename='.$fileName);
                         echo $export;
                     } catch (Exception $e) {
-                        echo("Impossible de récupérer l'historique : ". $e->getMessage());
+                        echo("Impossible d'exporter' l'historique en .xls : ". $e->getMessage());
                     }
                     
+                }
+                if(isset($_POST['submit-histo-csv'])) {
+                    try {
+                        $requete = "SELECT * FROM historique ".$trie;
+                        $result = $bdd->getPdo()->query($requete);
+                        //TODO
+                    } catch (Exception $e) {
+                        echo("Impossible d'exporter' l'historique en .csv : ". $e->getMessage());
+                    }
                 }
                 if(isset($_POST['submit-tri-histo'])) {
                     if($_POST['tri'] === 'annee') {
@@ -968,6 +975,21 @@
                             <button type="submit" name="submit-note" title="Trier par note">Note</button>
                         </form>
                     </th>
+                    <th>
+                        <form action="index.php?menu=3" method="POST">
+                            <button type="submit" name="submit-client" title="Trier par client">Client</button>
+                        </form>
+                    </th>
+                    <th>
+                        <form action="index.php?menu=3" method="POST">
+                            <button type="submit" name="submit-start" title="Trier par début">Début</button>
+                        </form>
+                    </th>
+                    <th>
+                        <form action="index.php?menu=3" method="POST">
+                            <button type="submit" name="submit-end" title="Trier par fin">Fin</button>
+                        </form>
+                    </th>
                 </tr>
                 <?php
                     $result = $bdd->getPdo()->query("SELECT * FROM historique ".$trie);
@@ -983,6 +1005,9 @@
                     <td><?php print $res['proprietaire']; ?></td>
                     <td><?php print $res['nombre']; ?></td>
                     <td><?php print $res['note']; ?></td>
+                    <td><?php print $res['client']; ?></td>
+                    <td><?php print $res['start']; ?></td>
+                    <td><?php print $res['end']; ?></td>
                 </tr>
                 <?php
                     }
