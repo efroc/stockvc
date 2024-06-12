@@ -69,6 +69,9 @@
         
         <div class="stock">
 <!-------------------------------------- TRAITEMENT DE TOUTES LES ACTIONS DE STOCK -------------------------------------------->
+<!--On répète le même processus à chaque action, dès que le bouton d'ajout, d'edit ou de suppression est cliqué, on récupère les
+informations des formulaires et on insère-supprime-modifie les informations grâce aux requetes (INSERT TO stock ou 
+DELETE FROM stock ou UPDATE stock) puis on insère l'action et ses attributs dans l'historique---------------------------------->
             <?php
                 $tri ="";
                 $rebut=false;
@@ -187,6 +190,8 @@
             ?>
             <div class="stock-action">
 <!----------------------------------------------FORMULAIRE EDITION DE STOCK---------------------------------------------------->
+<!--On affiche soit le formulaire d'ajout (par défaut) soit le formulaire d'edit soit le formulaire de suppression, et on relaie
+les informations aux actions plus haut----------------------------------------------------------------------------------------->
                 <?php
                     if(isset($_POST["submit-edit"])) {
                 ?>
@@ -282,7 +287,6 @@
                         <li>
                             <label for="etat">*Etat</label><br/>
                             <input type="radio" id="etat" name="etat" value="disponible" checked/>Disponible
-                            <!--<input type="radio" id="etat" name="etat" value="déjà prêté"/>Prêté-->
                             <input type="radio" id="etat" name="etat" value="affecté"/>Affecté<br/>
                             <input type="radio" id="etat" name="etat" value="en réparation"/>En réparation
                             <input type="radio" id="etat" name="etat" value="rebut"/>Rebut
@@ -891,6 +895,7 @@
             <?php
                 $trie ="";
                 $export ="";
+                /***** Tri par attribut *****/
                 if(isset($_POST['submit-date'])) {
                     $trie = ' ORDER BY date DESC';
                 }
@@ -927,6 +932,7 @@
                 if(isset($_POST['submit-end'])) {
                     $trie = ' ORDER BY end';
                 }
+                /***** Tri par date *****/
                 if(isset($_POST['submit-tri-histo'])) {
                     if($_POST['tri'] === 'annee') {
                         $trie .= "WHERE date > '{$dateYear}'";
@@ -938,6 +944,7 @@
                         $trie .= " WHERE date = '{$localdate}'";
                     }
                 }
+                /***** Création du .xls *****/
                 if(isset($_POST['submit-histo-xls'])) {
                     try {
                         $requete = "SELECT * FROM historique ".$trie;
