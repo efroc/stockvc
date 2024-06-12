@@ -17,20 +17,37 @@
     /***** Création de la connexion *****/ 
     $bdd = new BDD();
     $connexion = $bdd->connect();
-    /***** Date locale *****/
+/*************************************************ACTIONS AVANT AFFICHAGE******************************************************/
+    /******************* Date locale *****************/
+    /*Créer la date locale grâce à la fonction date()*/
     $localdate = date('Y-m-d');
     /***** Dates pour requetes *****/
     $dateYear = date('Y-m-d', strtotime("-1 Year"));
     $dateMonth = date("Y-m-d", strtotime("-1 Month"));
     $dateWeek = date("Y-m-d", strtotime("-1 Week"));
     $dateDay = date("Y-m-d", strtotime("-1 Day"));
-    /***** Alertes *****/
-    $requete = "SELECT ident FROM pret WHERE alerte < '{$localdate}'";
-    $resAlerte = $bdd->getPdo()->query($requete);
-    $tabAlerte = array();
-    foreach($resAlerte as $res) { 
-        array_push($tabAlerte, $res['ident']);
-    } 
+
+    $dateSuppHisto = date("Y-m-d", strtotime("-1 Year"));
+    /**************************** Alertes ***************************/
+    /*Selectionne les prêts pour lequels l'alerte doit se déclencher*/
+    $requete = "SELECT ident FROM pret WHERE alerte <= '{$localdate}'";
+    try {
+        $resAlerte = $bdd->getPdo()->query($requete);
+        $tabAlerte = array();
+        foreach($resAlerte as $res) { 
+            array_push($tabAlerte, $res['ident']);
+        } 
+    } catch(PDOException $e) {
+        echo ('Impossible de traiter les alertes : '. $e->getMessage());
+    }
+    /********************* Historique *****************/
+    /*Supprime l'historique avant un an la date locale*/
+    $requete = "DELETE FROM historique WHERE date < '{$dateSuppHisto}'";
+    try {
+        $bdd->getPdo()->query($requete); 
+    } catch(PDOException $e) {
+        echo ('Impossible de supprimer l\'ancien historique : '. $e->getMessage());
+    }
 ?>
 
 <!------------------------------------------------------- MENU ---------------------------------------------------------------->
@@ -365,6 +382,7 @@ les informations aux actions plus haut------------------------------------------
                 <?php 
                     $result = $bdd->getPdo()->query('SELECT *, COUNT(*) as number FROM stock GROUP BY reference, materiel, marque, etat, note, proprietaire'.$tri);
                     foreach($result as $res) {
+                        /** A chaque itération de ligne, on enregistre les valeurs de colonne dans des variables, que l'on passe dans les <input type=hidden>**/
                         $id = $res['ident']; $ref = $res['reference']; $mat = $res['materiel']; $marque = $res['marque']; 
                         $etat = $res['etat']; $note = $res['note']; $num = $res['number'];; $proprietaire = $res['proprietaire'];
                 ?>  
