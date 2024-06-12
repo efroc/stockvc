@@ -24,9 +24,8 @@
     $dateMonth = date("Y-m-d", strtotime("-1 Month"));
     $dateWeek = date("Y-m-d", strtotime("-1 Week"));
     $dateDay = date("Y-m-d", strtotime("-1 Day"));
-    $dateAlerte = date('Y-m-d', strtotime("+5 Days"));
     /***** Alertes *****/
-    $requete = "SELECT ident FROM pret WHERE end < '{$dateAlerte}'";
+    $requete = "SELECT ident FROM pret WHERE alerte < '{$localdate}'";
     $resAlerte = $bdd->getPdo()->query($requete);
     $tabAlerte = array();
     foreach($resAlerte as $res) { 
@@ -39,7 +38,7 @@
         <a class="redirection-left" target="_blank" href="https://www.vitrecommunaute.org/">
             <img class="DSIlogo" src="images/DSIlogo.png" alt="logo" height="59px"><img src="images/VClogo.png" alt="logo" height="59px">
         </a>
-        <p class="title"><a class="jebaited" title="Clique pour gagner 500€" target="_blank" href="https://www.youtube.com/watch?v=-a5Ba-CG8uc">G</a>estion du stock et des prêts</p>
+        <p class="title">Gestion du stock et des prêts</p>
         <a class="redirection-right" target="_blank" href="https://www.mairie-vitre.com/"><img src="images/mairielogo.png" alt="logo" height="59px"></a>
     </div>
     <ul class="menu">
@@ -89,8 +88,8 @@
                             $success-=1;
                         } 
                     }
-                    $historeq = "INSERT INTO historique (date, action, reference, materiel, marque, etat, proprietaire, nombre, note) 
-                                VALUES ('{$localdate}', 'Ajout au stock', '{$_POST['reference']}', '{$mat}', '{$marque}', '{$etat}', '{$proprietaire}', '{$num}', '{$note}')";
+                    $historeq = "INSERT INTO historique (date, action, reference, materiel, marque, etat, proprietaire, nombre, note, start, end) 
+                                VALUES ('{$localdate}', 'Ajout au stock', '{$_POST['reference']}', '{$mat}', '{$marque}', '{$etat}', '{$proprietaire}', '{$num}', '{$note}', 'NULL', 'NULL')";
                     try {
                         $bdd->query($historeq);  
                     } catch(Exception $e) {
@@ -445,15 +444,15 @@
             <?php
                 /***** Ajouter aux prêts *****/
                 if(isset($_POST['submit-pret'])) {
-                    if($_POST['start'] < $_POST['end']) {
+                    if($_POST['start'] <= $_POST['end'] && $_POST['alerte'] <= $_POST['end'] && $_POST['alerte'] >= $_POST['start'] ) {
                         $requete = "SELECT * FROM stock WHERE reference = '{$_POST['ref']}' AND materiel = '{$_POST['mat']}' 
                             AND marque = '{$_POST['marque']}' AND etat = 'disponible' AND note = '{$_POST['note']}'  LIMIT {$_POST['number']}";
                         $success = 0;
                         try {
                             $result = $bdd->getPdo()->query($requete);
                             foreach($result as $res) {
-                                $requete = "INSERT INTO pret (ident, reference, start, end, client) 
-                                            VALUES ('{$res['ident']}', '{$res['reference']}', '{$_POST['start']}', '{$_POST['end']}', '{$_POST['client']}')";
+                                $requete = "INSERT INTO pret (ident, reference, start, end, client, alerte) 
+                                            VALUES ('{$res['ident']}', '{$res['reference']}', '{$_POST['start']}', '{$_POST['end']}', '{$_POST['client']}', '{$_POST['alerte']}')";
                                 $updatereq = "UPDATE stock SET etat = 'déjà prêté' WHERE ident = '{$res['ident']}'";
                                 $bdd->getPdo()->query($requete);
                                 $success+=1;
@@ -481,7 +480,7 @@
                 if(isset($_POST['confirm-edit'])) {
                     if($_POST['start'] < $_POST['end']) {
                         $requete = "UPDATE pret SET start = '{$_POST['start']}', end = '{$_POST['end']}', 
-                        client = '{$_POST['client']}' WHERE ident = '{$_POST['id-edit']}'";
+                        client = '{$_POST['client']}', alerte = '{$_POST['alerte']}' WHERE ident = '{$_POST['id-edit']}'";
                         try {
                             $historeq = "INSERT INTO historique (date, action, reference, materiel, client, start, end) 
                                         VALUES ('{$localdate}', 'Modification de prêt', '{$_POST['ref-edit']}', '{$_POST['mat-edit']}', '{$_POST['client']}', '{$_POST['start']}', '{$_POST['end']}')";
@@ -497,28 +496,29 @@
                     }
                 }
                 /***** Supprimer un prêt *****/
-                if(isset($_POST['submit-supp'])) {
-                    $req = "DELETE FROM pret WHERE ident = {$_POST['id']} ";
-                    $updatereq = "UPDATE stock SET etat = 'disponible' 
-                                    WHERE ident = {$_POST['id']}";
+                if(isset($_POST['confirm-supp'])) {
+                    $client = str_replace('\'', ' ', $_POST['client']);
                     try {
-                        $bdd->getPdo()->query($req);
-                        try {
-                            $client = str_replace('\'', ' ', $_POST['client']);
-                            $historeq = "INSERT INTO historique (date, action, reference, materiel, nombre, client, start, end) 
-                                        VALUES ('{$localdate}', 'Suppression de prêt', '{$_POST['ref']}', '{$_POST['materiel']}', 1, '{$client}', '{$_POST['start']}', '{$_POST['end']}')";
-                            $bdd->getPdo()->query($updatereq);
+                        $result = $bdd->getPdo()->query("SELECT ident FROM pret WHERE reference = '{$_POST['reference']}' 
+                                    AND start = '{$_POST['start']}' AND end = '{$_POST['end']}' AND client = {$bdd->getPdo()->quote($_POST['client'])} 
+                                    AND alerte = '{$_POST['alerte']}' LIMIT {$_POST['number']}");
+                        foreach($result as $res) {
                             try {
-                                $bdd->getPdo()->query($historeq);
+                                $bdd->getPdo()->query("DELETE FROM pret WHERE ident = '{$res['ident']}'");
+                                $bdd->getPdo()->query("UPDATE stock SET etat = 'disponible' WHERE ident = {$res['ident']}");
                             } catch(Exception $e) {
-                                die("Impossible d'ajouter dans l'historique : ".$e->getMessage());
+                                die("Impossible de supprimer et de mettre à jour un prêt : ".$e->getMessage());
                             }
-                        } catch (Exception $e) {
-                            die("Impossible de mettre à jour le stock. ".$e->getMessage());
                         }
-                    } catch(Exception $e) {
-                        die("Erreur: Impossible de supprimer dans la BDD".$e->getMessage());
-                    } 
+                        try {
+                            $bdd->getPdo()->query("INSERT INTO historique (date, action, reference, materiel, nombre, client, start, end) 
+                                VALUES ('{$localdate}', 'Suppression de prêt', '{$_POST['reference']}', '{$_POST['materiel']}', '{$_POST['number']}', '{$client}', '{$_POST['start']}', '{$_POST['end']}')");
+                        } catch (Exception $e) {
+                            die("Impossible d'ajouter dans l'historique : ".$e->getMessage());
+                        }
+                    }   catch(Exception $e) {
+                        die("Impossible de récupérer les données de Pret : ".$e->getMessage());
+                    }
                 }
                 /***** Boutons de tri *****/
                 $tri = "";
@@ -543,6 +543,9 @@
                 if(isset($_POST['submit-client'])) {
                     $tri = ' ORDER BY client';
                 }
+                if(isset($_POST['submit-alerte'])) {
+                    $tri = ' ORDER BY alerte';
+                }
                 ?>
             
             <div class="pret-action">
@@ -556,13 +559,13 @@
                         <form class="edit" action="index.php?menu=2" method="POST">
                             <input type="hidden" value="<?php echo $_POST['id']; ?>" name="id-edit"/>
                             <label for="ref">Référence: </label>
-                            <input type="text" id="ref-edit" name="ref-edit" value="<?php echo $_POST['ref']; ?>" required readonly/>
+                            <input type="text" id="ref-edit" name="ref-edit" max-length="30" value="<?php echo $_POST['ref']; ?>" required readonly/>
                             <label for="mat">Matériel: </label> 
-                            <input type="text" id="mat-edit" name="mat-edit" value="<?php echo $_POST['materiel']; ?>" required placeholder="" readonly/>
+                            <input type="text" id="mat-edit" name="mat-edit" max-length="30" value="<?php echo $_POST['materiel']; ?>" required placeholder="" readonly/>
                             <label for="marque">Marque: </label>
-                            <input type="text" id="marque-edit" name="marque-edit" value="<?php echo $_POST['marque']; ?>" placeholder="" readonly/>
+                            <input type="text" id="marque-edit" name="marque-edit" max-length="30" value="<?php echo $_POST['marque']; ?>" placeholder="" readonly/>
                             <label for="note">Note: </label> 
-                            <input type="text" id="note-edit" name="note-edit" value="<?php echo $_POST['note']; ?>" readonly/>
+                            <input type="text" id="note-edit" name="note-edit" max-length="150" value="<?php echo $_POST['note']; ?>" readonly/>
                             <label for="start">*Début du prêt</label>
                             <input type="date" id="start" name="start" value="<?php echo $_POST['start']; ?>" required/><br/>
                             <label for="end">*Fin du prêt</label>
@@ -628,6 +631,37 @@
                         </form>
                         <form action="index.php?menu=2" method="POST">
                             <button type="submit" name="cancel-edit" title="Annuler">Annuler</button>
+                        </form>
+                    </div>
+                <?php
+                    } else if(isset($_POST['submit-supp'])) {
+                ?>
+                    <h3 class="action-clignote">Suppression de prêt</h3>
+                    <div class="supp-pret">
+                        <form action="index.php?menu=2" method="POST"><br/>
+                            <input type="hidden" value="<?php echo $_POST['id']; ?>" name="id"/>
+                            <input type="hidden" value="<?php echo $_POST['alerte']; ?>" name="alerte"/>
+                            <label for="reference">Référence: </label>
+                            <input type="text" id="reference" name="reference" value="<?php echo $_POST['reference']; ?>" required readonly/>
+                            <label for="materiel">Matériel: </label> 
+                            <input type="text" id="materiel" name="materiel" value="<?php echo $_POST['materiel']; ?>" required placeholder="" readonly/>
+                            <label for="marque">Marque: </label>
+                            <input type="text" id="marque" name="marque" value="<?php echo $_POST['marque']; ?>" placeholder="" readonly/>
+                            <label for="note">Note: </label> 
+                            <input type="text" id="note" name="note" value="<?php echo $_POST['note']; ?>" readonly/>
+                            <label for="start">Début du prêt</label>
+                            <input type="date" id="start" name="start" value="<?php echo $_POST['start']; ?>" required readonly/><br/>
+                            <label for="end">Fin du prêt</label>
+                            <input type="date" id="end" name="end" value="<?php echo $_POST['end']; ?>" required readonly/><br/>
+                            <label for="client">Client</label>
+                            <input type="text" id="client" name="client" value="<?php echo $_POST['client']; ?>" required readonly/><br/>
+                            <label for="nombre"*>Nombre à supprimer</label>
+                            <input type="number" id="number" name="number" min="1" max="<?php if(isset($_POST['submit-supp'])) { echo($_POST['number']); } else { echo("1"); }?>" 
+                                               value="1" required placeholder=""/><br/>
+                            <button type="submit" name="confirm-supp">Confirmer</button>
+                        </form>
+                        <form action="index.php?menu=2" method="POST">
+                            <button type="submit" name="cancel-supp" title="Annuler">Annuler</button>
                         </form>
                     </div>
                 <?php
@@ -717,6 +751,10 @@
                             <input type="date" id="end" name="end" required/>
                         </li>
                         <li>
+                            <label for="alerte">*Alerte</label><br/>
+                            <input type="date" id="alerte" name="alerte" required/>
+                        </li>
+                        <li>
                             <button type="submit" name="submit-pret">Confirmer la demande</button>
                         </li>
                     </ul>
@@ -771,6 +809,11 @@
                                 <button type="submit" name="submit-client" title="Trier par client">Client</button>
                             </form>
                         </th>
+                        <th class="alerte">
+                            <form action="index.php?menu=2" method="POST">
+                                <button type="submit" name="submit-alerte" title="Trier par alerte">Alerte</button>
+                            </form>
+                        </th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -793,6 +836,7 @@
                         <td class="start"><?php print $res['start']; ?></td>
                         <td class="end"><?php print $res['end']; ?></td>
                         <td class="client"><?php print $res['client']; ?></td>
+                        <td class="alerte"><?php print $res['alerte']; ?></td>
                         <td class="button">
                             <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-edit" title="Modifier">
@@ -804,6 +848,7 @@
                                 <input  type="hidden" value="<?php echo $res['start']; ?>"     name="start"/>
                                 <input  type="hidden" value="<?php echo $res['end']; ?>"       name="end"/>
                                 <input  type="hidden" value="<?php echo $res['client']; ?>"    name="client"/>
+                                <input  type="hidden" value="<?php echo $res['alerte']; ?>"    name="alerte"/>
                                 <img src="images/modifier.png" alt="modifier" height="20px">
                             </form>
                          </td>
@@ -811,11 +856,15 @@
                             <form action="index.php?menu=2" method="POST">
                                 <button type="submit" name="submit-supp" title="Supprimer">
                                 <input type="hidden" value="<?php echo $res['ident']; ?>" name="id"/>
-                                <input  type="hidden" value="<?php echo $res['reference']; ?>" name="ref"/>
+                                <input  type="hidden" value="<?php echo $res['reference']; ?>" name="reference"/>
                                 <input  type="hidden" value="<?php echo $res['materiel']; ?>"     name="materiel"/>
+                                <input  type="hidden" value="<?php echo $res['marque']; ?>"     name="marque"/>
+                                <input  type="hidden" value="<?php echo $res['note']; ?>"     name="note"/>
+                                <input  type="hidden" value="<?php echo $res['number']; ?>"     name="number"/>
                                 <input  type="hidden" value="<?php echo $res['start']; ?>"     name="start"/>
                                 <input  type="hidden" value="<?php echo $res['end']; ?>"       name="end"/>
                                 <input  type="hidden" value="<?php echo $res['client']; ?>"    name="client"/>
+                                <input  type="hidden" value="<?php echo $res['alerte']; ?>"    name="alerte"/>
                                 <img src="images/basket.png" alt="supprimer" height="20px">
                                 </button>
                             </form>
@@ -851,53 +900,32 @@
                 if(isset($_POST['submit-reference'])) {
                     $trie = ' ORDER BY reference';
                 }
-                if(isset($_POST['submit-message'])) {
-                    $trie = ' ORDER BY message';
+                if(isset($_POST['submit-materiel'])) {
+                    $trie = ' ORDER BY materiel';
                 }
-
-                if(isset($_POST['submit-histo-xls'])) {
-                    try {
-                        $requete = "SELECT * FROM historique ".$trie;
-                        $result = $bdd->getPdo()->query($requete);
-                        $export .= '
-                            <table>
-                            <tr>
-                            <td>id</id>
-                            <td>date</id>
-                            <td>reference</id>
-                            <td>action</id>
-                            <td>message</id>
-                            </tr>
-                        ';
-                        foreach($result as $res) {
-                            $export .= '
-                                <tr>
-                                <td>'.$res['id'].'</td>
-                                <td>'.$res['date'].'</td>
-                                <td>'.$res['reference'].'</td>
-                                <td>'.$res['action'].'</td>
-                                <td>'.$res['message'].'</td>
-                                </tr>
-                            ';
-                        }
-                        $export .= '</table>';
-                        $fileName = "historique-".$localdate.".xls";
-                        header('Content-Type: application/xls');
-                        header('Content-Disposition: attachment; filename='.$fileName);
-                        echo $export;
-                    } catch (Exception $e) {
-                        echo("Impossible d'exporter' l'historique en .xls : ". $e->getMessage());
-                    }
-                    
+                if(isset($_POST['submit-marque'])) {
+                    $trie = ' ORDER BY marque';
                 }
-                if(isset($_POST['submit-histo-csv'])) {
-                    try {
-                        $requete = "SELECT * FROM historique ".$trie;
-                        $result = $bdd->getPdo()->query($requete);
-                        //TODO
-                    } catch (Exception $e) {
-                        echo("Impossible d'exporter' l'historique en .csv : ". $e->getMessage());
-                    }
+                if(isset($_POST['submit-etat'])) {
+                    $trie = ' ORDER BY etat DESC';
+                }
+                if(isset($_POST['submit-proprietaire'])) {
+                    $trie = ' ORDER BY proprietaire';
+                }
+                if(isset($_POST['submit-nb'])) {
+                    $trie = ' ORDER BY nombre DESC';
+                }
+                if(isset($_POST['submit-note'])) {
+                    $trie = ' ORDER BY note';
+                }
+                if(isset($_POST['submit-client'])) {
+                    $trie = ' ORDER BY client';
+                }
+                if(isset($_POST['submit-start'])) {
+                    $trie = ' ORDER BY start';
+                }
+                if(isset($_POST['submit-end'])) {
+                    $trie = ' ORDER BY end';
                 }
                 if(isset($_POST['submit-tri-histo'])) {
                     if($_POST['tri'] === 'annee') {
@@ -910,12 +938,62 @@
                         $trie .= " WHERE date = '{$localdate}'";
                     }
                 }
+                if(isset($_POST['submit-histo-xls'])) {
+                    try {
+                        $requete = "SELECT * FROM historique ".$trie;
+                        $result = $bdd->getPdo()->query($requete);
+                        $export .= '
+                            <table>
+                            <tr>
+                            <td>id</id>
+                            <td>date</id>
+                            <td>action</id>
+                            <td>reference</id>
+                            <td>materiel</id>
+                            <td>marque</id>
+                            <td>etat</id>
+                            <td>proprietaire</id>
+                            <td>nombre</id>
+                            <td>note</id>
+                            <td>client</id>
+                            <td>start</id>
+                            <td>end</id>
+                            </tr>
+                        ';
+                        foreach($result as $res) {
+                            $export .= '
+                                <tr>
+                                <td>'.$res['id'].'</td>
+                                <td>'.$res['date'].'</td>
+                                <td>'.$res['action'].'</td>
+                                <td>'.$res['reference'].'</td>
+                                <td>'.$res['materiel'].'</td>
+                                <td>'.$res['marque'].'</td>
+                                <td>'.$res['etat'].'</td>
+                                <td>'.$res['proprietaire'].'</td>
+                                <td>'.$res['nombre'].'</td>
+                                <td>'.$res['note'].'</td>
+                                <td>'.$res['client'].'</td>
+                                <td>'.$res['start'].'</td>
+                                <td>'.$res['end'].'</td>
+                                </tr>
+                            ';
+                        }
+                        $export .= '</table>';
+                        $fileName = "historique-".$localdate.".xls";
+                        header('Content-Type: application/xls');
+                        header('Content-Disposition: attachment; filename='.$fileName);
+                        echo $export;
+                    } catch (Exception $e) {
+                        echo("Impossible d'exporter l'historique en .xls : ". $e->getMessage());
+                    }
+                    
+                }
             ?>
             <div class="export">
                 <h3 class="title-histo">Tout l'historique</h3>
                 <form name="submit-histo" action="index.php?menu=3" method="POST">
                     <input type="submit" name="submit-histo-xls" value="Exporter l'historique en .xls"/>
-                    <input type="submit" name="submit-histo-csv" value="Exporter l'historique en .csv"/>
                 </form>
                 <form name="tri-histo" action="index.php?menu=3" method="POST">
                     <select name="tri" id="tri" required>
@@ -945,47 +1023,47 @@
                             <button type="submit" name="submit-reference" title="Trier par référence">Référence</button>
                         </form>
                     </th>
-                    <th>
+                    <th class="mat">
                         <form action="index.php?menu=3" method="POST">
                             <button type="submit" name="submit-materiel" title="Trier par materiel">Materiel</button>
                         </form>
                     </th>
-                    <th>
+                    <th class="marque">
                         <form action="index.php?menu=3" method="POST">
                             <button type="submit" name="submit-marque" title="Trier par marque">Marque</button>
                         </form>
                     </th>
-                    <th>
+                    <th class="etat">
                         <form action="index.php?menu=3" method="POST">
                             <button type="submit" name="submit-etat" title="Trier par état">Etat</button>
                         </form>
                     </th>
-                    <th>
+                    <th class="proprietaire">
                         <form action="index.php?menu=3" method="POST">
                             <button type="submit" name="submit-proprietaire" title="Trier par propriétaire">Propriétaire</button>
                         </form>
                     </th>
-                    <th>
+                    <th class="nb">
                         <form action="index.php?menu=3" method="POST">
                             <button type="submit" name="submit-nb" title="Trier par nombre">Nombre</button>
                         </form>
                     </th>
-                    <th>
+                    <th class="note">
                         <form action="index.php?menu=3" method="POST">
                             <button type="submit" name="submit-note" title="Trier par note">Note</button>
                         </form>
                     </th>
-                    <th>
+                    <th class="client">
                         <form action="index.php?menu=3" method="POST">
                             <button type="submit" name="submit-client" title="Trier par client">Client</button>
                         </form>
                     </th>
-                    <th>
+                    <th class="start">
                         <form action="index.php?menu=3" method="POST">
                             <button type="submit" name="submit-start" title="Trier par début">Début</button>
                         </form>
                     </th>
-                    <th>
+                    <th class="end">
                         <form action="index.php?menu=3" method="POST">
                             <button type="submit" name="submit-end" title="Trier par fin">Fin</button>
                         </form>
@@ -996,18 +1074,18 @@
                     foreach($result as $res) {
                 ?>
                 <tr class="historique-table">
-                    <td><?php print $res['date']; ?></td>
-                    <td><?php print $res['action']; ?></td>
-                    <td><?php print $res['reference']; ?></td>
-                    <td><?php print $res['materiel']; ?></td>
-                    <td><?php print $res['marque']; ?></td>
-                    <td><?php print $res['etat']; ?></td>
-                    <td><?php print $res['proprietaire']; ?></td>
-                    <td><?php print $res['nombre']; ?></td>
-                    <td><?php print $res['note']; ?></td>
-                    <td><?php print $res['client']; ?></td>
-                    <td><?php print $res['start']; ?></td>
-                    <td><?php print $res['end']; ?></td>
+                    <td class="date"><?php print $res['date']; ?></td>
+                    <td class="action"><?php print $res['action']; ?></td>
+                    <td class="ref"><?php print $res['reference']; ?></td>
+                    <td class="mat"><?php print $res['materiel']; ?></td>
+                    <td class="marque"><?php print $res['marque']; ?></td>
+                    <td class="etat"><?php print $res['etat']; ?></td>
+                    <td class="proprietaire"><?php print $res['proprietaire']; ?></td>
+                    <td class="nb"><?php print $res['nombre']; ?></td>
+                    <td class="note"><?php print $res['note']; ?></td>
+                    <td class="client"><?php print $res['client']; ?></td>
+                    <td class="start"><?php print $res['start']; ?></td>
+                    <td class="end"><?php print $res['end']; ?></td>
                 </tr>
                 <?php
                     }
@@ -1091,15 +1169,4 @@
             }
         ?>
     </div>
-
-<!-------------------------------------------------------FOOTER CONSOLE-------------------------------------------------------->
-    
-<!--<div class="footer">-->
-<!-----------------------------------------------------ACTIONS CONSOLE--------------------------------------------------------->
-    <!--<div class="footer-content">
-            <p>Message d'erreur :</p>
-            <p><?php /*echo($erreur);*/ ?></p>
-        </div>
-    </div>
-    -->
 </body>
