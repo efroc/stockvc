@@ -167,7 +167,7 @@ tr > .button {
 
 .action-clignote{
     animation: clignoter 0.5s linear;
-    animation-iteration-count: 10;
+    animation-iteration-count: 5;
 }
 
 /******************************STYLE UNIQUE STOCK************************/
