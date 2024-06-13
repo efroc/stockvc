@@ -4,15 +4,15 @@ class BDD {
 
     private string $servername = "localhost";
     //gestion -> root
-    private string $username = "root";
+    private string $username = "gestion";
     //Gestion35500* -> ""
-    private string $password = "";
+    private string $password = "Gestion35500*";
     private $pdo;
     private string $currentQuery;
     //dbname=STOCK
     public function connect(): string {
         try {
-            $this->pdo = new PDO("mysql:host=$this->servername;dbname=stockvc", $this->username, $this->password);
+            $this->pdo = new PDO("mysql:host=$this->servername;dbname=STOCK", $this->username, $this->password);
             $this ->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return ("Connecté à la base de données | ");
         }
