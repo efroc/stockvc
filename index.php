@@ -1175,6 +1175,13 @@ les informations aux actions plus haut------------------------------------------
                     <br/>Vous pouvez exporter l'historique grâce au bouton en haut à droite de la page.
                 </p>
             </div>
+            <br/>
+            <h3>Fonctionnement et conditions</h3>
+            <p>Un matériel ne peut pas être supprimé si celui-ci est en prêt. Lors d'un ajout de prêt, le choix de l'alerte doit être compris forcément 
+                entre celle du début et celle de fin de prêt. L'ajout d'un prêt mais automatiquement le matériel en mode "prêté", et lorsque le prêt 
+                est supprime, le matériel se remet en "disponible". Un matériel ne peut être prêté que si celui-ci est disponible.
+                L'historique efface automatiquement les lignes qui datent de plus d'un an.
+            </p>
         </div>
 <!------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------------
