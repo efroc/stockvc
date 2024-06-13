@@ -315,11 +315,11 @@ les informations aux actions plus haut------------------------------------------
                         <li>
                             <label for="proprietaire">*Propriétaire</label><br/>
                             <select name="proprietaire" id="proprietaire" required>
-                                <option <?php if(isset($_POST['submit-add-stock'])) { 
+                                <option <?php if(isset($_POST['submit-add-stock'])) { /*On relaie les informations du bouton jusqu'au formulaire*/
                                                 if($_POST['proprietaire'] === 'Vitré Communauté') echo("selected=\"selected\"");
                                               } ?> value="Vitré Communauté">Vitré Communauté
                                 </option>
-                                <option <?php if(isset($_POST['submit-add-stock'])) { 
+                                <option <?php if(isset($_POST['submit-add-stock'])) { /*On relaie les informations du bouton jusqu'au formulaire*/
                                                 if($_POST['proprietaire'] === 'Mairie') echo("selected=\"selected\"");
                                               } ?> value="Mairie">Mairie
                                 </option>
