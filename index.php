@@ -592,62 +592,64 @@ les informations aux actions plus haut------------------------------------------
                             <input type="date" id="start" name="start" value="<?php echo $_POST['start']; ?>" required/><br/>
                             <label for="end">*Fin du prêt</label>
                             <input type="date" id="end" name="end" value="<?php echo $_POST['end']; ?>" required/><br/>
+                            <label for="alerte">Alerte</label><br/>
+                            <input type="date" id="alerte" name="alerte" value="<?php echo $_POST['alerte']; ?>" required/><br/>
                             <label for="client">*Client</label>
                             <select name="client" id="client" required>
-                                <option value="Mairie d\'Argentré du Plessis">Mairie d'Argentré du Plessis</option>
-                                <option value="Mairie d\'Availles-sur-Seiche">Mairie d'Availles-sur-Seiche</option>
-                                <option value="Mairie de Bais">Mairie de Bais</option>
-                                <option value="Mairie de Balazé">Mairie de Balazé</option>
-                                <option value="Mairie de Bréal-sous-Vitré">Mairie de Bréal-sous-Vitré</option>
-                                <option value="Mairie de Brielles">Mairie de Brielles</option>
-                                <option value="Mairie de Champeaux">Mairie de Champeaux</option>
-                                <option value="Mairie de Châteaubourg">Mairie de Châteaubourg</option>
-                                <option value="Mairie de Châtillon-en-Vendelais">Mairie de Châtillon-en-Vendelais</option>
-                                <option value="Mairie de Cornillé">Mairie de Cornillé</option>
-                                <option value="Mairie de Domagné">Mairie de Domagné</option>
-                                <option value="Mairie de Domalain">Mairie de Domalain</option>
-                                <option value="Mairie de Drouges">Mairie de Drouges</option>
-                                <option value="Mairie d\'Erbrée">Mairie d'Erbrée</option>
-                                <option value="Mairie d\'Étrelles">Mairie d'Étrelles</option>
-                                <option value="Mairie de Gennes-sur-Seiche">Mairie de Gennes-sur-Seiche</option>
-                                <option value="Mairie de La Chapelle-Erbrée">Mairie de La Chapelle-Erbrée</option>
-                                <option value="Mairie de La Guerche-de-Bretagne">Mairie de La Guerche-de-Bretagne</option>
-                                <option value="Mairie de La Selle-Guerchaise">Mairie de La Selle-Guerchaise</option>
-                                <option value="Mairie de Landavran">Mairie de Landavran</option>
-                                <option value="Mairie de Le Pertre">Mairie de Le Pertre</option>
-                                <option value="Mairie de Louvigné-de-Bais">Mairie de Louvigné-de-Bais</option>
-                                <option value="Mairie de Marpiré">Mairie de Marpiré</option>
-                                <option value="Mairie de Mecé">Mairie de Mecé</option>
-                                <option value="Mairie de Mondevert">Mairie de Mondevert</option>
-                                <option value="Mairie de Montautour">Mairie de Montautour</option>
-                                <option value="Mairie de Montreuil-des-Landes">Mairie de Montreuil-des-Landes</option>
-                                <option value="Mairie de Montreuil-sous-Pérouse">Mairie de Montreuil-sous-Pérouse</option>
-                                <option value="Mairie de Moulins">Mairie de Moulins</option>
-                                <option value="Mairie de Moussé">Mairie de Moussé</option>
-                                <option value="Mairie de Pocé-les-Bois">Mairie de Pocé-les-Bois</option>
-                                <option value="Mairie de Princé">Mairie de Princé</option>
-                                <option value="Mairie de Rannée">Mairie de Rannée</option>
-                                <option value="Mairie de Saint-Aubin-des-Landes">Mairie de Saint-Aubin-des-Landes</option>
-                                <option value="Mairie de Saint-Christophe-des-Bois">Mairie de Saint-Christophe-des-Bois</option>
-                                <option value="Mairie de Saint-Didier">Mairie de Saint-Didier</option>
-                                <option value="Mairie de Saint-Germain-du-Pinel">Mairie de Saint-Germain-du-Pinel</option>
-                                <option value="Mairie de Saint-Jean-sur-Vilaine">Mairie de Saint-Jean-sur-Vilaine</option>
-                                <option value="Mairie de Saint-M\'Hervé">Mairie de Saint-M'Hervé</option>
-                                <option value="Mairie de Taillis">Mairie de Taillis</option>
-                                <option value="Mairie de Torcé">Mairie de Torcé</option>
-                                <option value="Mairie de Val D\'Izé">Mairie de Val D'Izé</option>
-                                <option value="Mairie de Vergéal">Mairie de Vergéal</option>
-                                <option value="Mairie de Visseiche">Mairie de Visseiche</option>
-                                <option value="Mairie de Vitré">Mairie de Vitré</option>
-                                <option value="CCAS de Chateaubourg">CCAS de Chateaubourg</option>
-                                <option value="CCAS de Chatillon-en-Vendelais">CCAS de Chatillon-en-Vendelais</option>
-                                <option value="CCAS de Val d\'Izé">CCAS de Val d'Izé</option>
-                                <option value="CCAS de Vitré">CCAS de Vitré</option>
-                                <option value="Smictom Sud Est 35">Smictom Sud Est 35</option>
-                                <option value="Eau des Portes de Bretagne">Eau des Portes de Bretagne</option>
-                                <option value="Syndicat d\'Urbanisme du Pays de Vitré">Syndicat d'Urbanisme du Pays de Vitré</option>
-                                <option value="Vitré Communauté">Vitré Communauté</option>
-                                <option value="Syndicat de traitement S3TEC">Syndicat de traitement S3TEC</option>
+                                <option <?php if($_POST['client'] === 'Mairie d\'Argentré du Plessis') echo("selected=\"selected\""); ?> value="Mairie d\'Argentré du Plessis">Mairie d'Argentré du Plessis</option>
+                                <option <?php if($_POST['client'] === 'Mairie d\'Availles-sur-Seiche') echo("selected=\"selected\""); ?> value="Mairie d\'Availles-sur-Seiche">Mairie d'Availles-sur-Seiche</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Bais') echo("selected=\"selected\""); ?> value="Mairie de Bais">Mairie de Bais</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Balazé') echo("selected=\"selected\""); ?> value="Mairie de Balazé">Mairie de Balazé</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Bréal-sous-Vitré') echo("selected=\"selected\""); ?> value="Mairie de Bréal-sous-Vitré">Mairie de Bréal-sous-Vitré</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Brielles') echo("selected=\"selected\""); ?> value="Mairie de Brielles">Mairie de Brielles</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Champeaux') echo("selected=\"selected\""); ?> value="Mairie de Champeaux">Mairie de Champeaux</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Châteaubourg') echo("selected=\"selected\""); ?> value="Mairie de Châteaubourg">Mairie de Châteaubourg</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Châtillon-en-Vendelais') echo("selected=\"selected\""); ?> value="Mairie de Châtillon-en-Vendelais">Mairie de Châtillon-en-Vendelais</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Cornillé') echo("selected=\"selected\""); ?> value="Mairie de Cornillé">Mairie de Cornillé</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Domagné') echo("selected=\"selected\""); ?> value="Mairie de Domagné">Mairie de Domagné</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Domalain') echo("selected=\"selected\""); ?> value="Mairie de Domalain">Mairie de Domalain</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Drouges') echo("selected=\"selected\""); ?> value="Mairie de Drouges">Mairie de Drouges</option>
+                                <option <?php if($_POST['client'] === 'Mairie d\'Erbrée') echo("selected=\"selected\""); ?> value="Mairie d\'Erbrée">Mairie d'Erbrée</option>
+                                <option <?php if($_POST['client'] === 'Mairie d\'Étrelles') echo("selected=\"selected\""); ?> value="Mairie d\'Étrelles">Mairie d'Étrelles</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Gennes-sur-Seiche') echo("selected=\"selected\""); ?> value="Mairie de Gennes-sur-Seiche">Mairie de Gennes-sur-Seiche</option>
+                                <option <?php if($_POST['client'] === 'Mairie de La Chapelle-Erbrée') echo("selected=\"selected\""); ?> value="Mairie de La Chapelle-Erbrée">Mairie de La Chapelle-Erbrée</option>
+                                <option <?php if($_POST['client'] === 'Mairie de La Guerche-de-Bretagne') echo("selected=\"selected\""); ?> value="Mairie de La Guerche-de-Bretagne">Mairie de La Guerche-de-Bretagne</option>
+                                <option <?php if($_POST['client'] === 'Mairie de La Selle-Guerchaise') echo("selected=\"selected\""); ?> value="Mairie de La Selle-Guerchaise">Mairie de La Selle-Guerchaise</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Landavran') echo("selected=\"selected\""); ?> value="Mairie de Landavran">Mairie de Landavran</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Le Pertre') echo("selected=\"selected\""); ?> value="Mairie de Le Pertre">Mairie de Le Pertre</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Louvigné-de-Bais') echo("selected=\"selected\""); ?> value="Mairie de Louvigné-de-Bais">Mairie de Louvigné-de-Bais</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Marpiré') echo("selected=\"selected\""); ?> value="Mairie de Marpiré">Mairie de Marpiré</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Mecé') echo("selected=\"selected\""); ?> value="Mairie de Mecé">Mairie de Mecé</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Mondevert') echo("selected=\"selected\""); ?> value="Mairie de Mondevert">Mairie de Mondevert</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Montautour') echo("selected=\"selected\""); ?> value="Mairie de Montautour">Mairie de Montautour</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Montreuil-des-Landes') echo("selected=\"selected\""); ?> value="Mairie de Montreuil-des-Landes">Mairie de Montreuil-des-Landes</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Montreuil-sous-Pérouse') echo("selected=\"selected\""); ?> value="Mairie de Montreuil-sous-Pérouse">Mairie de Montreuil-sous-Pérouse</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Moulins') echo("selected=\"selected\""); ?> value="Mairie de Moulins">Mairie de Moulins</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Moussé') echo("selected=\"selected\""); ?> value="Mairie de Moussé">Mairie de Moussé</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Pocé-les-Bois') echo("selected=\"selected\""); ?> value="Mairie de Pocé-les-Bois">Mairie de Pocé-les-Bois</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Princé') echo("selected=\"selected\""); ?> value="Mairie de Princé">Mairie de Princé</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Rannée') echo("selected=\"selected\""); ?> value="Mairie de Rannée">Mairie de Rannée</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Saint-Aubin-des-Landes') echo("selected=\"selected\""); ?> value="Mairie de Saint-Aubin-des-Landes">Mairie de Saint-Aubin-des-Landes</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Saint-Christophe-des-Bois') echo("selected=\"selected\""); ?> value="Mairie de Saint-Christophe-des-Bois">Mairie de Saint-Christophe-des-Bois</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Saint-Didier') echo("selected=\"selected\""); ?> value="Mairie de Saint-Didier">Mairie de Saint-Didier</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Saint-Germain-du-Pinel') echo("selected=\"selected\""); ?> value="Mairie de Saint-Germain-du-Pinel">Mairie de Saint-Germain-du-Pinel</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Saint-Jean-sur-Vilaine') echo("selected=\"selected\""); ?> value="Mairie de Saint-Jean-sur-Vilaine">Mairie de Saint-Jean-sur-Vilaine</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Saint-M\'Hervé') echo("selected=\"selected\""); ?> value="Mairie de Saint-M\'Hervé">Mairie de Saint-M'Hervé</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Taillis') echo("selected=\"selected\""); ?> value="Mairie de Taillis">Mairie de Taillis</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Torcé') echo("selected=\"selected\""); ?> value="Mairie de Torcé">Mairie de Torcé</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Val D\'Izé') echo("selected=\"selected\""); ?> value="Mairie de Val D\'Izé">Mairie de Val D'Izé</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Vergéal') echo("selected=\"selected\""); ?> value="Mairie de Vergéal">Mairie de Vergéal</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Visseiche') echo("selected=\"selected\""); ?> value="Mairie de Visseiche">Mairie de Visseiche</option>
+                                <option <?php if($_POST['client'] === 'Mairie de Vitré') echo("selected=\"selected\""); ?> value="Mairie de Vitré">Mairie de Vitré</option>
+                                <option <?php if($_POST['client'] === 'CCAS de Chateaubourg') echo("selected=\"selected\""); ?> value="CCAS de Chateaubourg">CCAS de Chateaubourg</option>
+                                <option <?php if($_POST['client'] === 'CCAS de Chatillon-en-Vendelais') echo("selected=\"selected\""); ?> value="CCAS de Chatillon-en-Vendelais">CCAS de Chatillon-en-Vendelais</option>
+                                <option <?php if($_POST['client'] === 'CCAS de Val d\'Izé') echo("selected=\"selected\""); ?> value="CCAS de Val d\'Izé">CCAS de Val d'Izé</option>
+                                <option <?php if($_POST['client'] === 'CCAS de Vitré') echo("selected=\"selected\""); ?> value="CCAS de Vitré">CCAS de Vitré</option>
+                                <option <?php if($_POST['client'] === 'Smictom Sud Est 35') echo("selected=\"selected\""); ?> value="Smictom Sud Est 35">Smictom Sud Est 35</option>
+                                <option <?php if($_POST['client'] === 'Eau des Portes de Bretagne') echo("selected=\"selected\""); ?> value="Eau des Portes de Bretagne">Eau des Portes de Bretagne</option>
+                                <option <?php if($_POST['client'] === 'Syndicat d\'Urbanisme du Pays de Vitré') echo("selected=\"selected\""); ?> value="Syndicat d\'Urbanisme du Pays de Vitré">Syndicat d'Urbanisme du Pays de Vitré</option>
+                                <option <?php if($_POST['client'] === 'Vitré Communauté') echo("selected=\"selected\""); ?> value="Vitré Communauté">Vitré Communauté</option>
+                                <option <?php if($_POST['client'] === 'Syndicat de traitement S3TEC') echo("selected=\"selected\""); ?> value="Syndicat de traitement S3TEC">Syndicat de traitement S3TEC</option>
                             </select>
                             <button type="submit" name="confirm-edit" title="Confirmer">Confirmer</button>
                         </form>
