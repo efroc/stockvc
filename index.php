@@ -896,7 +896,7 @@ les informations aux actions plus haut------------------------------------------
                     </tr>
                     <?php
                         } 
-                    ?>
+                    ?> 
                 </table>
 
             </div>
