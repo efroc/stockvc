@@ -1,9 +1,9 @@
-/*************************EXPLICATION DE L4APPLICATION***********************/
+/*************************EXPLICATION DE L'APPLICATION***********************/
  - C'EST QUOI ?
     C'est un outil de gestion du matériel informatique en stock et en prêt.
 
 - COMMENT ON L'UTILISE ?
-    Il sufit d'ouvrir la page index.php, et le reste se fait tout seul.
+    Il suffit d'ouvrir la page index.php, et le reste se fait tout seul.
     Un guide d'utilisation est présent sur le site pour se faire la main 
     dessus.
 
